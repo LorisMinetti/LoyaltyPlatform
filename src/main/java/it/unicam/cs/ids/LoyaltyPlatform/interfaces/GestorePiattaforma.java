@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface GestorePiattaforma {
     ProgrammaFedelta aggiungiProgrammaFedelta();
+
     List<ProgrammaFedelta> getAllProgrammiFedelta();
     void selezionaProgrammaFedelta(ProgrammaFedelta programmaFedelta);
 }

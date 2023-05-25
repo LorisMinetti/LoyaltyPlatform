@@ -1,13 +1,15 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import it.unicam.cs.ids.LoyaltyPlatform.interfaces.GestorePiattaforma;
+
 import java.util.List;
 import java.util.UUID;
 
-public class GestorePiattaforma implements it.unicam.cs.ids.LoyaltyPlatform.interfaces.GestorePiattaforma {
+public class GestorePiattaformaImpl implements GestorePiattaforma {
     private String nome;
     private UUID id;
-    private List<Cliente> clientiIscritti;
-    private List<AttivitaCommerciale> attivitaCommericaliIscritte;
+    private List<ClienteModel> clientiIscritti;
+    private List<AttivitaCommercialeModel> attivitaCommericaliIscritte;
     @Override
     public ProgrammaFedelta aggiungiProgrammaFedelta() {
         return null;
