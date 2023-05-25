@@ -1,16 +1,16 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.interfaces.AttivitaCommerciale;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
 
 import java.util.List;
 
-public class AttivitaCommercialeController implements AttivitaCommerciale {
+public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
     private final AttivitaCommercialeModel attivitaCommercialeModel;
 
-    public AttivitaCommercialeController(AttivitaCommercialeModel attivitaCommercialeModel) {
+    public AttivitaCommercialeControllerImpl(AttivitaCommercialeModel attivitaCommercialeModel) {
         this.attivitaCommercialeModel = attivitaCommercialeModel;
     }
 

@@ -1,21 +1,21 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.interfaces.AttivitaCommerciale;
-import it.unicam.cs.ids.LoyaltyPlatform.interfaces.Cliente;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.*;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteModelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-public class ClienteController implements Cliente {
+public class ClienteControllerImpl implements ClienteController {
 
     private ClienteModel cliente;
 
-    private ClienteModelRepository clienteModelRepository;
+    private ClienteRepositoryImpl clienteRepositoryImpl;
 
-    public ClienteController(ClienteModel cliente) {
+    public ClienteControllerImpl(ClienteModel cliente) {
         this.cliente = cliente;
     }
 
@@ -29,10 +29,10 @@ public class ClienteController implements Cliente {
 
 
     @Override
-    public Acquisto effettuaAcquisto(AttivitaCommerciale attivita, double valoreAcquisto) {
+    public Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
 
         Acquisto ret = new Acquisto();
-        ret.setCliente(this);
+        ret.setClienteController(this);
         ret.setValoreAcquisto(valoreAcquisto);
         ret.setAttivitaCommerciale(attivita);
 
@@ -48,7 +48,7 @@ public class ClienteController implements Cliente {
         return ret;
     }
 
-    private void calcoloBeneficiPerAcquisto(AttivitaCommerciale attivita, double valoreAcquisto) {
+    private void calcoloBeneficiPerAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
         List<ProgrammaFedelta> listaProgrammi = attivita.getAvailablePrograms();
         Map<ProgrammaALivelli, Integer> livelloPerAttivitaCommerciale = cliente.getLivelloPerAttivitaCommerciale();
         Map<ProgrammaAPunti, Integer> puntiPerAttivitaCommerciale = cliente.getPuntiPerAttivitaCommerciale();
@@ -97,7 +97,7 @@ public class ClienteController implements Cliente {
     }
 
 
-    private double ricaricaSpesaTotaleCliente(AttivitaCommerciale attivitaCommerciale){
+    private double ricaricaSpesaTotaleCliente(AttivitaCommercialeController attivitaCommerciale){
         double spesaTotale = 0;
         if(attivitaCommerciale != null){
             //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
@@ -109,7 +109,7 @@ public class ClienteController implements Cliente {
         return spesaTotale;
     }
 
-    private void aggiornaSpesaTotale(AttivitaCommerciale attivita, double valoreAcquisto) {
+    private void aggiornaSpesaTotale(AttivitaCommercialeController attivita, double valoreAcquisto) {
         /*
          */
         if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
@@ -119,4 +119,28 @@ public class ClienteController implements Cliente {
         }
     }
 
+
+    /**
+     * Metodi implementati dall'interfaccia Controller
+     */
+
+    @Override
+    public ClienteModel createCliente(ClienteModel cliente) {
+        return null;
+    }
+
+    @Override
+    public ClienteModel getById(UUID id) {
+        return null;
+    }
+
+    @Override
+    public ClienteModel updateCliente(ClienteModel cliente) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteCliente(ClienteModel clienteModel) {
+        return false;
+    }
 }

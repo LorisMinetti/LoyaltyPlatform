@@ -1,7 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteModelRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -21,8 +21,8 @@ public class LoyaltyPlatformApplication {
 		cliente.setId(UUID.randomUUID());
 		cliente.setNome("Mario Rossi");
 
-		ClienteModelRepository clienteModelRepository = new ClienteModelRepository();
-		clienteModelRepository.save(cliente);
+		ClienteRepositoryImpl clienteRepositoryImpl = new ClienteRepositoryImpl();
+		clienteRepositoryImpl.save(cliente);
 
 	}
 

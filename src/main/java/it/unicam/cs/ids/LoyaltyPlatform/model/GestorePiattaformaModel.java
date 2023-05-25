@@ -1,11 +1,11 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import it.unicam.cs.ids.LoyaltyPlatform.interfaces.GestorePiattaforma;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
 
 import java.util.List;
 import java.util.UUID;
 
-public class GestorePiattaformaImpl implements GestorePiattaforma {
+public class GestorePiattaformaModel implements GestorePiattaformaController {
     private String nome;
     private UUID id;
     private List<ClienteModel> clientiIscritti;
