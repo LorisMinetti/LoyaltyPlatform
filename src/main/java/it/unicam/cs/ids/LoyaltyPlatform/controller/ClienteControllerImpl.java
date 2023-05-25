@@ -4,25 +4,33 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeCo
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.*;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 public class ClienteControllerImpl implements ClienteController {
 
     private ClienteModel cliente;
 
-    private ClienteRepositoryImpl clienteRepositoryImpl;
+    private final ClienteRepositoryImpl clienteRepositoryImpl;
 
-    public ClienteControllerImpl(ClienteModel cliente) {
+    public ClienteControllerImpl(ClienteModel cliente, ClienteRepositoryImpl clienteRepositoryImpl) {
         this.cliente = cliente;
+        this.clienteRepositoryImpl = clienteRepositoryImpl;
     }
 
+
+    //TODO: implementare il metodo
     @Override
     public boolean effettuaPagamento() {
         return false;
     }
+
+
+
 
     @Override
     public Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
@@ -56,8 +64,7 @@ public class ClienteControllerImpl implements ClienteController {
             //ci sono programmi fedeltà attivi e devo quindi considerarli tutti
             for(ProgrammaFedelta programmaFedelta : listaProgrammi) {
 
-                if(programmaFedelta instanceof ProgrammaALivelli) {
-                    ProgrammaALivelli programmaALivelli = (ProgrammaALivelli) programmaFedelta;
+                if(programmaFedelta instanceof ProgrammaALivelli programmaALivelli) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelli)) {
                         if( (ricaricaSpesaTotaleCliente(attivita) + valoreAcquisto) >
                                 programmaALivelli.getLivelli().get(programmaALivelli.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
@@ -67,8 +74,7 @@ public class ClienteControllerImpl implements ClienteController {
                         }
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaAPunti) {
-                    ProgrammaAPunti programmaAPunti = (ProgrammaAPunti) programmaFedelta;
+                } else if(programmaFedelta instanceof ProgrammaAPunti programmaAPunti) {
                     if(puntiPerAttivitaCommerciale.containsKey(programmaAPunti)) {
                         puntiPerAttivitaCommerciale
                                 .put(programmaAPunti, (int)(puntiPerAttivitaCommerciale.get(programmaAPunti) + programmaAPunti.getRapportoPunti() * valoreAcquisto));
@@ -78,8 +84,7 @@ public class ClienteControllerImpl implements ClienteController {
                                 .put(programmaAPunti, (int)(programmaAPunti.getRapportoPunti() * valoreAcquisto));
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaCashback) {
-                    ProgrammaCashback programmaCashback = (ProgrammaCashback) programmaFedelta;
+                } else if(programmaFedelta instanceof ProgrammaCashback programmaCashback) {
                     if(saldoPerAttivitaCommerciale.containsKey(programmaCashback)) {
                         saldoPerAttivitaCommerciale
                                 .put(programmaCashback, saldoPerAttivitaCommerciale.get(programmaCashback) + programmaCashback.getPercentualeCashback() * valoreAcquisto);
@@ -91,7 +96,6 @@ public class ClienteControllerImpl implements ClienteController {
             }
         }
     }
-
 
     private double ricaricaSpesaTotaleCliente(AttivitaCommercialeController attivitaCommerciale){
         double spesaTotale = 0;
@@ -122,9 +126,25 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public ClienteModel createCliente(ClienteModel cliente) {
-        return null;
+        if(cliente.getId() != null){
+            throw new IllegalArgumentException("Non è possibile creare un cliente con un ID già esistente");
+        }
+
+        log.debug("Creazione nuovo cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
+        ClienteModel result = null;
+
+        //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID
+        cliente.setId(UUID.randomUUID());
+
+        try{
+            result = clienteRepositoryImpl.save(cliente);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
+    //TODO: implementare la ricerca per id
     @Override
     public ClienteModel getById(UUID id) {
         return null;
@@ -132,11 +152,31 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public ClienteModel updateCliente(ClienteModel cliente) {
-        return null;
+        if(cliente.getId() == null){
+            throw new IllegalArgumentException("Non è possibile aggiornare un cliente senza ID");
+        }
+
+        log.debug("Modifica cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
+
+        ClienteModel result = null;
+        try{
+            result = clienteRepositoryImpl.update(cliente);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public boolean deleteCliente(ClienteModel clienteModel) {
-        return false;
+        log.debug("Eliminazione cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
+
+        try{
+            clienteRepositoryImpl.delete(clienteModel);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
