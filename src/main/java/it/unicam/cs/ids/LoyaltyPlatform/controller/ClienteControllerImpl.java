@@ -60,8 +60,7 @@ public class ClienteControllerImpl implements ClienteController {
             //ci sono programmi fedeltà attivi e devo quindi considerarli tutti
             for(ProgrammaFedelta programmaFedelta : listaProgrammi) {
 
-                if(programmaFedelta instanceof ProgrammaALivelli) {
-                    ProgrammaALivelli programmaALivelli = (ProgrammaALivelli) programmaFedelta;
+                if(programmaFedelta instanceof ProgrammaALivelli programmaALivelli) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelli)) {
                         if( (ricaricaSpesaTotaleCliente(attivita) + valoreAcquisto) >
                                 programmaALivelli.getLivelli().get(programmaALivelli.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
@@ -71,8 +70,7 @@ public class ClienteControllerImpl implements ClienteController {
                         }
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaAPunti) {
-                    ProgrammaAPunti programmaAPunti = (ProgrammaAPunti) programmaFedelta;
+                } else if(programmaFedelta instanceof ProgrammaAPunti programmaAPunti) {
                     if(puntiPerAttivitaCommerciale.containsKey(programmaAPunti)) {
                         puntiPerAttivitaCommerciale
                                 .put(programmaAPunti, (int)(puntiPerAttivitaCommerciale.get(programmaAPunti) + programmaAPunti.getRapportoPunti() * valoreAcquisto));
@@ -82,8 +80,7 @@ public class ClienteControllerImpl implements ClienteController {
                                 .put(programmaAPunti, (int)(programmaAPunti.getRapportoPunti() * valoreAcquisto));
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaCashback) {
-                    ProgrammaCashback programmaCashback = (ProgrammaCashback) programmaFedelta;
+                } else if(programmaFedelta instanceof ProgrammaCashback programmaCashback) {
                     if(saldoPerAttivitaCommerciale.containsKey(programmaCashback)) {
                         saldoPerAttivitaCommerciale
                                 .put(programmaCashback, saldoPerAttivitaCommerciale.get(programmaCashback) + programmaCashback.getPercentualeCashback() * valoreAcquisto);
