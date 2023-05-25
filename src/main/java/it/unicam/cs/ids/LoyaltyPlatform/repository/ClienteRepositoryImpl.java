@@ -22,7 +22,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public void save(ClienteModel clienteModel) {
+    public ClienteModel save(ClienteModel clienteModel) {
         try{
             String fileName = clienteModel.getNome() + ".json";  //usa l'id del cliente come nome del file
             String filePath = OUTPUT_DIR + "\\" + fileName;
@@ -36,11 +36,13 @@ public class ClienteRepositoryImpl implements ClienteRepository {
             System.err.println("Errore durante il salvataggio del ClienteModel: " + e.getMessage());
         }
 
+        return clienteModel;
     }
 
     @Override
-    public void update(ClienteModel clienteModel) {
+    public ClienteModel update(ClienteModel clienteModel) {
 
+        return clienteModel;
     }
 
     @Override
