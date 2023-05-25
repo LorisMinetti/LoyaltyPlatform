@@ -19,14 +19,10 @@ public class ClienteControllerImpl implements ClienteController {
         this.cliente = cliente;
     }
 
-
     @Override
     public boolean effettuaPagamento() {
         return false;
     }
-
-
-
 
     @Override
     public Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {

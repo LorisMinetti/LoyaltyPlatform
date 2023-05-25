@@ -5,6 +5,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import java.util.UUID;
 
 public interface ClienteRepository {
+
     void save(ClienteModel clienteModel);
 
     void update(ClienteModel clienteModel);

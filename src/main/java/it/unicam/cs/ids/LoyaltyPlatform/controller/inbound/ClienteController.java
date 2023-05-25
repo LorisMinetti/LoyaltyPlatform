@@ -9,13 +9,14 @@ public interface ClienteController {
 
     ClienteModel createCliente(ClienteModel cliente);
 
-    ClienteModel getById(UUID id);
-
     ClienteModel updateCliente(ClienteModel cliente);
 
-    boolean deleteCliente(ClienteModel clienteModel);
+    boolean deleteCliente(ClienteModel cliente);
+
+    ClienteModel getById(UUID id);
 
     Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto);
+
     boolean effettuaPagamento();
 
 }
