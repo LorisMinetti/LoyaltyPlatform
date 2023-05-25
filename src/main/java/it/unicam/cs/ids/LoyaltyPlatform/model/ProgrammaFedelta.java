@@ -1,6 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import it.unicam.cs.ids.LoyaltyPlatform.interfaces.AttivitaCommerciale;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import lombok.Data;
 
 import java.util.UUID;
@@ -10,6 +10,6 @@ public class ProgrammaFedelta {
     private String nome;
     private UUID id;
     private double costo;
-    private AttivitaCommerciale attivitaCommerciale;
+    private AttivitaCommercialeController attivitaCommerciale;
 
 }
