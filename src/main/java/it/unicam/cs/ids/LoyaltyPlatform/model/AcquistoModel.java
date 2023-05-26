@@ -14,8 +14,8 @@ import java.util.UUID;
 public class AcquistoModel {
     private double valoreAcquisto;
     private UUID id;
-    private ClienteController clienteController;
-    private AttivitaCommercialeController attivitaCommerciale;
+    private ClienteModel clienteController;
+    private AttivitaCommercialeModel attivitaCommerciale;
 
 
 }
