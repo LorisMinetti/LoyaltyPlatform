@@ -1,10 +1,8 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ClienteRepository;
-import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +14,11 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\cliente";
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-    public ClienteRepositoryImpl() {}
+    public ClienteRepositoryImpl() {
+        this.mapper = new ObjectMapper();
+    }
 
     @Override
     public ClienteModel save(ClienteModel clienteModel) {

@@ -15,13 +15,16 @@ public class LoyaltyPlatformApplication {
 		SpringApplication.run(LoyaltyPlatformApplication.class, args);
 
 		ClienteModel cliente = new ClienteModel();
-		cliente.setNome("Francesco Tasso");
+		cliente.setNome("LorisMinetti");
 
 
 		ClienteControllerImpl clienteController = new ClienteControllerImpl(new ClienteRepositoryImpl());
 
 		//per ora l'update non funziona poichè sia se lo creo da creator sia se lo creo da main il metodo create assegberà
 		//un id random al cliente, quindi non sarà mai uguale a quello che ho creato prima
+
+		clienteController.deleteCliente(cliente);
+
 
 	}
 
