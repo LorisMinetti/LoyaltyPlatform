@@ -15,8 +15,8 @@ public class ClienteModel {
     private String nome;
     private UUID id;
     private Map<AttivitaCommercialeController, Double> spesaTotalePerAttivitaCommerciale;
-    private Map<ProgrammaALivelli, Integer> livelloPerAttivitaCommerciale;
-    private Map<ProgrammaAPunti, Integer> puntiPerAttivitaCommerciale;
-    private Map<ProgrammaCashback, Double> saldoPerAttivitaCommerciale;
+    private Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
+    private Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale;
+    private Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale;
 
 }

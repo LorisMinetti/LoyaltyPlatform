@@ -1,6 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.Acquisto;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 
 import java.util.UUID;
@@ -15,7 +15,7 @@ public interface ClienteController {
 
     ClienteModel getById(UUID id);
 
-    Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto);
+    AcquistoModel effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto);
 
     boolean effettuaPagamento();
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface ClienteRepository {
+
     ClienteModel save(ClienteModel clienteModel);
 
     ClienteModel update(ClienteModel clienteModel) throws IOException;

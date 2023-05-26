@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode
 @ToString
-public class Acquisto {
+public class AcquistoModel {
     private double valoreAcquisto;
     private UUID id;
     private ClienteController clienteController;

@@ -5,6 +5,6 @@ import lombok.Data;
 
 import java.util.List;
 @Data
-public class ProgrammaCoalizione extends ProgrammaFedelta {
+public class ProgrammaCoalizioneModel extends ProgrammaFedelta {
     private List<AttivitaCommercialeController> attivtaCoalizione;
 }

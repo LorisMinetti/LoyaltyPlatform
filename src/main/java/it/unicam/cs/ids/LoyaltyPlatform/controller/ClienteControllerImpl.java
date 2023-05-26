@@ -32,9 +32,9 @@ public class ClienteControllerImpl implements ClienteController {
 
 
     @Override
-    public Acquisto effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
+    public AcquistoModel effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
 
-        Acquisto ret = new Acquisto();
+        AcquistoModel ret = new AcquistoModel();
         ret.setClienteController(this);
         ret.setValoreAcquisto(valoreAcquisto);
         ret.setAttivitaCommerciale(attivita);
@@ -53,9 +53,9 @@ public class ClienteControllerImpl implements ClienteController {
 
     private void calcoloBeneficiPerAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
         List<ProgrammaFedelta> listaProgrammi = attivita.getAvailablePrograms();
-        Map<ProgrammaALivelli, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
-        Map<ProgrammaAPunti, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
-        Map<ProgrammaCashback, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
+        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
+        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
+        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
 
         if(listaProgrammi.isEmpty()) {
             throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
@@ -63,33 +63,33 @@ public class ClienteControllerImpl implements ClienteController {
             //ci sono programmi fedeltà attivi e devo quindi considerarli tutti
             for(ProgrammaFedelta programmaFedelta : listaProgrammi) {
 
-                if(programmaFedelta instanceof ProgrammaALivelli programmaALivelli) {
-                    if(livelloPerAttivitaCommerciale.containsKey(programmaALivelli)) {
+                if(programmaFedelta instanceof ProgrammaALivelliModel programmaALivelliModel) {
+                    if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
                         if( (ricaricaSpesaTotaleCliente(attivita) + valoreAcquisto) >
-                                programmaALivelli.getLivelli().get(programmaALivelli.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
+                                programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
                         {
                             //il cliente ha raggiunto il livello successivo
-                            programmaALivelli.setLivelloAttuale(programmaALivelli.getLivelloAttuale() + 1);
+                            programmaALivelliModel.setLivelloAttuale(programmaALivelliModel.getLivelloAttuale() + 1);
                         }
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaAPunti programmaAPunti) {
-                    if(puntiPerAttivitaCommerciale.containsKey(programmaAPunti)) {
+                } else if(programmaFedelta instanceof ProgrammaAPuntiModel programmaAPuntiModel) {
+                    if(puntiPerAttivitaCommerciale.containsKey(programmaAPuntiModel)) {
                         puntiPerAttivitaCommerciale
-                                .put(programmaAPunti, (int)(puntiPerAttivitaCommerciale.get(programmaAPunti) + programmaAPunti.getRapportoPunti() * valoreAcquisto));
+                                .put(programmaAPuntiModel, (int)(puntiPerAttivitaCommerciale.get(programmaAPuntiModel) + programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
                     } else {
                         //caso in cui vanno inseriti punti per questa attività commerciale per la prima volta
                         puntiPerAttivitaCommerciale
-                                .put(programmaAPunti, (int)(programmaAPunti.getRapportoPunti() * valoreAcquisto));
+                                .put(programmaAPuntiModel, (int)(programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaCashback programmaCashback) {
-                    if(saldoPerAttivitaCommerciale.containsKey(programmaCashback)) {
+                } else if(programmaFedelta instanceof ProgrammaCashbackModel programmaCashbackModel) {
+                    if(saldoPerAttivitaCommerciale.containsKey(programmaCashbackModel)) {
                         saldoPerAttivitaCommerciale
-                                .put(programmaCashback, saldoPerAttivitaCommerciale.get(programmaCashback) + programmaCashback.getPercentualeCashback() * valoreAcquisto);
+                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
                     } else {
                         saldoPerAttivitaCommerciale
-                                .put(programmaCashback, programmaCashback.getPercentualeCashback() * valoreAcquisto);
+                                .put(programmaCashbackModel, programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
                     }
                 }
             }
