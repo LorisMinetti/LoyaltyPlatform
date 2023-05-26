@@ -1,11 +1,18 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.GestorePiattaformaRepository;
 
 import java.util.UUID;
 
 public class GestorePiattaformaRepositoryImpl implements GestorePiattaformaRepository {
+
+    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\gestorePiattaforma";
+
+    private ObjectMapper mapper;
+
+    public GestorePiattaformaRepositoryImpl() {}
 
     @Override
     public void save(GestorePiattaformaModel gestorePiattaformaModel) {

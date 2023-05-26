@@ -10,7 +10,7 @@ public interface AttivitaCommercialeRepository {
 
     void update(AttivitaCommercialeModel attivitaCommercialeModel);
 
-    void delete(AttivitaCommercialeModel attivitaCommercialeModel);
+    boolean delete(AttivitaCommercialeModel attivitaCommercialeModel);
 
     AttivitaCommercialeModel findById(UUID id);
 

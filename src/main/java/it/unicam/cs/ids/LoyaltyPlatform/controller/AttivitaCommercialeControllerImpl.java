@@ -4,15 +4,18 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeCo
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
 public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
-    private final AttivitaCommercialeModel attivitaCommerciale;
+    private final AttivitaCommercialeModel attivitaCommercialeModel;
 
-    public AttivitaCommercialeControllerImpl(AttivitaCommercialeModel attivitaCommerciale) {
-        this.attivitaCommerciale = attivitaCommerciale;
+    public AttivitaCommercialeControllerImpl(AttivitaCommercialeModel attivitaCommercialeModel) {
+        this.attivitaCommercialeModel = attivitaCommercialeModel;
     }
 
     @Override
@@ -22,17 +25,17 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
     @Override
     public List<ProgrammaFedelta> getAvailablePrograms() {
-        if(attivitaCommerciale.getProgrammiFedeltaAderiti().isEmpty()){
+        if(attivitaCommercialeModel.getProgrammiFedeltaAderiti().isEmpty()){
             return null;
         } else {
-            return attivitaCommerciale.getProgrammiFedeltaAderiti();
+            return attivitaCommercialeModel.getProgrammiFedeltaAderiti();
         }
     }
 
     @Override
     public void selezionaProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
-        if(programmaFedelta != null && !attivitaCommerciale.getProgrammiFedeltaAderiti().contains(programmaFedelta)) {
-            attivitaCommerciale.getProgrammiFedeltaAderiti().add(programmaFedelta);
+        if(programmaFedelta != null && !attivitaCommercialeModel.getProgrammiFedeltaAderiti().contains(programmaFedelta)) {
+            attivitaCommercialeModel.getProgrammiFedeltaAderiti().add(programmaFedelta);
         } else {
             throw new IllegalArgumentException("Programma fedeltà non valido");
         }

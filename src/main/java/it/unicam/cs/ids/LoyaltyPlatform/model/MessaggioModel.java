@@ -3,7 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Messaggio<M, D> {
+public class MessaggioModel<M, D> {
     private UUID id;
     private String testo;
     private LocalDateTime time;

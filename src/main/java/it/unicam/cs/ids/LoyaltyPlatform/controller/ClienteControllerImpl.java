@@ -13,12 +13,11 @@ import java.util.UUID;
 @Slf4j
 public class ClienteControllerImpl implements ClienteController {
 
-    private ClienteModel cliente;
+    private ClienteModel clienteModel;
 
     private final ClienteRepositoryImpl clienteRepositoryImpl;
 
-    public ClienteControllerImpl(ClienteModel cliente, ClienteRepositoryImpl clienteRepositoryImpl) {
-        this.cliente = cliente;
+    public ClienteControllerImpl(ClienteRepositoryImpl clienteRepositoryImpl) {
         this.clienteRepositoryImpl = clienteRepositoryImpl;
     }
 
@@ -54,9 +53,9 @@ public class ClienteControllerImpl implements ClienteController {
 
     private void calcoloBeneficiPerAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
         List<ProgrammaFedelta> listaProgrammi = attivita.getAvailablePrograms();
-        Map<ProgrammaALivelli, Integer> livelloPerAttivitaCommerciale = cliente.getLivelloPerAttivitaCommerciale();
-        Map<ProgrammaAPunti, Integer> puntiPerAttivitaCommerciale = cliente.getPuntiPerAttivitaCommerciale();
-        Map<ProgrammaCashback, Double> saldoPerAttivitaCommerciale = cliente.getSaldoPerAttivitaCommerciale();
+        Map<ProgrammaALivelli, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
+        Map<ProgrammaAPunti, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
+        Map<ProgrammaCashback, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
 
         if(listaProgrammi.isEmpty()) {
             throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
@@ -102,8 +101,8 @@ public class ClienteControllerImpl implements ClienteController {
         if(attivitaCommerciale != null){
             //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
             //ci sia già un programma a livelli offerto da questa attivita
-            if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivitaCommerciale)){
-                spesaTotale = cliente.getSpesaTotalePerAttivitaCommerciale().get(attivitaCommerciale);
+            if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivitaCommerciale)){
+                spesaTotale = clienteModel.getSpesaTotalePerAttivitaCommerciale().get(attivitaCommerciale);
             }
         }
         return spesaTotale;
@@ -112,10 +111,10 @@ public class ClienteControllerImpl implements ClienteController {
     private void aggiornaSpesaTotale(AttivitaCommercialeController attivita, double valoreAcquisto) {
         /*
          */
-        if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
-            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, cliente.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
+        if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
+            clienteModel.getSpesaTotalePerAttivitaCommerciale().put(attivita, clienteModel.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
         } else {
-            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
+            clienteModel.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
         }
     }
 
@@ -169,7 +168,7 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public boolean deleteCliente(ClienteModel clienteModel) {
-        log.debug("Eliminazione cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
+        log.debug("Eliminazione cliente" + clienteModel.getNome() + " --> ID: " + clienteModel.getId());
 
         try{
             clienteRepositoryImpl.delete(clienteModel);
