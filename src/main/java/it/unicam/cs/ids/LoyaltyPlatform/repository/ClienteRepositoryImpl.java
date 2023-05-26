@@ -23,7 +23,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     public ClienteModel save(ClienteModel clienteModel) {
         try{
-            String fileName = clienteModel.getNome() + ".json";  //usa l'id del cliente come nome del file
+            String fileName = clienteModel.getNome() + ".json";  //usa il nome del cliente come nome del file
             String filePath = OUTPUT_DIR + "\\" + fileName;
 
             String json = mapper.writeValueAsString(clienteModel);
@@ -94,7 +94,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     public boolean delete(ClienteModel clienteModel) {
         try {
-            String fileName = clienteModel.getNome() + ".json";  // Usa l'id del cliente come nome del file
+            String fileName = clienteModel.getNome() + ".json";  // Usa il nome del cliente come nome del file
             String filePath = OUTPUT_DIR + "\\" + fileName;
 
             File file = new File(filePath);
@@ -116,7 +116,5 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     public ClienteModel findById(UUID id) {
         return null;
     }
-
-    //update
 
 }

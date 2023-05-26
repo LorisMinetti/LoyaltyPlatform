@@ -2,15 +2,16 @@ package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.MessaggioModel;
-
+import java.io.IOException;
 import java.util.UUID;
 
 public interface MessaggioRepository {
-    void save(MessaggioModel gestorePiattaformaModel);
 
-    void update(MessaggioModel gestorePiattaformaModel);
+    MessaggioModel save(MessaggioModel messaggioModel);
 
-    boolean delete(MessaggioModel gestorePiattaformaModel);
+    MessaggioModel update(MessaggioModel messaggioModel) throws IOException;
+
+    boolean delete(MessaggioModel messaggioModel);
 
     MessaggioModel findById(UUID id);
 
