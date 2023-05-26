@@ -16,8 +16,18 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     private final ObjectMapper mapper;
 
-    public ClienteRepositoryImpl() {
+    public ClienteRepositoryImpl(){
         this.mapper = new ObjectMapper();
+    }
+
+    /*
+    *   Singleton constructor
+    */
+    private static class SingletonBuilder{
+        private static final ClienteRepositoryImpl INSTANCE = new ClienteRepositoryImpl();
+    }
+    public static ClienteRepositoryImpl getInstance(){
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

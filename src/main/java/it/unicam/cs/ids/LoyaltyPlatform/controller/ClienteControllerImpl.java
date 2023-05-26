@@ -17,8 +17,8 @@ public class ClienteControllerImpl implements ClienteController {
 
     private final ClienteRepositoryImpl clienteRepositoryImpl;
 
-    public ClienteControllerImpl(ClienteRepositoryImpl clienteRepositoryImpl) {
-        this.clienteRepositoryImpl = clienteRepositoryImpl;
+    public ClienteControllerImpl() {
+        this.clienteRepositoryImpl = ClienteRepositoryImpl.getInstance();
     }
 
 
@@ -129,7 +129,7 @@ public class ClienteControllerImpl implements ClienteController {
             throw new IllegalArgumentException("Non è possibile creare un cliente con un ID già esistente");
         }
 
-        log.debug("Creazione nuovo cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
+        log.debug("Creazione nuovo cliente" + cliente.getNome());
         ClienteModel result = null;
 
         //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID

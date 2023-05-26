@@ -2,7 +2,6 @@ package it.unicam.cs.ids.LoyaltyPlatform;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.ClienteControllerImpl;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -18,7 +17,7 @@ public class LoyaltyPlatformApplication {
 		cliente.setNome("LorisMinetti");
 
 
-		ClienteControllerImpl clienteController = new ClienteControllerImpl(new ClienteRepositoryImpl());
+		ClienteControllerImpl clienteController = new ClienteControllerImpl();
 
 		//per ora l'update non funziona poichè sia se lo creo da creator sia se lo creo da main il metodo create assegberà
 		//un id random al cliente, quindi non sarà mai uguale a quello che ho creato prima
