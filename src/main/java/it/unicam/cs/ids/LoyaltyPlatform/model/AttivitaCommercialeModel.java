@@ -14,6 +14,6 @@ public class AttivitaCommercialeModel {
     private String nome;
     private UUID id;
     private String partitaIVA;
-    private List<ProgrammaFedelta> programmiFedeltaAderiti;
+    private List<ProgrammaFedeltaModel> programmiFedeltaAderiti;
 
 }

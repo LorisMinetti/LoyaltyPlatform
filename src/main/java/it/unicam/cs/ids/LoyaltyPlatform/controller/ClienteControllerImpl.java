@@ -52,7 +52,7 @@ public class ClienteControllerImpl implements ClienteController {
     }
 
     private void calcoloBeneficiPerAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
-        List<ProgrammaFedelta> listaProgrammi = attivita.getAvailablePrograms();
+        List<ProgrammaFedeltaModel> listaProgrammi = attivita.getAvailablePrograms();
         Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
         Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
         Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
@@ -61,9 +61,9 @@ public class ClienteControllerImpl implements ClienteController {
             throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
         } else {
             //ci sono programmi fedeltà attivi e devo quindi considerarli tutti
-            for(ProgrammaFedelta programmaFedelta : listaProgrammi) {
+            for(ProgrammaFedeltaModel programmaFedeltaModel : listaProgrammi) {
 
-                if(programmaFedelta instanceof ProgrammaALivelliModel programmaALivelliModel) {
+                if(programmaFedeltaModel instanceof ProgrammaALivelliModel programmaALivelliModel) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
                         if( (ricaricaSpesaTotaleCliente(attivita) + valoreAcquisto) >
                                 programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
@@ -73,7 +73,7 @@ public class ClienteControllerImpl implements ClienteController {
                         }
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaAPuntiModel programmaAPuntiModel) {
+                } else if(programmaFedeltaModel instanceof ProgrammaAPuntiModel programmaAPuntiModel) {
                     if(puntiPerAttivitaCommerciale.containsKey(programmaAPuntiModel)) {
                         puntiPerAttivitaCommerciale
                                 .put(programmaAPuntiModel, (int)(puntiPerAttivitaCommerciale.get(programmaAPuntiModel) + programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
@@ -83,7 +83,7 @@ public class ClienteControllerImpl implements ClienteController {
                                 .put(programmaAPuntiModel, (int)(programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
                     }
 
-                } else if(programmaFedelta instanceof ProgrammaCashbackModel programmaCashbackModel) {
+                } else if(programmaFedeltaModel instanceof ProgrammaCashbackModel programmaCashbackModel) {
                     if(saldoPerAttivitaCommerciale.containsKey(programmaCashbackModel)) {
                         saldoPerAttivitaCommerciale
                                 .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
