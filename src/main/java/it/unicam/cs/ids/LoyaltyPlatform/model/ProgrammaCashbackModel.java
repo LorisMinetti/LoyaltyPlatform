@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public class ProgrammaCashbackModel extends ProgrammaFedelta {
+public class ProgrammaCashbackModel extends ProgrammaFedeltaModel {
     private double spesaMinima;
     private double percentualeCashback;
 }

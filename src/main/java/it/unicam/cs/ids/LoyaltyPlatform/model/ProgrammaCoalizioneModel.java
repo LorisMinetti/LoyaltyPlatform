@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @EqualsAndHashCode
 @ToString
-public class ProgrammaCoalizioneModel extends ProgrammaFedelta {
+public class ProgrammaCoalizioneModel extends ProgrammaFedeltaModel {
     private List<AttivitaCommercialeController> attivtaCoalizione;
 }
