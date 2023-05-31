@@ -35,9 +35,9 @@ public class ClienteControllerImpl implements ClienteController {
     public AcquistoModel effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
 
         AcquistoModel ret = new AcquistoModel();
-        ret.setClienteController(this);
+    //    ret.setClienteModel(this);
         ret.setValoreAcquisto(valoreAcquisto);
-        ret.setAttivitaCommerciale(attivita);
+    //    ret.setAttivitaCommercialeModel(attivita);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
         calcoloBeneficiPerAcquisto(attivita, valoreAcquisto);
