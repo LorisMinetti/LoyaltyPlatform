@@ -14,7 +14,17 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
     private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\attivitaCommerciale";
     private ObjectMapper mapper;
 
-    public AttivitaCommercialeRepositoryImpl() {}
+    public AttivitaCommercialeRepositoryImpl() {this.mapper = new ObjectMapper();}
+
+    /*
+     *   Singleton constructor
+     */
+    private static class SingletonBuilder{
+        private static final AttivitaCommercialeRepositoryImpl INSTANCE = new AttivitaCommercialeRepositoryImpl();
+    }
+    public static AttivitaCommercialeRepositoryImpl getInstance(){
+        return AttivitaCommercialeRepositoryImpl.SingletonBuilder.INSTANCE;
+    }
 
     @Override
     public void save(AttivitaCommercialeModel attivitaCommercialeModel) {

@@ -12,10 +12,12 @@ import java.util.UUID;
 
 public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
-    private final AttivitaCommercialeModel attivitaCommercialeModel;
+    private AttivitaCommercialeModel attivitaCommercialeModel;
 
-    public AttivitaCommercialeControllerImpl(AttivitaCommercialeModel attivitaCommercialeModel) {
-        this.attivitaCommercialeModel = attivitaCommercialeModel;
+    private final AttivitaCommercialeRepositoryImpl attivitaCommercialeRepositoryImpl;
+
+    public AttivitaCommercialeControllerImpl() {
+        this.attivitaCommercialeRepositoryImpl = AttivitaCommercialeRepositoryImpl.getInstance();
     }
 
     @Override
