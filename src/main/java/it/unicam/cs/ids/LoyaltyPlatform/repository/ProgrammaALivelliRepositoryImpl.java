@@ -27,7 +27,7 @@ public class ProgrammaALivelliRepositoryImpl implements ProgrammaALivelliReposit
         private static final ProgrammaALivelliRepositoryImpl INSTANCE = new ProgrammaALivelliRepositoryImpl();
     }
     public static ProgrammaALivelliRepositoryImpl getInstance(){
-        return ProgrammaALivelliRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

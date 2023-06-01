@@ -27,7 +27,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         private static final ClienteRepositoryImpl INSTANCE = new ClienteRepositoryImpl();
     }
     public static ClienteRepositoryImpl getInstance(){
-        return ClienteRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

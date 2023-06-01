@@ -25,7 +25,7 @@ public class ProgrammaCashbackRepositoryImpl implements ProgrammaCashbackReposit
         private static final ProgrammaCashbackRepositoryImpl INSTANCE = new ProgrammaCashbackRepositoryImpl();
     }
     public static ProgrammaCashbackRepositoryImpl getInstance(){
-        return ProgrammaCashbackRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

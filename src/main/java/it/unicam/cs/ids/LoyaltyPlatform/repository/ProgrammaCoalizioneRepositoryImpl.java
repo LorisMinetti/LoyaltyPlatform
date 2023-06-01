@@ -25,7 +25,7 @@ public class ProgrammaCoalizioneRepositoryImpl implements ProgrammaCoalizioneRep
         private static final ProgrammaCoalizioneRepositoryImpl INSTANCE = new ProgrammaCoalizioneRepositoryImpl();
     }
     public static ProgrammaCoalizioneRepositoryImpl getInstance(){
-        return ProgrammaCoalizioneRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

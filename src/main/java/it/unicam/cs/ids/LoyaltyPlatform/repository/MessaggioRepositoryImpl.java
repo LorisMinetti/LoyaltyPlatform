@@ -18,6 +18,16 @@ public class MessaggioRepositoryImpl implements MessaggioRepository {
 
     public MessaggioRepositoryImpl() {this.mapper = new ObjectMapper();}
 
+    /*
+     *   Singleton constructor
+     */
+    private static class SingletonBuilder{
+        private static final MessaggioRepositoryImpl INSTANCE = new MessaggioRepositoryImpl();
+    }
+    public static MessaggioRepositoryImpl getInstance(){
+        return SingletonBuilder.INSTANCE;
+    }
+
     @Override
     public MessaggioModel save(MessaggioModel messaggioModel) {
         try{

@@ -20,6 +20,16 @@ public class AcquistoRepositoryImpl implements AcquistoRepository {
         this.mapper = new ObjectMapper();
     }
 
+    /*
+     *   Singleton constructor
+     */
+    private static class SingletonBuilder{
+        private static final AcquistoRepositoryImpl INSTANCE = new AcquistoRepositoryImpl();
+    }
+    public static AcquistoRepositoryImpl getInstance(){
+        return SingletonBuilder.INSTANCE;
+    }
+
     @Override
     public AcquistoModel save(AcquistoModel acquistoModel) {
         try{

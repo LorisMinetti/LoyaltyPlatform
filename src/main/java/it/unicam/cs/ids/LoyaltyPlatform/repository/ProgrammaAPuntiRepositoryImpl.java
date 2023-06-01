@@ -25,7 +25,7 @@ public class ProgrammaAPuntiRepositoryImpl implements ProgrammaAPuntiRepository 
         private static final ProgrammaAPuntiRepositoryImpl INSTANCE = new ProgrammaAPuntiRepositoryImpl();
     }
     public static ProgrammaAPuntiRepositoryImpl getInstance(){
-        return ProgrammaAPuntiRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override

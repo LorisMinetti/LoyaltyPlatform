@@ -25,7 +25,7 @@ public class ProgrammaFedeltaRepositoryImpl implements ProgrammaFedeltaRepositor
         private static final ProgrammaFedeltaRepositoryImpl INSTANCE = new ProgrammaFedeltaRepositoryImpl();
     }
     public static ProgrammaFedeltaRepositoryImpl getInstance(){
-        return ProgrammaFedeltaRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override
