@@ -3,6 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
 
 import java.util.List;
 import java.util.UUID;
