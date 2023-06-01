@@ -24,9 +24,9 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final AttivitaCommercialeRepositoryImpl INSTANCE = new AttivitaCommercialeRepositoryImpl();
+        private static final AttivitaCommercialeRepository INSTANCE = new AttivitaCommercialeRepositoryImpl();
     }
-    public static AttivitaCommercialeRepositoryImpl getInstance(){
+    public static AttivitaCommercialeRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

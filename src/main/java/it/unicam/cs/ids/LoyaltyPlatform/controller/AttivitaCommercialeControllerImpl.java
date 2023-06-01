@@ -4,16 +4,17 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeCo
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AttivitaCommercialeRepository;
 
 import java.util.List;
 import java.util.UUID;
 
 public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
-    private final AttivitaCommercialeRepositoryImpl attivitaCommercialeRepositoryImpl;
+    private final AttivitaCommercialeRepository attivitaCommercialeRepository;
 
     public AttivitaCommercialeControllerImpl() {
-        this.attivitaCommercialeRepositoryImpl = AttivitaCommercialeRepositoryImpl.getInstance();
+        this.attivitaCommercialeRepository = AttivitaCommercialeRepositoryImpl.getInstance();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     @Override
     public AttivitaCommercialeModel getById(UUID id) {
         try{
-            return attivitaCommercialeRepositoryImpl.findById(id);
+            return attivitaCommercialeRepository.findById(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
