@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ClienteModel {
     private String nome;
     private UUID id;
-    private Map<AttivitaCommercialeController, Double> spesaTotalePerAttivitaCommerciale;
+    private Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale;
     private Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
     private Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale;
     private Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale;
@@ -26,7 +26,7 @@ public class ClienteModel {
     public static class Builder{
         private String nome;
         private UUID id;
-        private Map<AttivitaCommercialeController, Double> spesaTotalePerAttivitaCommerciale;
+        private Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale;
         private Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
         private Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale;
         private Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale;
@@ -38,7 +38,7 @@ public class ClienteModel {
             this.nome = nome;
             return this;
         }
-        public Builder spesaTotalePerAttivitaCommerciale(Map<AttivitaCommercialeController, Double> spesaTotalePerAttivitaCommerciale){
+        public Builder spesaTotalePerAttivitaCommerciale(Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale){
             this.spesaTotalePerAttivitaCommerciale = spesaTotalePerAttivitaCommerciale;
             return this;
         }
