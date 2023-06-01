@@ -18,8 +18,8 @@ public interface AttivitaCommercialeController {
 
     ProgrammaFedeltaModel aderisciProgrammaFedelta();
 
-    List<ProgrammaFedeltaModel> getAvailablePrograms();
+    List<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel);
 
-    void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
+    void selezionaProgrammaFedelta(AttivitaCommercialeModel attivitaCommercialeModel, ProgrammaFedeltaModel programmaFedeltaModel);
 
 }

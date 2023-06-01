@@ -10,8 +10,6 @@ import java.util.UUID;
 
 public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
-    private AttivitaCommercialeModel attivitaCommercialeModel;
-
     private final AttivitaCommercialeRepositoryImpl attivitaCommercialeRepositoryImpl;
 
     public AttivitaCommercialeControllerImpl() {
@@ -24,7 +22,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
     @Override
-    public List<ProgrammaFedeltaModel> getAvailablePrograms() {
+    public List<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel) {
         if(attivitaCommercialeModel.getProgrammiFedeltaAderiti().isEmpty()){
             return null;
         } else {
@@ -33,7 +31,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
     @Override
-    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
+    public void selezionaProgrammaFedelta(AttivitaCommercialeModel attivitaCommercialeModel, ProgrammaFedeltaModel programmaFedeltaModel) {
         if(programmaFedeltaModel != null && !attivitaCommercialeModel.getProgrammiFedeltaAderiti().contains(programmaFedeltaModel)) {
             attivitaCommercialeModel.getProgrammiFedeltaAderiti().add(programmaFedeltaModel);
         } else {
