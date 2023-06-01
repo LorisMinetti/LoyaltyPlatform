@@ -32,12 +32,12 @@ public class ClienteControllerImpl implements ClienteController {
 
 
     @Override
-    public AcquistoModel effettuaAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
+    public AcquistoModel effettuaAcquisto(AttivitaCommercialeModel attivita, double valoreAcquisto) {
 
         AcquistoModel ret = new AcquistoModel();
-        ret.setClienteController(this);
+        ret.setClienteModel(this.clienteModel);
         ret.setValoreAcquisto(valoreAcquisto);
-        ret.setAttivitaCommerciale(attivita);
+        ret.setAttivitaCommercialeModel(attivita);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
         calcoloBeneficiPerAcquisto(attivita, valoreAcquisto);
@@ -51,8 +51,10 @@ public class ClienteControllerImpl implements ClienteController {
         return ret;
     }
 
-    private void calcoloBeneficiPerAcquisto(AttivitaCommercialeController attivita, double valoreAcquisto) {
-        List<ProgrammaFedelta> listaProgrammi = attivita.getAvailablePrograms();
+    private void calcoloBeneficiPerAcquisto(AttivitaCommercialeModel attivita, double valoreAcquisto) {
+        AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
+
+        List<ProgrammaFedelta> listaProgrammi = attivitaCommercialeController.getAvailablePrograms();
         Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
         Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
         Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
@@ -96,7 +98,7 @@ public class ClienteControllerImpl implements ClienteController {
         }
     }
 
-    private double ricaricaSpesaTotaleCliente(AttivitaCommercialeController attivitaCommerciale){
+    private double ricaricaSpesaTotaleCliente(AttivitaCommercialeModel attivitaCommerciale){
         double spesaTotale = 0;
         if(attivitaCommerciale != null){
             //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
@@ -108,7 +110,7 @@ public class ClienteControllerImpl implements ClienteController {
         return spesaTotale;
     }
 
-    private void aggiornaSpesaTotale(AttivitaCommercialeController attivita, double valoreAcquisto) {
+    private void aggiornaSpesaTotale(AttivitaCommercialeModel attivita, double valoreAcquisto) {
         /*
          */
         if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
