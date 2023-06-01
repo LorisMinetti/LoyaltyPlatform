@@ -123,7 +123,23 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     //TODO
     @Override
-    public ClienteModel findById(UUID id) {
+    public ClienteModel findByName(String name) {
+        try {
+            String fileName = name.toString() + ".json";
+            String filePath = OUTPUT_DIR + "\\" + fileName;
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                String json = Files.readString(Paths.get(filePath));
+                ClienteModel clienteModel = mapper.readValue(json, ClienteModel.class);
+                System.out.println("ClienteModel trovato: " + clienteModel);
+                return clienteModel;
+            } else {
+                System.out.println("Il file non esiste: " + filePath);
+            }
+        } catch (IOException e) {
+            System.err.println("Errore durante la lettura del file del ClienteModel: " + e.getMessage());
+        }
         return null;
     }
 

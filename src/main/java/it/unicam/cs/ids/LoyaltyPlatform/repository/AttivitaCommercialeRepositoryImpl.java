@@ -5,9 +5,13 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AttivitaCommercialeRepository;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRepository {
 
@@ -68,6 +72,23 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
 
     @Override
     public AttivitaCommercialeModel findById(UUID id) {
+        try {
+            List<String> fileNames = Files.list(Paths.get(OUTPUT_DIR))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .collect(Collectors.toList());
+
+            for (String fileName : fileNames) {
+                String filePath = OUTPUT_DIR + "\\" + fileName;
+                String json = Files.readString(Paths.get(filePath));
+                AttivitaCommercialeModel attivitaCommercialeModel = mapper.readValue(json, AttivitaCommercialeModel.class);
+                if (attivitaCommercialeModel.getId().equals(id)) {
+                    return attivitaCommercialeModel;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Errore durante la lettura dei file dell'AttivitaCommercialeModel: " + e.getMessage());
+        }
         return null;
     }
 }

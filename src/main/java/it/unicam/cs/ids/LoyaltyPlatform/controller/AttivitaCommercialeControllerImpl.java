@@ -3,6 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,6 +61,11 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
     @Override
     public AttivitaCommercialeModel getById(UUID id) {
+        try{
+            return attivitaCommercialeRepositoryImpl.findById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

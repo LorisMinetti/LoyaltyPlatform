@@ -13,6 +13,6 @@ public interface ClienteRepository {
 
     boolean delete(ClienteModel clienteModel);
 
-    ClienteModel findById(UUID id);
+    ClienteModel findByName(String name);
 
 }
