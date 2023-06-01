@@ -51,7 +51,7 @@ public class GestorePiattaformaRepositoryImpl implements GestorePiattaformaRepos
             File file = new File(filePath);
             if (file.exists()) {
                 file.delete();
-                System.out.println("ClienteModel eliminato con successo: " + gestorePiattaformaModel);
+                System.out.println("Gestore eliminato con successo: " + gestorePiattaformaModel);
                 return true;
             } else {
                 System.out.println("Il file non esiste: " + filePath);

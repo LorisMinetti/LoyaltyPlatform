@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public class GestorePiattaformaControllerImpl implements GestorePiattaformaController {
 
-    private GestorePiattaformaModel gestorePiattaformaModel;
-
     @Override
     public ProgrammaFedeltaModel aggiungiProgrammaFedelta() {
         return null;
