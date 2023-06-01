@@ -16,7 +16,7 @@ public interface ClienteController {
 
     ClienteModel getById(UUID id);
 
-    AcquistoModel effettuaAcquisto(AttivitaCommercialeModel attivita, double valoreAcquisto);
+    AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto);
 
     boolean effettuaPagamento();
 

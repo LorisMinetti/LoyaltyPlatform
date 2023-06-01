@@ -13,8 +13,6 @@ import java.util.UUID;
 @Slf4j
 public class ClienteControllerImpl implements ClienteController {
 
-    private ClienteModel clienteModel;
-
     private final ClienteRepositoryImpl clienteRepositoryImpl;
 
     public ClienteControllerImpl() {
@@ -32,17 +30,17 @@ public class ClienteControllerImpl implements ClienteController {
 
 
     @Override
-    public AcquistoModel effettuaAcquisto(AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
 
         AcquistoModel ret = new AcquistoModel();
-        ret.setClienteModel(this.clienteModel);
+        ret.setClienteModel(clienteModel);
         ret.setValoreAcquisto(valoreAcquisto);
         ret.setAttivitaCommercialeModel(attivita);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
-        calcoloBeneficiPerAcquisto(attivita, valoreAcquisto);
+        calcoloBeneficiPerAcquisto(clienteModel, attivita, valoreAcquisto);
         //caso generale della spesa totale da sommare una volta effettuato un qualsiasi acquisto, sia il primo o un successivo
-        aggiornaSpesaTotale(attivita, valoreAcquisto);
+        aggiornaSpesaTotale(clienteModel, attivita, valoreAcquisto);
 
         /*
         in futuro andrà implementato il concetto di pagamento andato a buon fine.
@@ -51,10 +49,10 @@ public class ClienteControllerImpl implements ClienteController {
         return ret;
     }
 
-    private void calcoloBeneficiPerAcquisto(AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    private void calcoloBeneficiPerAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
         AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
 
-        List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms();
+        List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms(attivita);
         Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
         Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
         Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
@@ -67,7 +65,7 @@ public class ClienteControllerImpl implements ClienteController {
 
                 if(programmaFedeltaModel instanceof ProgrammaALivelliModel programmaALivelliModel) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
-                        if( (ricaricaSpesaTotaleCliente(attivita) + valoreAcquisto) >
+                        if( (ricaricaSpesaTotaleCliente(clienteModel, attivita) + valoreAcquisto) >
                                 programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
                         {
                             //il cliente ha raggiunto il livello successivo
@@ -98,7 +96,7 @@ public class ClienteControllerImpl implements ClienteController {
         }
     }
 
-    private double ricaricaSpesaTotaleCliente(AttivitaCommercialeModel attivitaCommerciale){
+    private double ricaricaSpesaTotaleCliente(ClienteModel clienteModel, AttivitaCommercialeModel attivitaCommerciale){
         double spesaTotale = 0;
         if(attivitaCommerciale != null){
             //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
@@ -110,7 +108,7 @@ public class ClienteControllerImpl implements ClienteController {
         return spesaTotale;
     }
 
-    private void aggiornaSpesaTotale(AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    private void aggiornaSpesaTotale(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
         /*
          */
         if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
