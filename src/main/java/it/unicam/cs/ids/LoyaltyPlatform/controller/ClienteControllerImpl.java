@@ -4,6 +4,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeCo
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.*;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ClienteRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -13,21 +14,28 @@ import java.util.UUID;
 @Slf4j
 public class ClienteControllerImpl implements ClienteController {
 
-    private final ClienteRepositoryImpl clienteRepositoryImpl;
+    private final ClienteRepository clienteRepository;
 
     public ClienteControllerImpl() {
-        this.clienteRepositoryImpl = ClienteRepositoryImpl.getInstance();
+        this.clienteRepository = ClienteRepositoryImpl.getInstance();
     }
 
+    /*
+     *  Singleton constructor
+     */
+    private static class SingletonBuilder {
+        private static final ClienteController INSTANCE = new ClienteControllerImpl();
+    }
+
+    public static ClienteController getInstance() {
+        return SingletonBuilder.INSTANCE;
+    }
 
     //TODO: implementare il metodo
     @Override
     public boolean effettuaPagamento() {
         return false;
     }
-
-
-
 
     @Override
     public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
@@ -136,7 +144,7 @@ public class ClienteControllerImpl implements ClienteController {
         cliente.setId(UUID.randomUUID());
 
         try{
-            result = clienteRepositoryImpl.save(cliente);
+            result = clienteRepository.save(cliente);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,7 +155,7 @@ public class ClienteControllerImpl implements ClienteController {
     @Override
     public ClienteModel getByName(String name) {
         try{
-            return clienteRepositoryImpl.findByName(name);
+            return clienteRepository.findByName(name);
         } catch (Exception e){
             System.err.println("Errore durante la lettura del ClienteModel: " + e.getMessage());
         }
@@ -164,7 +172,7 @@ public class ClienteControllerImpl implements ClienteController {
 
         ClienteModel result = null;
         try{
-            result = clienteRepositoryImpl.update(cliente);
+            result = clienteRepository.update(cliente);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,7 +184,7 @@ public class ClienteControllerImpl implements ClienteController {
         log.debug("Eliminazione cliente" + clienteModel.getNome() + " --> ID: " + clienteModel.getId());
 
         try{
-            clienteRepositoryImpl.delete(clienteModel);
+            clienteRepository.delete(clienteModel);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

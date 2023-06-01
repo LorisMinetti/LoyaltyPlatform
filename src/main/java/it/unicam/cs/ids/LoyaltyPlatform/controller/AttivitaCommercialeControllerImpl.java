@@ -1,6 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
@@ -15,6 +16,17 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
     public AttivitaCommercialeControllerImpl() {
         this.attivitaCommercialeRepository = AttivitaCommercialeRepositoryImpl.getInstance();
+    }
+
+    /*
+     *  Singleton constructor
+     */
+    private static class SingletonBuilder {
+        private static final AttivitaCommercialeController INSTANCE = new AttivitaCommercialeControllerImpl();
+    }
+
+    public static AttivitaCommercialeController getInstance() {
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override
