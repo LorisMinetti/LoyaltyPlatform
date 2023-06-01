@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public interface AttivitaCommercialeRepository {
 
-    void save(AttivitaCommercialeModel attivitaCommercialeModel);
+    AttivitaCommercialeModel save(AttivitaCommercialeModel attivitaCommercialeModel);
 
-    void update(AttivitaCommercialeModel attivitaCommercialeModel);
+    AttivitaCommercialeModel update(AttivitaCommercialeModel attivitaCommercialeModel);
 
     boolean delete(AttivitaCommercialeModel attivitaCommercialeModel);
 

@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public interface GestorePiattaformaRepository {
 
-    void save(GestorePiattaformaModel gestorePiattaformaModel);
+    GestorePiattaformaModel save(GestorePiattaformaModel gestorePiattaformaModel);
 
-    void update(GestorePiattaformaModel gestorePiattaformaModel);
+    GestorePiattaformaModel update(GestorePiattaformaModel gestorePiattaformaModel);
 
     boolean delete(GestorePiattaformaModel gestorePiattaformaModel);
 

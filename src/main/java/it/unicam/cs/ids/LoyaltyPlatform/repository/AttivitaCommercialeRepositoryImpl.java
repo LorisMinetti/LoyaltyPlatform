@@ -27,11 +27,11 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
         private static final AttivitaCommercialeRepositoryImpl INSTANCE = new AttivitaCommercialeRepositoryImpl();
     }
     public static AttivitaCommercialeRepositoryImpl getInstance(){
-        return AttivitaCommercialeRepositoryImpl.SingletonBuilder.INSTANCE;
+        return SingletonBuilder.INSTANCE;
     }
 
     @Override
-    public void save(AttivitaCommercialeModel attivitaCommercialeModel) {
+    public AttivitaCommercialeModel save(AttivitaCommercialeModel attivitaCommercialeModel) {
         try{
             String fileName = attivitaCommercialeModel.getId() + ".json";
             String filePath = OUTPUT_DIR + "\\" + fileName;
@@ -43,11 +43,13 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
         } catch (Exception e) {
             System.err.println("Errore durante il salvataggio dell'Attività Commerciale: " + e.getMessage());
         }
+        return attivitaCommercialeModel;
     }
 
+    //TODO
     @Override
-    public void update(AttivitaCommercialeModel attivitaCommercialeModel) {
-
+    public AttivitaCommercialeModel update(AttivitaCommercialeModel attivitaCommercialeModel) {
+        return null;
     }
 
     @Override
@@ -70,6 +72,7 @@ public class AttivitaCommercialeRepositoryImpl implements AttivitaCommercialeRep
         return false;
     }
 
+    //TODO
     @Override
     public AttivitaCommercialeModel findById(UUID id) {
         try {
