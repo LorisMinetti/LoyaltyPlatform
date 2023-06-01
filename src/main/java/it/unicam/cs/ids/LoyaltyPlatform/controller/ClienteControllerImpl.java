@@ -145,7 +145,12 @@ public class ClienteControllerImpl implements ClienteController {
 
     //TODO: implementare la ricerca per id
     @Override
-    public ClienteModel getById(UUID id) {
+    public ClienteModel getByName(String name) {
+        try{
+            return clienteRepositoryImpl.findByName(name);
+        } catch (Exception e){
+            System.err.println("Errore durante la lettura del ClienteModel: " + e.getMessage());
+        }
         return null;
     }
 

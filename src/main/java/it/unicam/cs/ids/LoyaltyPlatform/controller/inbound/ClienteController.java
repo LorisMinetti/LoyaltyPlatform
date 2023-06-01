@@ -14,7 +14,7 @@ public interface ClienteController {
 
     boolean deleteCliente(ClienteModel cliente);
 
-    ClienteModel getById(UUID id);
+    ClienteModel getByName(String name);
 
     AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto);
 
