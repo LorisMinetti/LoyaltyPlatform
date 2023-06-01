@@ -2,6 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ClienteRepository;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.GestorePiattaformaRepository;
 
 import java.io.File;
@@ -16,7 +17,19 @@ public class GestorePiattaformaRepositoryImpl implements GestorePiattaformaRepos
 
     private ObjectMapper mapper;
 
-    public GestorePiattaformaRepositoryImpl() {}
+    public GestorePiattaformaRepositoryImpl() {
+        this.mapper = new ObjectMapper();
+    }
+
+    /*
+     *   Singleton constructor
+     */
+    private static class SingletonBuilder{
+        private static final GestorePiattaformaRepository INSTANCE = new GestorePiattaformaRepositoryImpl();
+    }
+    public static GestorePiattaformaRepository getInstance(){
+        return SingletonBuilder.INSTANCE;
+    }
 
     @Override
     public GestorePiattaformaModel save(GestorePiattaformaModel gestorePiattaformaModel) {

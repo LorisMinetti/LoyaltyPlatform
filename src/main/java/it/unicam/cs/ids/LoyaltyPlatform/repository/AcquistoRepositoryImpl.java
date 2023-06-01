@@ -24,9 +24,9 @@ public class AcquistoRepositoryImpl implements AcquistoRepository {
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final AcquistoRepositoryImpl INSTANCE = new AcquistoRepositoryImpl();
+        private static final AcquistoRepository INSTANCE = new AcquistoRepositoryImpl();
     }
-    public static AcquistoRepositoryImpl getInstance(){
+    public static AcquistoRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

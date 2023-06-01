@@ -22,9 +22,9 @@ public class ProgrammaCoalizioneRepositoryImpl implements ProgrammaCoalizioneRep
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final ProgrammaCoalizioneRepositoryImpl INSTANCE = new ProgrammaCoalizioneRepositoryImpl();
+        private static final ProgrammaCoalizioneRepository INSTANCE = new ProgrammaCoalizioneRepositoryImpl();
     }
-    public static ProgrammaCoalizioneRepositoryImpl getInstance(){
+    public static ProgrammaCoalizioneRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

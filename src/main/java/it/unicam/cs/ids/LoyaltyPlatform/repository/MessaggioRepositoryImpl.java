@@ -22,9 +22,9 @@ public class MessaggioRepositoryImpl implements MessaggioRepository {
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final MessaggioRepositoryImpl INSTANCE = new MessaggioRepositoryImpl();
+        private static final MessaggioRepository INSTANCE = new MessaggioRepositoryImpl();
     }
-    public static MessaggioRepositoryImpl getInstance(){
+    public static MessaggioRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

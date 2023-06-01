@@ -22,9 +22,9 @@ public class ProgrammaAPuntiRepositoryImpl implements ProgrammaAPuntiRepository 
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final ProgrammaAPuntiRepositoryImpl INSTANCE = new ProgrammaAPuntiRepositoryImpl();
+        private static final ProgrammaAPuntiRepository INSTANCE = new ProgrammaAPuntiRepositoryImpl();
     }
-    public static ProgrammaAPuntiRepositoryImpl getInstance(){
+    public static ProgrammaAPuntiRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

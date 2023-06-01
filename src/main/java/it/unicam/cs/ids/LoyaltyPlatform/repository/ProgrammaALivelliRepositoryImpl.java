@@ -24,9 +24,9 @@ public class ProgrammaALivelliRepositoryImpl implements ProgrammaALivelliReposit
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final ProgrammaALivelliRepositoryImpl INSTANCE = new ProgrammaALivelliRepositoryImpl();
+        private static final ProgrammaALivelliRepository INSTANCE = new ProgrammaALivelliRepositoryImpl();
     }
-    public static ProgrammaALivelliRepositoryImpl getInstance(){
+    public static ProgrammaALivelliRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 
