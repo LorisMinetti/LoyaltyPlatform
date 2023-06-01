@@ -22,9 +22,9 @@ public class ProgrammaCashbackRepositoryImpl implements ProgrammaCashbackReposit
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final ProgrammaCashbackRepositoryImpl INSTANCE = new ProgrammaCashbackRepositoryImpl();
+        private static final ProgrammaCashbackRepository INSTANCE = new ProgrammaCashbackRepositoryImpl();
     }
-    public static ProgrammaCashbackRepositoryImpl getInstance(){
+    public static ProgrammaCashbackRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

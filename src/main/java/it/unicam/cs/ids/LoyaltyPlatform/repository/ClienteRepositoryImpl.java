@@ -24,9 +24,9 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     *   Singleton constructor
     */
     private static class SingletonBuilder{
-        private static final ClienteRepositoryImpl INSTANCE = new ClienteRepositoryImpl();
+        private static final ClienteRepository INSTANCE = new ClienteRepositoryImpl();
     }
-    public static ClienteRepositoryImpl getInstance(){
+    public static ClienteRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 

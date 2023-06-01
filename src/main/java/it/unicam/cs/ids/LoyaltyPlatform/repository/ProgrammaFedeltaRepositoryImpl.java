@@ -22,9 +22,9 @@ public class ProgrammaFedeltaRepositoryImpl implements ProgrammaFedeltaRepositor
      *   Singleton constructor
      */
     private static class SingletonBuilder{
-        private static final ProgrammaFedeltaRepositoryImpl INSTANCE = new ProgrammaFedeltaRepositoryImpl();
+        private static final ProgrammaFedeltaRepository INSTANCE = new ProgrammaFedeltaRepositoryImpl();
     }
-    public static ProgrammaFedeltaRepositoryImpl getInstance(){
+    public static ProgrammaFedeltaRepository getInstance(){
         return SingletonBuilder.INSTANCE;
     }
 
