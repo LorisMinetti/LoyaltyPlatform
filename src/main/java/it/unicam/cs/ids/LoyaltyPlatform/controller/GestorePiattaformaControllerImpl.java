@@ -2,7 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,17 +12,17 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
     private GestorePiattaformaModel gestorePiattaformaModel;
 
     @Override
-    public ProgrammaFedelta aggiungiProgrammaFedelta() {
+    public ProgrammaFedeltaModel aggiungiProgrammaFedelta() {
         return null;
     }
 
     @Override
-    public List<ProgrammaFedelta> getAllProgrammiFedelta() {
+    public List<ProgrammaFedeltaModel> getAllProgrammiFedelta() {
         return null;
     }
 
     @Override
-    public void selezionaProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
+    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
 
     }
 

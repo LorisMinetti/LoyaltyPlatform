@@ -1,7 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,10 +16,10 @@ public interface AttivitaCommercialeController {
 
     AttivitaCommercialeModel getById(UUID id);
 
-    ProgrammaFedelta aderisciProgrammaFedelta();
+    ProgrammaFedeltaModel aderisciProgrammaFedelta();
 
-    List<ProgrammaFedelta> getAvailablePrograms();
+    List<ProgrammaFedeltaModel> getAvailablePrograms();
 
-    void selezionaProgrammaFedelta(ProgrammaFedelta programmaFedelta);
+    void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
 }

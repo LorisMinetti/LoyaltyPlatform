@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public class ProgrammaAPuntiModel extends ProgrammaFedelta {
+public class ProgrammaAPuntiModel extends ProgrammaFedeltaModel {
     private double spesaMinima;
     private double rapportoPunti;
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class MessaggioRepositoryImpl implements MessaggioRepository {
 
-    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\cliente";
+    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\messaggio";
 
     private final ObjectMapper mapper;
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class AcquistoRepositoryImpl implements AcquistoRepository {
 
-    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\cliente";
+    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\acuisto";
 
     private final ObjectMapper mapper;
 

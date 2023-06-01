@@ -2,12 +2,8 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedelta;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +18,12 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
     @Override
-    public ProgrammaFedelta aderisciProgrammaFedelta() {
+    public ProgrammaFedeltaModel aderisciProgrammaFedelta() {
         return null;
     }
 
     @Override
-    public List<ProgrammaFedelta> getAvailablePrograms() {
+    public List<ProgrammaFedeltaModel> getAvailablePrograms() {
         if(attivitaCommercialeModel.getProgrammiFedeltaAderiti().isEmpty()){
             return null;
         } else {
@@ -36,9 +32,9 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
     @Override
-    public void selezionaProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
-        if(programmaFedelta != null && !attivitaCommercialeModel.getProgrammiFedeltaAderiti().contains(programmaFedelta)) {
-            attivitaCommercialeModel.getProgrammiFedeltaAderiti().add(programmaFedelta);
+    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
+        if(programmaFedeltaModel != null && !attivitaCommercialeModel.getProgrammiFedeltaAderiti().contains(programmaFedeltaModel)) {
+            attivitaCommercialeModel.getProgrammiFedeltaAderiti().add(programmaFedeltaModel);
         } else {
             throw new IllegalArgumentException("Programma fedeltà non valido");
         }

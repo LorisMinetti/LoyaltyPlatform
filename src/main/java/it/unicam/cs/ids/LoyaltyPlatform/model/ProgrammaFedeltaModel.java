@@ -10,10 +10,10 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode
 @ToString
-public class ProgrammaFedelta {
+public class ProgrammaFedeltaModel {
     private String nome;
     private UUID id;
     private double costo;
-    private AttivitaCommercialeController attivitaCommerciale;
+    private AttivitaCommercialeModel attivitaCommerciale;
 
 }

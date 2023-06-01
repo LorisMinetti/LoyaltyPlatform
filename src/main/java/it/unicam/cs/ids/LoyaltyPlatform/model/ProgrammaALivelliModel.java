@@ -9,7 +9,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode
 @ToString
-public class ProgrammaALivelliModel extends ProgrammaFedelta {
+public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {
 
     /*
     * Mappa che associa ad ogni livello la spesa totale necessari per raggiungerlo
