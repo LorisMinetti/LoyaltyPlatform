@@ -9,13 +9,11 @@ import lombok.ToString;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode
-@Builder
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class ProgrammaFedeltaModel {
     private String nome;
     private UUID id;
     private double costo;
-    private AttivitaCommercialeModel attivitaCommerciale;
 
 }
