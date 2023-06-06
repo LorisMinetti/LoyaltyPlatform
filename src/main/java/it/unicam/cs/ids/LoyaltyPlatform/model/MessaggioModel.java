@@ -1,14 +1,15 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @ToString
 public class MessaggioModel<M, D> {
     private UUID id;

@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode
+@Builder
 @ToString
 public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {
 
