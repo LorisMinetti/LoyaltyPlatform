@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AcquistoController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.*;
@@ -16,8 +17,11 @@ public class ClienteControllerImpl implements ClienteController {
 
     private final ClienteRepository clienteRepository;
 
+    private final AcquistoController acquistoController;
+
     public ClienteControllerImpl() {
         this.clienteRepository = ClienteRepositoryImpl.getInstance();
+        this.acquistoController = AcquistoControllerImpl.getInstance();
     }
 
     /*
@@ -40,10 +44,8 @@ public class ClienteControllerImpl implements ClienteController {
     @Override
     public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
 
-        AcquistoModel ret = new AcquistoModel();
-        ret.setClienteModel(clienteModel);
-        ret.setValoreAcquisto(valoreAcquisto);
-        ret.setAttivitaCommercialeModel(attivita);
+        AcquistoModel ret = AcquistoModel.builder().cliente(clienteModel).attivitaCommerciale(attivita).valoreAcquisto(valoreAcquisto).build();
+        acquistoController.createAcquisto(ret);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
         calcoloBeneficiPerAcquisto(clienteModel, attivita, valoreAcquisto);
@@ -57,13 +59,13 @@ public class ClienteControllerImpl implements ClienteController {
         return ret;
     }
 
-    private void calcoloBeneficiPerAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    private void calcoloBeneficiPerAcquisto(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
         AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
 
         List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms(attivita);
-        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = clienteModel.getLivelloPerAttivitaCommerciale();
-        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = clienteModel.getPuntiPerAttivitaCommerciale();
-        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = clienteModel.getSaldoPerAttivitaCommerciale();
+        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = cliente.getLivelloPerAttivitaCommerciale();
+        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = cliente.getPuntiPerAttivitaCommerciale();
+        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = cliente.getSaldoPerAttivitaCommerciale();
 
         if(listaProgrammi.isEmpty()) {
             throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
@@ -73,7 +75,7 @@ public class ClienteControllerImpl implements ClienteController {
 
                 if(programmaFedeltaModel instanceof ProgrammaALivelliModel programmaALivelliModel) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
-                        if( (ricaricaSpesaTotaleCliente(clienteModel, attivita) + valoreAcquisto) >
+                        if( (ricaricaSpesaTotaleCliente(cliente, attivita) + valoreAcquisto) >
                                 programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
                         {
                             //il cliente ha raggiunto il livello successivo
@@ -94,7 +96,7 @@ public class ClienteControllerImpl implements ClienteController {
                 } else if(programmaFedeltaModel instanceof ProgrammaCashbackModel programmaCashbackModel) {
                     if(saldoPerAttivitaCommerciale.containsKey(programmaCashbackModel)) {
                         saldoPerAttivitaCommerciale
-                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
+                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + (valoreAcquisto/100 * programmaCashbackModel.getPercentualeCashback()));
                     } else {
                         saldoPerAttivitaCommerciale
                                 .put(programmaCashbackModel, programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
@@ -104,25 +106,23 @@ public class ClienteControllerImpl implements ClienteController {
         }
     }
 
-    private double ricaricaSpesaTotaleCliente(ClienteModel clienteModel, AttivitaCommercialeModel attivitaCommerciale){
+    private double ricaricaSpesaTotaleCliente(ClienteModel cliente, AttivitaCommercialeModel attivitaCommerciale){
         double spesaTotale = 0;
         if(attivitaCommerciale != null){
             //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
             //ci sia già un programma a livelli offerto da questa attivita
-            if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivitaCommerciale)){
-                spesaTotale = clienteModel.getSpesaTotalePerAttivitaCommerciale().get(attivitaCommerciale);
+            if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivitaCommerciale)){
+                spesaTotale = cliente.getSpesaTotalePerAttivitaCommerciale().get(attivitaCommerciale);
             }
         }
         return spesaTotale;
     }
 
-    private void aggiornaSpesaTotale(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
-        /*
-         */
-        if(clienteModel.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
-            clienteModel.getSpesaTotalePerAttivitaCommerciale().put(attivita, clienteModel.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
+    private void aggiornaSpesaTotale(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
+        if(cliente.getSpesaTotalePerAttivitaCommerciale().containsValue(attivita)) {
+            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, cliente.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
         } else {
-            clienteModel.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
+            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
         }
     }
 
@@ -156,7 +156,7 @@ public class ClienteControllerImpl implements ClienteController {
     public ClienteModel getByName(String name) {
         ClienteModel clienteModel = null;
         try{
-            clienteModel = clienteRepositoryImpl.findByName(name);
+            clienteModel = clienteRepository.findByName(name);
         } catch (Exception e){
             System.err.println("Errore durante la lettura del ClienteModel: " + e.getMessage());
         }
@@ -181,11 +181,11 @@ public class ClienteControllerImpl implements ClienteController {
     }
 
     @Override
-    public boolean deleteCliente(ClienteModel clienteModel) {
-        log.debug("Eliminazione cliente" + clienteModel.getNome() + " --> ID: " + clienteModel.getId());
+    public boolean deleteCliente(ClienteModel cliente) {
+        log.debug("Eliminazione cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
 
         try{
-            clienteRepository.delete(clienteModel);
+            clienteRepository.delete(cliente);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
