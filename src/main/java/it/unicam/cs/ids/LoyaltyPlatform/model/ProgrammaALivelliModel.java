@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @ToString
 public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {
@@ -19,4 +19,17 @@ public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {
     private Map<Integer, Double> livelli;
 
     private int livelloAttuale;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProgrammaALivelliModel that)) return false;
+        if (!super.equals(o)) return false;
+        return getLivelloAttuale() == that.getLivelloAttuale() && getLivelli().equals(that.getLivelli());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getLivelli(), getLivelloAttuale());
+    }
 }
