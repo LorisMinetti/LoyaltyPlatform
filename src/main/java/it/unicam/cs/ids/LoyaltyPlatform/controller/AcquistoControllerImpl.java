@@ -1,15 +1,14 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AcquistoController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AcquistoRepositoryImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.GestorePiattaformaRepositoryImpl;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AcquistoRepository;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.GestorePiattaformaRepository;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+@Slf4j
 public class AcquistoControllerImpl implements AcquistoController {
 
     private final AcquistoRepository acquistoRepository;
@@ -30,9 +29,23 @@ public class AcquistoControllerImpl implements AcquistoController {
     }
 
     @Override
-    public AcquistoModel createAcquisto(AcquistoModel acquistoModel) {
-        return null;
-    }
+    public AcquistoModel createAcquisto(AcquistoModel acquisto) {
+        if(acquisto.getId() != null){
+            throw new IllegalArgumentException("Non è possibile creare un acquisto con un ID già esistente");
+        }
+
+        log.debug("Creazione nuovo Acquisto dal valore: " + acquisto.getValoreAcquisto() + " effettuato dal cliente: " + acquisto.getCliente().getNome() + " " + acquisto.getCliente().getNome());
+        AcquistoModel result = null;
+
+        //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID
+        acquisto.setId(UUID.randomUUID());
+
+        try{
+            result = acquistoRepository.save(acquisto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;    }
 
     @Override
     public AcquistoModel updateAcquisto(AcquistoModel acquistoModel) {
