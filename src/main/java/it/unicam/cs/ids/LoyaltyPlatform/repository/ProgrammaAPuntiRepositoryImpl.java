@@ -31,7 +31,7 @@ public class ProgrammaAPuntiRepositoryImpl implements ProgrammaAPuntiRepository 
     @Override
     public ProgrammaAPuntiModel save(ProgrammaAPuntiModel programmaAPuntiModel) {
         try{
-            String fileName = programmaAPuntiModel.getNome() + ".json";  //usa il nome del programma come nome del file
+            String fileName = programmaAPuntiModel.getId() + ".json";  //usa il nome del programma come nome del file
             String filePath = OUTPUT_DIR + "\\" + fileName;
 
             String json = mapper.writeValueAsString(programmaAPuntiModel);
