@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -14,5 +15,6 @@ public class ProgrammaFedeltaModel {
     private String nome;
     private UUID id;
     private double costo;
-    private boolean available;
+    private LocalDateTime dataAttivazione;
+    private AttivitaCommercialeModel attivitaCommercialeModel;
 }

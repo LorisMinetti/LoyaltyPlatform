@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -16,5 +17,5 @@ public class GestorePiattaformaModel {
     private UUID id;
     private List<ClienteModel> clientiIscritti;
     private List<AttivitaCommercialeModel> attivitaCommericaliIscritte;
-
+    private Map<ProgrammaFedeltaModel, Boolean> available;
 }
