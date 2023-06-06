@@ -9,9 +9,9 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @ToString
 public class ProgrammaCoalizioneModel extends ProgrammaFedeltaModel {
-    private List<AttivitaCommercialeController> attivtaCoalizione;
+    private List<AttivitaCommercialeModel> attivtaCoalizione;
 }
