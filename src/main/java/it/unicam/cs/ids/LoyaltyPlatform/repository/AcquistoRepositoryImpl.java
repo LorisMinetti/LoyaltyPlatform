@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class AcquistoRepositoryImpl implements AcquistoRepository {
 
-    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\acuisto";
+    private static final String OUTPUT_DIR = "C:\\Users\\loris\\Desktop\\LoyaltyPlatform\\acquisto";
 
     private final ObjectMapper mapper;
 
@@ -33,7 +33,7 @@ public class AcquistoRepositoryImpl implements AcquistoRepository {
     @Override
     public AcquistoModel save(AcquistoModel acquistoModel) {
         try{
-            String fileName = acquistoModel.getValoreAcquisto() + ".json";  //usa il valore dell'acquisto come nome del file
+            String fileName = acquistoModel.getId() + ".json";  //usa il valore dell'acquisto come nome del file
             String filePath = OUTPUT_DIR + "\\" + fileName;
 
             String json = mapper.writeValueAsString(acquistoModel);
