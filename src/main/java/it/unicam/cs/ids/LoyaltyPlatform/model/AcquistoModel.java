@@ -1,7 +1,5 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,8 +14,8 @@ import java.util.UUID;
 public class AcquistoModel {
     private double valoreAcquisto;
     private UUID id;
-    private ClienteModel clienteModel;
-    private AttivitaCommercialeModel attivitaCommercialeModel;
+    private ClienteModel cliente;
+    private AttivitaCommercialeModel attivitaCommerciale;
 
 
 }
