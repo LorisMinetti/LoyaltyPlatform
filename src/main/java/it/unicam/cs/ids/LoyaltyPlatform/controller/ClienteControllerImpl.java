@@ -119,10 +119,20 @@ public class ClienteControllerImpl implements ClienteController {
     }
 
     private void aggiornaSpesaTotale(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
-        if(cliente.getSpesaTotalePerAttivitaCommerciale().containsValue(attivita)) {
-            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, cliente.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
+//        if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
+//            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, cliente.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
+//        } else {
+//            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
+//        }
+
+        Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = cliente.getSpesaTotalePerAttivitaCommerciale();
+
+        if (spesaTotalePerAttivitaCommerciale.containsKey(attivita)) {
+            double spesaTotale = spesaTotalePerAttivitaCommerciale.get(attivita);
+            spesaTotale += valoreAcquisto;
+            spesaTotalePerAttivitaCommerciale.put(attivita, spesaTotale);
         } else {
-            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
+            spesaTotalePerAttivitaCommerciale.put(attivita, valoreAcquisto);
         }
     }
 
