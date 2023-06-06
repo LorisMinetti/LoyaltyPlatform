@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.Map;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @ToString
 public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {

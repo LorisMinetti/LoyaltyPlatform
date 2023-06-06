@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
-@EqualsAndHashCode
 @Builder
 @ToString
 public class ProgrammaCashbackModel extends ProgrammaFedeltaModel {

@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @ToString
 public class ProgrammaCoalizioneModel extends ProgrammaFedeltaModel {
