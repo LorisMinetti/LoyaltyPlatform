@@ -48,9 +48,9 @@ public class ClienteControllerImpl implements ClienteController {
         AcquistoModel nuovoAcquisto = acquistoController.createAcquisto(ret);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
-        calcoloBeneficiPerAcquisto(clienteModel, attivita, valoreAcquisto);
+        calcoloBeneficiPerAcquisto(nuovoAcquisto);
         //caso generale della spesa totale da sommare una volta effettuato un qualsiasi acquisto, sia il primo o un successivo
-        aggiornaSpesaTotale(clienteModel, attivita, valoreAcquisto);
+        aggiornaSpesaTotale(nuovoAcquisto);
 
         /*
         in futuro andrà implementato il concetto di pagamento andato a buon fine.
@@ -59,13 +59,13 @@ public class ClienteControllerImpl implements ClienteController {
         return ret;
     }
 
-    private void calcoloBeneficiPerAcquisto(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    private void calcoloBeneficiPerAcquisto(AcquistoModel acquisto) {
         AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
 
-        List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms(attivita);
-        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = cliente.getLivelloPerAttivitaCommerciale();
-        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = cliente.getPuntiPerAttivitaCommerciale();
-        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = cliente.getSaldoPerAttivitaCommerciale();
+        List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms(acquisto.getAttivitaCommerciale());
+        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = acquisto.getCliente().getLivelloPerAttivitaCommerciale();
+        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = acquisto.getCliente().getPuntiPerAttivitaCommerciale();
+        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = acquisto.getCliente().getSaldoPerAttivitaCommerciale();
 
         if(listaProgrammi.isEmpty()) {
             throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
@@ -75,7 +75,7 @@ public class ClienteControllerImpl implements ClienteController {
 
                 if(programmaFedeltaModel instanceof ProgrammaALivelliModel programmaALivelliModel) {
                     if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
-                        if( (ricaricaSpesaTotaleCliente(cliente, attivita) + valoreAcquisto) >
+                        if( (ricaricaSpesaTotaleCliente(acquisto.getCliente(), acquisto.getAttivitaCommerciale()) + acquisto.getValoreAcquisto()) >
                                 programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
                         {
                             //il cliente ha raggiunto il livello successivo
@@ -86,20 +86,20 @@ public class ClienteControllerImpl implements ClienteController {
                 } else if(programmaFedeltaModel instanceof ProgrammaAPuntiModel programmaAPuntiModel) {
                     if(puntiPerAttivitaCommerciale.containsKey(programmaAPuntiModel)) {
                         puntiPerAttivitaCommerciale
-                                .put(programmaAPuntiModel, (int)(puntiPerAttivitaCommerciale.get(programmaAPuntiModel) + programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
+                                .put(programmaAPuntiModel, (int)(puntiPerAttivitaCommerciale.get(programmaAPuntiModel) + programmaAPuntiModel.getRapportoPunti() * acquisto.getValoreAcquisto()));
                     } else {
                         //caso in cui vanno inseriti punti per questa attività commerciale per la prima volta
                         puntiPerAttivitaCommerciale
-                                .put(programmaAPuntiModel, (int)(programmaAPuntiModel.getRapportoPunti() * valoreAcquisto));
+                                .put(programmaAPuntiModel, (int)(programmaAPuntiModel.getRapportoPunti() * acquisto.getValoreAcquisto()));
                     }
 
                 } else if(programmaFedeltaModel instanceof ProgrammaCashbackModel programmaCashbackModel) {
                     if(saldoPerAttivitaCommerciale.containsKey(programmaCashbackModel)) {
                         saldoPerAttivitaCommerciale
-                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + (valoreAcquisto/100 * programmaCashbackModel.getPercentualeCashback()));
+                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + (acquisto.getValoreAcquisto()/100 * programmaCashbackModel.getPercentualeCashback()));
                     } else {
                         saldoPerAttivitaCommerciale
-                                .put(programmaCashbackModel, programmaCashbackModel.getPercentualeCashback() * valoreAcquisto);
+                                .put(programmaCashbackModel, programmaCashbackModel.getPercentualeCashback() * acquisto.getValoreAcquisto());
                     }
                 }
             }
@@ -118,22 +118,22 @@ public class ClienteControllerImpl implements ClienteController {
         return spesaTotale;
     }
 
-    private void aggiornaSpesaTotale(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
+    private void aggiornaSpesaTotale(AcquistoModel acquisto){
 
-        Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = cliente.getSpesaTotalePerAttivitaCommerciale();
+        Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = acquisto.getCliente().getSpesaTotalePerAttivitaCommerciale();
         for (Map.Entry<AttivitaCommercialeModel, Double> entry : spesaTotalePerAttivitaCommerciale.entrySet()) {
             AttivitaCommercialeModel key = entry.getKey();
             Double value = entry.getValue();
 
             //se trovo l'attività commerciale nella map, aggiorno il valore
-            if(spesaTotalePerAttivitaCommerciale.containsKey(attivita)){
-                value += valoreAcquisto;
+            if(spesaTotalePerAttivitaCommerciale.containsKey(acquisto.getAttivitaCommerciale())){
+                value += acquisto.getValoreAcquisto();
                 spesaTotalePerAttivitaCommerciale.replace(key, value);
                 return;
             }
         }
         //se non ho trovato l'attività commerciale nella map, la aggiungo
-        spesaTotalePerAttivitaCommerciale.put(attivita, valoreAcquisto);
+        spesaTotalePerAttivitaCommerciale.put(acquisto.getAttivitaCommerciale(), acquisto.getValoreAcquisto());
 
     }
 
