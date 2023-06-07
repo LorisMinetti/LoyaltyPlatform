@@ -50,6 +50,8 @@ public class LoyaltyPlatformApplication {
 						programmaCashback, programmaAPunti))
 				.build();
 
+		attivitaCommercialeController.createAttivitaCommerciale(attivitaCommercialeModel);
+
 
 		/*
 		cliente attributi
@@ -76,7 +78,6 @@ public class LoyaltyPlatformApplication {
 				.build();
 
 
-		attivitaCommercialeController.createAttivitaCommerciale(attivitaCommercialeModel);
 
 		System.out.println(cliente);
 

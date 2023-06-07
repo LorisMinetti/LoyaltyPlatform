@@ -45,7 +45,7 @@ public class ClienteControllerImpl implements ClienteController {
     public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
 
         AcquistoModel ret = AcquistoModel.builder().cliente(clienteModel).attivitaCommerciale(attivita).valoreAcquisto(valoreAcquisto).build();
-        acquistoController.createAcquisto(ret);
+        AcquistoModel nuovoAcquisto = acquistoController.createAcquisto(ret);
 
         //prendo tutti i programmi fedeltà attivi per l'attività commerciale
         calcoloBeneficiPerAcquisto(clienteModel, attivita, valoreAcquisto);
@@ -126,11 +126,10 @@ public class ClienteControllerImpl implements ClienteController {
             Double value = entry.getValue();
 
             //se trovo l'attività commerciale nella map, aggiorno il valore
-            if (key.equals(attivita)) {
+            if(spesaTotalePerAttivitaCommerciale.containsKey(attivita)){
                 value += valoreAcquisto;
-                spesaTotalePerAttivitaCommerciale.put(key, value);
-                spesaTotalePerAttivitaCommerciale.replace(key, 29.0);
-                return;  //Esce dal metodo se viene aggiornato il valore.
+                spesaTotalePerAttivitaCommerciale.replace(key, value);
+                return;
             }
         }
         //se non ho trovato l'attività commerciale nella map, la aggiungo
