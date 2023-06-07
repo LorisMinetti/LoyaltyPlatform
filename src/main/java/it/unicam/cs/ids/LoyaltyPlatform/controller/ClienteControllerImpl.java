@@ -119,21 +119,23 @@ public class ClienteControllerImpl implements ClienteController {
     }
 
     private void aggiornaSpesaTotale(ClienteModel cliente, AttivitaCommercialeModel attivita, double valoreAcquisto) {
-//        if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivita)) {
-//            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, cliente.getSpesaTotalePerAttivitaCommerciale().get(attivita) + valoreAcquisto);
-//        } else {
-//            cliente.getSpesaTotalePerAttivitaCommerciale().put(attivita, valoreAcquisto);
-//        }
 
         Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = cliente.getSpesaTotalePerAttivitaCommerciale();
+        for (Map.Entry<AttivitaCommercialeModel, Double> entry : spesaTotalePerAttivitaCommerciale.entrySet()) {
+            AttivitaCommercialeModel key = entry.getKey();
+            Double value = entry.getValue();
 
-        if (spesaTotalePerAttivitaCommerciale.containsKey(attivita)) {
-            double spesaTotale = spesaTotalePerAttivitaCommerciale.get(attivita);
-            spesaTotale += valoreAcquisto;
-            spesaTotalePerAttivitaCommerciale.put(attivita, spesaTotale);
-        } else {
-            spesaTotalePerAttivitaCommerciale.put(attivita, valoreAcquisto);
+            //se trovo l'attività commerciale nella map, aggiorno il valore
+            if (key.equals(attivita)) {
+                value += valoreAcquisto;
+                spesaTotalePerAttivitaCommerciale.put(key, value);
+                spesaTotalePerAttivitaCommerciale.replace(key, 29.0);
+                return;  //Esce dal metodo se viene aggiornato il valore.
+            }
         }
+        //se non ho trovato l'attività commerciale nella map, la aggiungo
+        spesaTotalePerAttivitaCommerciale.put(attivita, valoreAcquisto);
+
     }
 
 
