@@ -21,11 +21,11 @@ public class AttivitaCommercialeModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AttivitaCommercialeModel that)) return false;
-        return getNome().equals(that.getNome()) && getId().equals(that.getId()) && getPartitaIVA().equals(that.getPartitaIVA());
+        return getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNome(), getId(), getPartitaIVA());
+        return Objects.hash(getId());
     }
 }
