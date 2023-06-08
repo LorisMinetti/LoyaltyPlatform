@@ -17,4 +17,5 @@ public class ProgrammaFedeltaModel {
     private UUID id;
     private double costo;
     private LocalDateTime dataAttivazione;
+    private AttivitaCommercialeModel attivitaCommercialeModel;
 }
