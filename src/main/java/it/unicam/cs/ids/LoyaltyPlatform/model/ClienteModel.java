@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
 public class ClienteModel {
