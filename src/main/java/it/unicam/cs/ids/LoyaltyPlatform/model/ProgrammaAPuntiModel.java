@@ -1,29 +1,26 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
+import lombok.*;
+import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Data
+@EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @ToString
+@Entity
 public class ProgrammaAPuntiModel extends ProgrammaFedeltaModel {
+    @Column(name = "spesa_minima", nullable = false)
     private double spesaMinima;
+    @Column(name = "rapporto_punti", nullable = false)
     private double rapportoPunti;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProgrammaAPuntiModel that)) return false;
-        if (!super.equals(o)) return false;
-        return Double.compare(that.getSpesaMinima(), getSpesaMinima()) == 0 && Double.compare(that.getRapportoPunti(), getRapportoPunti()) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getSpesaMinima(), getRapportoPunti());
-    }
 }

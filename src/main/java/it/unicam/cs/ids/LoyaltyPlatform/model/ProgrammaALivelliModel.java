@@ -1,35 +1,29 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
 @Data
+@EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @ToString
-public class ProgrammaALivelliModel extends ProgrammaFedeltaModel {
-
-    /*
-    * Mappa che associa ad ogni livello la spesa totale necessari per raggiungerlo
-    */
-    private Map<Integer, Double> livelli;
-
+@Entity
+public class ProgrammaALivelliModel extends ProgrammaFedeltaModel implements Serializable {
+//
+//    //ogni indice rappresenterà il livello corrispondente
+//    //ogni valore corrisponderà al numero di punti necessari per raggiungere il livello corrispondente
+    private double[] livelli;
+//
     private int livelloAttuale;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProgrammaALivelliModel that)) return false;
-        if (!super.equals(o)) return false;
-        return getLivelloAttuale() == that.getLivelloAttuale() && getLivelli().equals(that.getLivelli());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getLivelli(), getLivelloAttuale());
-    }
+//
+//
+//    }
 }

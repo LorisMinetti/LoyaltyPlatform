@@ -1,8 +1,16 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.PuntiPerAttivitaCommerciale;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SaldoPerAttivitaCommerciale;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SpesaTotalePerAttivitaCommerciale;
+import jakarta.annotation.Generated;
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Map;
+import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -11,14 +19,28 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ClienteModel {
+@Table(name = "cliente")
+@Entity
+@Accessors(chain = true)
+public class ClienteModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
-    private Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale;
-    private Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
-    private Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale;
-    private Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale;
 
+    @OneToMany(mappedBy = "cliente")
+    private Set<SpesaTotalePerAttivitaCommerciale> spesaTotalePerAttivitaCommerciale;
 
+    //    private Set<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
+    @OneToMany(mappedBy = "cliente")
+    private Set<PuntiPerAttivitaCommerciale> puntiPerAttivitaCommercial;
+    @OneToMany(mappedBy = "cliente")
+    private Set<SaldoPerAttivitaCommerciale> saldoPerAttivitaCommerciale;
 
 }
