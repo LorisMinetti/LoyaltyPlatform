@@ -2,16 +2,11 @@ package it.unicam.cs.ids.LoyaltyPlatform.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 @Data
-@EqualsAndHashCode
-@Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
