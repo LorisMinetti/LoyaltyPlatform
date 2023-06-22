@@ -1,18 +1,23 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.util.UUID;
 
-public interface ClienteRepository {
+@Repository
+public interface ClienteRepository extends JpaRepository<ClienteModel, UUID>, JpaSpecificationExecutor<ClienteModel> {
 
-    ClienteModel save(ClienteModel clienteModel);
+    @Modifying
+    @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
+    void setFlagDelete(UUID id);
 
-    ClienteModel update(ClienteModel clienteModel) throws IOException;
+    boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    boolean delete(ClienteModel clienteModel);
-
-    ClienteModel findByName(String name);
+    ClienteModel getByIdAndFlagEliminaIsFalse(UUID id);
 
 }

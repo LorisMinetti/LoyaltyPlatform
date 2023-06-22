@@ -1,18 +1,24 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.util.UUID;
 
-public interface ProgrammaCashbackRepository {
+@Repository
+public interface ProgrammaCashbackRepository extends JpaRepository<ProgrammaCashbackModel, UUID>, JpaSpecificationExecutor<ProgrammaCashbackModel> {
 
-    ProgrammaCashbackModel save(ProgrammaCashbackModel programmaCashbackModel);
+    @Modifying
+    @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
+    void setFlagDelete(UUID id);
 
-    ProgrammaCashbackModel update(ProgrammaCashbackModel programmaCashbackModel) throws IOException;
+    boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    boolean delete(ProgrammaCashbackModel programmaCashbackModel);
+    ProgrammaCashbackModel getByIdAndFlagEliminaIsFalse(UUID id);
 
-    ProgrammaCashbackModel findById(UUID id);
 
 }

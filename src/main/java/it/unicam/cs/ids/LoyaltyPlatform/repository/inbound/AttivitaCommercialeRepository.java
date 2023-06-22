@@ -1,17 +1,22 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public interface AttivitaCommercialeRepository {
+@Repository
+public interface AttivitaCommercialeRepository extends JpaRepository<AttivitaCommercialeModel, UUID>, JpaSpecificationExecutor<AttivitaCommercialeModel> {
 
-    AttivitaCommercialeModel save(AttivitaCommercialeModel attivitaCommercialeModel);
+    @Modifying
+    @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
+    void setFlagDelete(UUID id);
 
-    AttivitaCommercialeModel update(AttivitaCommercialeModel attivitaCommercialeModel);
+    boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    boolean delete(AttivitaCommercialeModel attivitaCommercialeModel);
-
-    AttivitaCommercialeModel findById(UUID id);
-
+    AttivitaCommercialeModel getByIdAndFlagEliminaIsFalse(UUID id);
 }
