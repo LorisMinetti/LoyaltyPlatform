@@ -1,22 +1,10 @@
 package it.unicam.cs.ids.LoyaltyPlatform;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.AttivitaCommercialeControllerImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.ClienteControllerImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.ProgrammaAPuntiControllerImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.ProgrammaCashbackControllerImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaAPuntiController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaCashbackController;
-import it.unicam.cs.ids.LoyaltyPlatform.model.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-
-import java.util.*;
 
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class }) // Disabilita la connessione al database
+@SpringBootApplication() // Disabilita la connessione al database
 public class LoyaltyPlatformApplication {
 
 	public static void main(String[] args) {
@@ -26,71 +14,71 @@ public class LoyaltyPlatformApplication {
 		SpringApplication.run(LoyaltyPlatformApplication.class, args);
 
 
-		DBController.getInstance().connect();
+	//	DBController.getInstance().connect();
 
 
 
-		ClienteController clienteController = new ClienteControllerImpl();
-		AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
-
-
-		ProgrammaCashbackModel programmaCashback = ProgrammaCashbackModel.builder().percentualeCashback(5.0).spesaMinima(2.0).build();
-		ProgrammaAPuntiModel programmaAPunti = ProgrammaAPuntiModel.builder().rapportoPunti(2).spesaMinima(4.0).build();
-		ProgrammaCashbackController programmaCashbackController = new ProgrammaCashbackControllerImpl();
-		ProgrammaAPuntiController programmaAPuntiController = new ProgrammaAPuntiControllerImpl();
-
-		programmaCashback.setNome("Cashback");
-		programmaCashback.setCosto(60);
-		programmaCashbackController.createProgrammaCashback(programmaCashback);
-
-		programmaAPunti.setNome("Punti");
-		programmaAPunti.setCosto(40);
-
-
-
-		AttivitaCommercialeModel attivitaCommercialeModel = AttivitaCommercialeModel.builder()
-				.nome("Nirvana da Safi")
-				.partitaIVA("ABCDEGFHILMNOPQ")
-				.programmiFedeltaAderiti(List.of(
-						programmaCashback, programmaAPunti))
-				.build();
-
-		attivitaCommercialeController.createAttivitaCommerciale(attivitaCommercialeModel);
-
-
-		/*
-		cliente attributi
-		 */
-		Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = new HashMap<>();
-		saldoPerAttivitaCommerciale.put(programmaCashback, 68.0);
-
-		Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = new HashMap<>();
-		puntiPerAttivitaCommerciale.put(programmaAPunti, 1210);
-
-		Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = new HashMap<>();
-		livelloPerAttivitaCommerciale.put(ProgrammaALivelliModel.builder().livelloAttuale(0).build(), 1);
-
-		Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = new HashMap<>();
-		spesaTotalePerAttivitaCommerciale.put(attivitaCommercialeModel, 100.0);
-
-
-		ClienteModel cliente = ClienteModel.builder()
-				.nome("Loris Minetti")
-				.saldoPerAttivitaCommerciale(saldoPerAttivitaCommerciale)
-				.puntiPerAttivitaCommerciale(puntiPerAttivitaCommerciale)
-				.spesaTotalePerAttivitaCommerciale(spesaTotalePerAttivitaCommerciale)
-				.livelloPerAttivitaCommerciale(livelloPerAttivitaCommerciale)
-				.build();
-
-
-
-		System.out.println(cliente);
-
-		clienteController.effettuaAcquisto(cliente, attivitaCommercialeModel, 50);
-
-		System.out.println(cliente);
-
-		clienteController.createCliente(cliente);
+//		ClienteController clienteController = new ClienteControllerImpl(clienteRepository, acquistoController);
+//		AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
+//
+//
+//		ProgrammaCashbackModel programmaCashback = ProgrammaCashbackModel.builder().percentualeCashback(5.0).spesaMinima(2.0).build();
+//		ProgrammaAPuntiModel programmaAPunti = ProgrammaAPuntiModel.builder().rapportoPunti(2).spesaMinima(4.0).build();
+//		ProgrammaCashbackController programmaCashbackController = new ProgrammaCashbackControllerImpl();
+//		ProgrammaAPuntiController programmaAPuntiController = new ProgrammaAPuntiControllerImpl();
+//
+//		programmaCashback.setNome("Cashback");
+//		programmaCashback.setCosto(60);
+//		programmaCashbackController.createProgrammaCashback(programmaCashback);
+//
+//		programmaAPunti.setNome("Punti");
+//		programmaAPunti.setCosto(40);
+//
+//
+//
+//		AttivitaCommercialeModel attivitaCommercialeModel = AttivitaCommercialeModel.builder()
+//				.nome("Nirvana da Safi")
+//				.partitaIVA("ABCDEGFHILMNOPQ")
+//				.programmiFedeltaAderiti(List.of(
+//						programmaCashback, programmaAPunti))
+//				.build();
+//
+//		attivitaCommercialeController.createAttivitaCommerciale(attivitaCommercialeModel);
+//
+//
+//		/*
+//		cliente attributi
+//		 */
+//		Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = new HashMap<>();
+//		saldoPerAttivitaCommerciale.put(programmaCashback, 68.0);
+//
+//		Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = new HashMap<>();
+//		puntiPerAttivitaCommerciale.put(programmaAPunti, 1210);
+//
+//		Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = new HashMap<>();
+//		livelloPerAttivitaCommerciale.put(ProgrammaALivelliModel.builder().livelloAttuale(0).build(), 1);
+//
+//		Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = new HashMap<>();
+//		spesaTotalePerAttivitaCommerciale.put(attivitaCommercialeModel, 100.0);
+//
+//
+//		ClienteModel cliente = ClienteModel.builder()
+//				.nome("Loris Minetti")
+//				.saldoPerAttivitaCommerciale(saldoPerAttivitaCommerciale)
+//				.puntiPerAttivitaCommerciale(puntiPerAttivitaCommerciale)
+//				.spesaTotalePerAttivitaCommerciale(spesaTotalePerAttivitaCommerciale)
+//				.livelloPerAttivitaCommerciale(livelloPerAttivitaCommerciale)
+//				.build();
+//
+//
+//
+//		System.out.println(cliente);
+//
+//		clienteController.effettuaAcquisto(cliente, attivitaCommercialeModel, 50);
+//
+//		System.out.println(cliente);
+//
+//		clienteController.createCliente(cliente);
 
 //		Scanner scanner = new Scanner(System.in);
 //		startPlatform(scanner);
