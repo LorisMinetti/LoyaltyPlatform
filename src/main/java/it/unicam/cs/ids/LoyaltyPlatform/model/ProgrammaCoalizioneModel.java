@@ -1,26 +1,51 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import lombok.Data;
-import lombok.ToString;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.List;
-import java.util.Objects;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @ToString
-public class ProgrammaCoalizioneModel extends ProgrammaFedeltaModel {
-    private List<AttivitaCommercialeModel> attivtaCoalizione;
+@Entity
+public class ProgrammaCoalizioneModel implements Serializable {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProgrammaCoalizioneModel that)) return false;
-        if (!super.equals(o)) return false;
-        return getAttivtaCoalizione().equals(that.getAttivtaCoalizione());
-    }
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getAttivtaCoalizione());
-    }
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
+    @Column(name = "attivta_coalizione_2")
+    private AttivitaCommercialeModel attivtaCoalizione1;
+
+    @Column(name = "attivta_coalizione_2")
+    private AttivitaCommercialeModel attivtaCoalizione2;
+
+    @Column(name = "attivta_coalizione_2")
+    private AttivitaCommercialeModel attivtaCoalizione3;
+
+    @Column(name = "attivta_coalizione_2")
+    private AttivitaCommercialeModel attivtaCoalizione4;
+
+    @Column(name = "data_attivazione")
+    private LocalDateTime dataAttivazione;
+
+    @Column(name = "flag_elimina", nullable = false)
+    private boolean flagElimina;
+
+
+
+
 }
