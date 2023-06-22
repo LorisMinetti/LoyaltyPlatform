@@ -1,10 +1,11 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -13,11 +14,11 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
 @Entity
+@Table(name = "programma_cashback")
 public class ProgrammaCashbackModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,10 +33,10 @@ public class ProgrammaCashbackModel implements Serializable {
     @Column(name = "percentuale_cashback", nullable = false)
     private double percentualeCashback;
 
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id", nullable = false)
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
+    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale;
+
 
     @Column(name = "data_attivazione")
     private LocalDateTime dataAttivazione;

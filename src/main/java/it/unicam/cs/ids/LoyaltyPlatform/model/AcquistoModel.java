@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,9 @@ public class AcquistoModel {
     private UUID id;
     private ClienteModel cliente;
     private AttivitaCommercialeModel attivitaCommerciale;
+
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
 
 
 }

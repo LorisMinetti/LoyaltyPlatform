@@ -1,9 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,10 +10,10 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
+@Table(name = "programma_fedelta")
 @Entity
 public class ProgrammaFedeltaModel implements Serializable {
 
@@ -43,4 +40,5 @@ public class ProgrammaFedeltaModel implements Serializable {
 
     @Column(name = "flag_elimina", nullable = false)
     private boolean flagElimina;
+
 }

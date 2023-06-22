@@ -7,9 +7,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 public class MessaggioModel<M, D> {
     private UUID id;

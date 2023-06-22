@@ -3,7 +3,6 @@ package it.unicam.cs.ids.LoyaltyPlatform.model;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.PuntiPerAttivitaCommerciale;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SaldoPerAttivitaCommerciale;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SpesaTotalePerAttivitaCommerciale;
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -15,9 +14,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 @Table(name = "cliente")
 @Entity
@@ -42,5 +39,8 @@ public class ClienteModel implements Serializable {
     private Set<PuntiPerAttivitaCommerciale> puntiPerAttivitaCommercial;
     @OneToMany(mappedBy = "cliente")
     private Set<SaldoPerAttivitaCommerciale> saldoPerAttivitaCommerciale;
+
+    @Column(name = "flagElimina")
+    private boolean flagElimina;
 
 }
