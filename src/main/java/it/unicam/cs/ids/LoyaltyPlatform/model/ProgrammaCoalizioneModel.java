@@ -27,6 +27,7 @@ public class ProgrammaCoalizioneModel implements Serializable {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
+
     @Column(name = "attivta_coalizione_2")
     private AttivitaCommercialeModel attivtaCoalizione1;
 
@@ -38,6 +39,9 @@ public class ProgrammaCoalizioneModel implements Serializable {
 
     @Column(name = "attivta_coalizione_2")
     private AttivitaCommercialeModel attivtaCoalizione4;
+
+    @Column(name = "attivta_coalizione_2")
+    private AttivitaCommercialeModel attivtaCoalizione5;
 
     @Column(name = "data_attivazione")
     private LocalDateTime dataAttivazione;
