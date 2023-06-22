@@ -4,6 +4,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ClienteController {
@@ -14,7 +15,9 @@ public interface ClienteController {
 
     boolean deleteCliente(ClienteModel cliente);
 
-    ClienteModel getByName(String name);
+    ClienteModel getById(UUID id);
+
+    List<ClienteModel> findAll();
 
     AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto);
 

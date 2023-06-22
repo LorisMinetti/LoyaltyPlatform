@@ -1,35 +1,25 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepositoryImpl;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AttivitaCommercialeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
+@Service
 public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeController {
 
-    private final AttivitaCommercialeRepository attivitaCommercialeRepository;
+    @Autowired
+    private AttivitaCommercialeRepository attivitaCommercialeRepository;
 
-    public AttivitaCommercialeControllerImpl() {
-        this.attivitaCommercialeRepository = AttivitaCommercialeRepositoryImpl.getInstance();
-    }
-
-    /*
-     *  Singleton constructor
-     */
-    private static class SingletonBuilder {
-        private static final AttivitaCommercialeController INSTANCE = new AttivitaCommercialeControllerImpl();
-    }
-
-    public static AttivitaCommercialeController getInstance() {
-        return SingletonBuilder.INSTANCE;
-    }
 
     @Override
     public ProgrammaFedeltaModel aderisciProgrammaFedelta() {
@@ -37,60 +27,76 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
     @Override
-    public List<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel) {
-        if(attivitaCommercialeModel.getProgrammiFedeltaAderiti().isEmpty()){
-            return null;
-        } else {
-            return attivitaCommercialeModel.getProgrammiFedeltaAderiti();
-        }
+    public Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel) {
+        return null;
     }
 
     @Override
     public void selezionaProgrammaFedelta(AttivitaCommercialeModel attivitaCommercialeModel, ProgrammaFedeltaModel programmaFedeltaModel) {
-        if(programmaFedeltaModel != null && !attivitaCommercialeModel.getProgrammiFedeltaAderiti().contains(programmaFedeltaModel)) {
-            attivitaCommercialeModel.getProgrammiFedeltaAderiti().add(programmaFedeltaModel);
-        } else {
-            throw new IllegalArgumentException("Programma fedeltà non valido");
-        }
     }
 
     @Override
     public AttivitaCommercialeModel createAttivitaCommerciale(AttivitaCommercialeModel attivitaCommerciale) {
-        if(attivitaCommerciale.getId() != null){
-            throw new IllegalArgumentException("Non è possibile creare un cliente con un ID già esistente");
+        if(attivitaCommerciale.getId() != null) {
+            log.error("Tentativo di creazione di un attivitaCommerciale con id già presente");
         }
-
-        log.debug("Creazione nuova attivita" + attivitaCommerciale.getNome());
-        AttivitaCommercialeModel result = null;
-
-        //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID
-        attivitaCommerciale.setId(UUID.randomUUID());
-
         try{
-            result = attivitaCommercialeRepository.save(attivitaCommerciale);
+            return attivitaCommercialeRepository.save(attivitaCommerciale);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Errore durante la creazione di un attivitaCommerciale");
+            return null;
         }
-        return result;    }
+    }
 
     @Override
     public AttivitaCommercialeModel updateAttivitaCommerciale(AttivitaCommercialeModel attivitaCommerciale) {
-        return null;
+        if(attivitaCommerciale.getId() == null) {
+            log.error("Tentativo di aggiornamento di un attivitaCommerciale senza id");
+        }
+        try{
+            return attivitaCommercialeRepository.save(attivitaCommerciale);
+        } catch (Exception e) {
+            log.error("Errore durante l'aggiornamento di un attivitaCommerciale");
+            return null;
+        }
     }
 
     @Override
     public boolean deleteAttivitaCommerciale(AttivitaCommercialeModel attivitaCommerciale) {
-        return false;
-    }
+        if(!attivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(attivitaCommerciale.getId())){
+            log.error("Tentativo di eliminazione di un attivitaCommerciale non presente");
+            return false;
+        }
+        try{
+            attivitaCommercialeRepository.setFlagDelete(attivitaCommerciale.getId());
+            return true;
+        } catch (Exception e) {
+            log.error("Errore durante l'eliminazione di un attivitaCommerciale");
+            e.printStackTrace();
+            return false;
+        }    }
 
     @Override
     public AttivitaCommercialeModel getById(UUID id) {
+        AttivitaCommercialeModel ret = null;
         try{
-            return attivitaCommercialeRepository.findById(id);
-        } catch (Exception e) {
+            ret = attivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(id);
+        } catch (Exception e){
             e.printStackTrace();
+            log.error("Errore nel recupero del attivitaCommerciale per Id");
         }
-        return null;
+        return ret;
     }
+
+    @Override
+    public List<AttivitaCommercialeModel> findAll() {
+        List<AttivitaCommercialeModel> ret = new ArrayList<>();
+        try{
+            ret = this.attivitaCommercialeRepository.findAll();
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("Errore nel recupero della lista dei clienti");
+        }
+        return ret;    }
 
 }

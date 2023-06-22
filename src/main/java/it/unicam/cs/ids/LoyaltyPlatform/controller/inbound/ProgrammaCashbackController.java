@@ -1,8 +1,8 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProgrammaCashbackController {
@@ -14,5 +14,8 @@ public interface ProgrammaCashbackController {
     boolean deleteProgrammaCashback(ProgrammaCashbackModel programmaCashbackModel);
 
     ProgrammaCashbackModel getById(UUID id);
+
+    List<ProgrammaCashbackModel> findAll();
+
 
 }

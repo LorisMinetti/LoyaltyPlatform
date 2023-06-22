@@ -1,206 +1,102 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AcquistoController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
-import it.unicam.cs.ids.LoyaltyPlatform.model.*;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepositoryImpl;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ClienteRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
+@Service
 public class ClienteControllerImpl implements ClienteController {
 
-    private final ClienteRepository clienteRepository;
 
-    private final AcquistoController acquistoController;
-
-    public ClienteControllerImpl() {
-        this.clienteRepository = ClienteRepositoryImpl.getInstance();
-        this.acquistoController = AcquistoControllerImpl.getInstance();
-    }
-
-    /*
-     *  Singleton constructor
-     */
-    private static class SingletonBuilder {
-        private static final ClienteController INSTANCE = new ClienteControllerImpl();
-    }
-
-    public static ClienteController getInstance() {
-        return SingletonBuilder.INSTANCE;
-    }
-
-    //TODO: implementare il metodo
-    @Override
-    public boolean effettuaPagamento() {
-        return false;
-    }
-
-    @Override
-    public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
-
-        AcquistoModel ret = AcquistoModel.builder().cliente(clienteModel).attivitaCommerciale(attivita).valoreAcquisto(valoreAcquisto).build();
-        AcquistoModel nuovoAcquisto = acquistoController.createAcquisto(ret);
-
-        //prendo tutti i programmi fedeltà attivi per l'attività commerciale
-        calcoloBeneficiPerAcquisto(nuovoAcquisto);
-        //caso generale della spesa totale da sommare una volta effettuato un qualsiasi acquisto, sia il primo o un successivo
-        aggiornaSpesaTotale(nuovoAcquisto);
-
-        /*
-        in futuro andrà implementato il concetto di pagamento andato a buon fine.
-        */
-
-        return ret;
-    }
-
-    private void calcoloBeneficiPerAcquisto(AcquistoModel acquisto) {
-        AttivitaCommercialeController attivitaCommercialeController = new AttivitaCommercialeControllerImpl();
-
-        List<ProgrammaFedeltaModel> listaProgrammi = attivitaCommercialeController.getAvailablePrograms(acquisto.getAttivitaCommerciale());
-        Map<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale = acquisto.getCliente().getLivelloPerAttivitaCommerciale();
-        Map<ProgrammaAPuntiModel, Integer> puntiPerAttivitaCommerciale = acquisto.getCliente().getPuntiPerAttivitaCommerciale();
-        Map<ProgrammaCashbackModel, Double> saldoPerAttivitaCommerciale = acquisto.getCliente().getSaldoPerAttivitaCommerciale();
-
-        if(listaProgrammi.isEmpty()) {
-            throw new IllegalArgumentException("Non ci possono essere atttività commerciali senza programmi fedeltà attivi");
-        } else {
-            //ci sono programmi fedeltà attivi e devo quindi considerarli tutti
-            for(ProgrammaFedeltaModel programmaFedeltaModel : listaProgrammi) {
-
-                if(programmaFedeltaModel instanceof ProgrammaALivelliModel programmaALivelliModel) {
-                    if(livelloPerAttivitaCommerciale.containsKey(programmaALivelliModel)) {
-                        if( (ricaricaSpesaTotaleCliente(acquisto.getCliente(), acquisto.getAttivitaCommerciale()) + acquisto.getValoreAcquisto()) >
-                                programmaALivelliModel.getLivelli().get(programmaALivelliModel.getLivelloAttuale()))  //caso in cui con l'acquisto il cliente raggiunge il livello successivo
-                        {
-                            //il cliente ha raggiunto il livello successivo
-                            programmaALivelliModel.setLivelloAttuale(programmaALivelliModel.getLivelloAttuale() + 1);
-                        }
-                    }
-
-                } else if(programmaFedeltaModel instanceof ProgrammaAPuntiModel programmaAPuntiModel) {
-                    if(puntiPerAttivitaCommerciale.containsKey(programmaAPuntiModel)) {
-                        puntiPerAttivitaCommerciale
-                                .put(programmaAPuntiModel, (int)(puntiPerAttivitaCommerciale.get(programmaAPuntiModel) + programmaAPuntiModel.getRapportoPunti() * acquisto.getValoreAcquisto()));
-                    } else {
-                        //caso in cui vanno inseriti punti per questa attività commerciale per la prima volta
-                        puntiPerAttivitaCommerciale
-                                .put(programmaAPuntiModel, (int)(programmaAPuntiModel.getRapportoPunti() * acquisto.getValoreAcquisto()));
-                    }
-
-                } else if(programmaFedeltaModel instanceof ProgrammaCashbackModel programmaCashbackModel) {
-                    if(saldoPerAttivitaCommerciale.containsKey(programmaCashbackModel)) {
-                        saldoPerAttivitaCommerciale
-                                .put(programmaCashbackModel, saldoPerAttivitaCommerciale.get(programmaCashbackModel) + (acquisto.getValoreAcquisto()/100 * programmaCashbackModel.getPercentualeCashback()));
-                    } else {
-                        saldoPerAttivitaCommerciale
-                                .put(programmaCashbackModel, programmaCashbackModel.getPercentualeCashback() * acquisto.getValoreAcquisto());
-                    }
-                }
-            }
-        }
-    }
-
-    private double ricaricaSpesaTotaleCliente(ClienteModel cliente, AttivitaCommercialeModel attivitaCommerciale){
-        double spesaTotale = 0;
-        if(attivitaCommerciale != null){
-            //devo controllare che nella map che gestisce il saldo dei clienti per ogni attivita (ogni programma a livelli infatti porta con se infatti l'attivita che lo offre)
-            //ci sia già un programma a livelli offerto da questa attivita
-            if(cliente.getSpesaTotalePerAttivitaCommerciale().containsKey(attivitaCommerciale)){
-                spesaTotale = cliente.getSpesaTotalePerAttivitaCommerciale().get(attivitaCommerciale);
-            }
-        }
-        return spesaTotale;
-    }
-
-    private void aggiornaSpesaTotale(AcquistoModel acquisto){
-
-        Map<AttivitaCommercialeModel, Double> spesaTotalePerAttivitaCommerciale = acquisto.getCliente().getSpesaTotalePerAttivitaCommerciale();
-        for (Map.Entry<AttivitaCommercialeModel, Double> entry : spesaTotalePerAttivitaCommerciale.entrySet()) {
-            AttivitaCommercialeModel key = entry.getKey();
-            Double value = entry.getValue();
-
-            //se trovo l'attività commerciale nella map, aggiorno il valore
-            if(spesaTotalePerAttivitaCommerciale.containsKey(acquisto.getAttivitaCommerciale())){
-                value += acquisto.getValoreAcquisto();
-                spesaTotalePerAttivitaCommerciale.replace(key, value);
-                return;
-            }
-        }
-        //se non ho trovato l'attività commerciale nella map, la aggiungo
-        spesaTotalePerAttivitaCommerciale.put(acquisto.getAttivitaCommerciale(), acquisto.getValoreAcquisto());
-
-    }
-
-
-    /**
-     * Metodi implementati dall'interfaccia Controller
-     */
-
+    @Autowired(required = false)
+    private ClienteRepository clienteRepository;
     @Override
     public ClienteModel createCliente(ClienteModel cliente) {
-        if(cliente.getId() != null){
-            throw new IllegalArgumentException("Non è possibile creare un cliente con un ID già esistente");
+        if(cliente.getId() != null) {
+            log.error("Tentativo di creazione di un cliente con id già presente");
         }
-
-        log.debug("Creazione nuovo cliente" + cliente.getNome());
-        ClienteModel result = null;
-
-        //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID
-        cliente.setId(UUID.randomUUID());
-
         try{
-            result = clienteRepository.save(cliente);
+            return clienteRepository.save(cliente);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Errore durante la creazione di un cliente");
+            return null;
         }
-        return result;
-    }
-
-    //TODO: implementare la ricerca per id
-    @Override
-    public ClienteModel getByName(String name) {
-        ClienteModel clienteModel = null;
-        try{
-            clienteModel = clienteRepository.findByName(name);
-        } catch (Exception e){
-            System.err.println("Errore durante la lettura del ClienteModel: " + e.getMessage());
-        }
-        return clienteModel;
     }
 
     @Override
     public ClienteModel updateCliente(ClienteModel cliente) {
-        if(cliente.getId() == null){
-            throw new IllegalArgumentException("Non è possibile aggiornare un cliente senza ID");
+        if(cliente.getId() == null) {
+            log.error("Tentativo di aggiornamento di un cliente senza id");
         }
-
-        log.debug("Modifica cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
-
-        ClienteModel result = null;
         try{
-            result = clienteRepository.update(cliente);
+            return clienteRepository.save(cliente);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Errore durante l'aggiornamento di un cliente");
+            return null;
         }
-        return result;
     }
 
     @Override
     public boolean deleteCliente(ClienteModel cliente) {
-        log.debug("Eliminazione cliente" + cliente.getNome() + " --> ID: " + cliente.getId());
-
+        if(!clienteRepository.existsByIdAndFlagEliminaIsFalse(cliente.getId())){
+            log.error("Tentativo di eliminazione di un cliente non presente");
+            return false;
+        }
         try{
-            clienteRepository.delete(cliente);
+            clienteRepository.setFlagDelete(cliente.getId());
             return true;
         } catch (Exception e) {
+            log.error("Errore durante l'eliminazione di un cliente");
             e.printStackTrace();
             return false;
         }
+
+    }
+
+    @Override
+    public ClienteModel getById(UUID id) {
+        ClienteModel ret = null;
+        try{
+            ret = clienteRepository.getByIdAndFlagEliminaIsFalse(id);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("Errore nel recupero del cliente per Id");
+        }
+        return ret;
+    }
+
+    @Override
+    public List<ClienteModel> findAll(){
+        List<ClienteModel> ret = new ArrayList<>();
+        try{
+            ret = this.clienteRepository.findAll();
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("Errore nel recupero della lista dei clienti");
+        }
+        return ret;
+    }
+
+
+    //TODO: implementare
+    @Override
+    public AcquistoModel effettuaAcquisto(ClienteModel clienteModel, AttivitaCommercialeModel attivita, double valoreAcquisto) {
+        return null;
+    }
+
+    //TODO: implementare
+    @Override
+    public boolean effettuaPagamento() {
+        return false;
     }
 }

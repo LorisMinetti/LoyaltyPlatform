@@ -2,65 +2,88 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaCashbackController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaCashbackRepositoryImpl;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ProgrammaCashbackRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 @Slf4j
+@Service
 public class ProgrammaCashbackControllerImpl implements ProgrammaCashbackController {
 
-    private final ProgrammaCashbackRepository programmaCashbackRepository;
+    @Autowired(required = false)
+    private ProgrammaCashbackRepository programmaCashbackRepository;
 
-    public ProgrammaCashbackControllerImpl() {
-        this.programmaCashbackRepository = ProgrammaCashbackRepositoryImpl.getInstance();
-    }
-
-    /*
-     *  Singleton constructor
-     */
-    private static class SingletonBuilder {
-        private static final ProgrammaCashbackController INSTANCE = new ProgrammaCashbackControllerImpl();
-    }
-
-    public static ProgrammaCashbackController getInstance() {
-        return SingletonBuilder.INSTANCE;
-    }
 
     @Override
     public ProgrammaCashbackModel createProgrammaCashback(ProgrammaCashbackModel programmaCashbackModel) {
-        if(programmaCashbackModel.getId() != null){
-            throw new IllegalArgumentException("Non è possibile creare un programmaCashback con un ID già esistente");
+        if(programmaCashbackModel.getId() != null) {
+            log.error("Tentativo di creazione di un cliente con id già presente");
         }
-
-        log.debug("Creazione nuovo ProgrammaCashback dalla percentuale: " + programmaCashbackModel.getPercentualeCashback() + " e con la spesa minima di: " + programmaCashbackModel.getSpesaMinima());
-        ProgrammaCashbackModel result = null;
-
-        //TODO: eliminare questa riga quando sarà implementato il metodo di generazione automatica dell'ID
-        programmaCashbackModel.setId(UUID.randomUUID());
-
         try{
-            result = programmaCashbackRepository.save(programmaCashbackModel);
+            programmaCashbackModel.setDataAttivazione(LocalDateTime.now());
+            return programmaCashbackRepository.save(programmaCashbackModel);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            log.error("Errore durante la creazione di un programmaCashback");
+            return null;
         }
-        return result;
     }
 
     @Override
     public ProgrammaCashbackModel updateProgrammaCashback(ProgrammaCashbackModel programmaCashbackModel) {
-        return null;
+        if(programmaCashbackModel.getId() == null) {
+            log.error("Tentativo di aggiornamento di un cliente senza id");
+        }
+        try{
+            return programmaCashbackRepository.save(programmaCashbackModel);
+        } catch (Exception e) {
+            log.error("Errore durante l'aggiornamento di un cliente");
+            return null;
+        }
     }
 
     @Override
     public boolean deleteProgrammaCashback(ProgrammaCashbackModel programmaCashbackModel) {
-        return false;
-    }
+        if(!programmaCashbackRepository.existsByIdAndFlagEliminaIsFalse(programmaCashbackModel.getId())){
+            log.error("Tentativo di eliminazione di un cliente non presente");
+            return false;
+        }
+        try{
+            programmaCashbackRepository.setFlagDelete(programmaCashbackModel.getId());
+            return true;
+        } catch (Exception e) {
+            log.error("Errore durante l'eliminazione di un cliente");
+            e.printStackTrace();
+            return false;
+        }    }
 
     @Override
     public ProgrammaCashbackModel getById(UUID id) {
-        return null;
+        ProgrammaCashbackModel ret = null;
+        try{
+            ret = programmaCashbackRepository.getByIdAndFlagEliminaIsFalse(id);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("Errore nel recupero del cliente per Id");
+        }
+        return ret;
     }
+
+    @Override
+    public List<ProgrammaCashbackModel> findAll() {
+        List<ProgrammaCashbackModel> ret = new ArrayList<>();
+        try{
+            ret = this.programmaCashbackRepository.findAll();
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("Errore nel recupero della lista dei clienti");
+        }
+        return ret;    }
 }

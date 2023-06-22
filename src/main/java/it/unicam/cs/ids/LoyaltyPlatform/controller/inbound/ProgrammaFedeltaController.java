@@ -1,8 +1,8 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.MessaggioModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProgrammaFedeltaController {
@@ -14,5 +14,9 @@ public interface ProgrammaFedeltaController {
     boolean deleteProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
     ProgrammaFedeltaModel getById(UUID id);
+
+    List<ProgrammaFedeltaModel> findAll();
+
+
 
 }
