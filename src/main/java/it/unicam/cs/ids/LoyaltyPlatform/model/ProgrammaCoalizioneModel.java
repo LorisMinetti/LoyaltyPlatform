@@ -14,11 +14,10 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
-@Entity
+@Entity(name = "programma_coalizione")
 public class ProgrammaCoalizioneModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,20 +27,20 @@ public class ProgrammaCoalizioneModel implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "attivta_coalizione_2")
-    private AttivitaCommercialeModel attivtaCoalizione1;
+    @Column(name = "attivta_coalizione_1")
+    private AttivitaCommercialeModel attivitaCoalizione1;
 
     @Column(name = "attivta_coalizione_2")
-    private AttivitaCommercialeModel attivtaCoalizione2;
+    private AttivitaCommercialeModel attivitaCoalizione2;
 
-    @Column(name = "attivta_coalizione_2")
-    private AttivitaCommercialeModel attivtaCoalizione3;
+    @Column(name = "attivta_coalizione_3")
+    private AttivitaCommercialeModel attivitaCoalizione3;
 
-    @Column(name = "attivta_coalizione_2")
-    private AttivitaCommercialeModel attivtaCoalizione4;
+    @Column(name = "attivta_coalizione_4")
+    private AttivitaCommercialeModel attivitaCoalizione4;
 
-    @Column(name = "attivta_coalizione_2")
-    private AttivitaCommercialeModel attivtaCoalizione5;
+    @Column(name = "attivta_coalizione_5")
+    private AttivitaCommercialeModel attivitaCoalizione5;
 
     @Column(name = "data_attivazione")
     private LocalDateTime dataAttivazione;
