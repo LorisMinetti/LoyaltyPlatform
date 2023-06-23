@@ -2,18 +2,22 @@ package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public interface AcquistoRepository {
 
-    AcquistoModel save(AcquistoModel acquistoModel);
+    @Modifying
+    @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
+    void setFlagDelete(UUID id);
 
-    AcquistoModel update(AcquistoModel acquistoModel) throws IOException;
+    boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    boolean delete(AcquistoModel acquistoModel);
+    ClienteModel getByIdAndFlagEliminaIsFalse(UUID id);
 
-    AcquistoModel findById(UUID id);
+    List<AcquistoModel> getAllByClienteIdAndFlagEliminaIsFalse(UUID id);
 
 }

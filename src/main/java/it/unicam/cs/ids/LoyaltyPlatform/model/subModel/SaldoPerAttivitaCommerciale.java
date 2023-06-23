@@ -1,7 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model.subModel;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaAPuntiModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
 import jakarta.persistence.*;
 import lombok.Data;
