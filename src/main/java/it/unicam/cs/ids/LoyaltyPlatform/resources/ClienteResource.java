@@ -22,7 +22,7 @@ public class ClienteResource {
     private ClienteController clienteController;
 
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ClienteModel> createCliente(@Validated @RequestBody ClienteModel dto) {
         log.debug("REST request to create Cliente: {}", dto);
         ClienteModel result = null;
@@ -35,7 +35,7 @@ public class ClienteResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ClienteModel> updateCliente(@Validated @RequestBody ClienteModel dto){
         log.debug("REST request to update Cliente: {}", dto);
         ClienteModel result = null;

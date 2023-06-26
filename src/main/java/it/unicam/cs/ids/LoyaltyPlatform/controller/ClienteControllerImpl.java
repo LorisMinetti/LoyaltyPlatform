@@ -4,7 +4,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ClienteRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaCashbackController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ProgrammaCashbackRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaCashbackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 public class ProgrammaCashbackControllerImpl implements ProgrammaCashbackController {
 
-    @Autowired(required = false)
+    @Autowired
     private ProgrammaCashbackRepository programmaCashbackRepository;
 
 

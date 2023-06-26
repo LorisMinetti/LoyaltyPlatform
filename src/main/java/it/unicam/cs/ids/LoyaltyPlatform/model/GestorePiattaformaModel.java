@@ -1,23 +1,23 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import jakarta.persistence.Column;
+import lombok.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@Builder
+@NoArgsConstructor
 @ToString
 public class GestorePiattaformaModel {
     private String nome;
     private UUID id;
     private List<ClienteModel> clientiIscritti;
     private List<AttivitaCommercialeModel> attivitaCommericaliIscritte;
-    private Map<ProgrammaFedeltaModel, Boolean> available;
+    private Set<ProgrammaFedeltaModel> programmiFedelta;
+
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
 }

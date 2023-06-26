@@ -22,7 +22,7 @@ public class ProgrammaCashbackResource {
     private ProgrammaCashbackController programmaCashbackController;
 
 
-    @PostMapping("/v")
+    @PostMapping("/create")
     public ResponseEntity<ProgrammaCashbackModel> createCashback(@Validated @RequestBody ProgrammaCashbackModel dto) {
         log.debug("REST request to create ProgrammaCashback: {}", dto);
         ProgrammaCashbackModel result = null;
@@ -35,7 +35,7 @@ public class ProgrammaCashbackResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ProgrammaCashbackModel> updateCashback(@Validated @RequestBody ProgrammaCashbackModel dto){
         log.debug("REST request to update Cashback: {}", dto);
         ProgrammaCashbackModel result = null;

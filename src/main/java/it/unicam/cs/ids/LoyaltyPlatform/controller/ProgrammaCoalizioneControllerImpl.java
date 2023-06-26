@@ -1,33 +1,16 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaCashbackController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaCoalizioneController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCoalizioneModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaCashbackRepositoryImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaCoalizioneRepositoryImpl;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ProgrammaCashbackRepository;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ProgrammaCoalizioneRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaCoalizioneRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ProgrammaCoalizioneControllerImpl implements ProgrammaCoalizioneController {
 
-    private final ProgrammaCoalizioneRepository programmaCoalizioneRepository;
+    private ProgrammaCoalizioneRepository programmaCoalizioneRepository;
 
-    public ProgrammaCoalizioneControllerImpl() {
-        this.programmaCoalizioneRepository = ProgrammaCoalizioneRepositoryImpl.getInstance();
-    }
-
-    /*
-     *  Singleton constructor
-     */
-    private static class SingletonBuilder {
-        private static final ProgrammaCoalizioneController INSTANCE = new ProgrammaCoalizioneControllerImpl();
-    }
-
-    public static ProgrammaCoalizioneController getInstance() {
-        return SingletonBuilder.INSTANCE;
-    }
 
     @Override
     public ProgrammaCoalizioneModel createProgrammaCoalizione(ProgrammaCoalizioneModel programmaCoalizioneModel) {
@@ -46,6 +29,11 @@ public class ProgrammaCoalizioneControllerImpl implements ProgrammaCoalizioneCon
 
     @Override
     public ProgrammaCoalizioneModel getById(UUID id) {
+        return null;
+    }
+
+    @Override
+    public List<ProgrammaCoalizioneModel> findAll() {
         return null;
     }
 
