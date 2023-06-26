@@ -2,7 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaAPuntiController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaAPuntiModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.ProgrammaAPuntiRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaAPuntiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

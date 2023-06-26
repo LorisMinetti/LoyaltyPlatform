@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
