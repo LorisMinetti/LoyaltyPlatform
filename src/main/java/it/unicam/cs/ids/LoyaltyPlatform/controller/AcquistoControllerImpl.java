@@ -3,7 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AcquistoController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AcquistoRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.AcquistoRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
