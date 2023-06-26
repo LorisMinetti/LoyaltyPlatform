@@ -1,17 +1,22 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaAPuntiModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public interface ProgrammaAPuntiRepository {
+@Repository
+public interface ProgrammaAPuntiRepository extends JpaRepository<ProgrammaAPuntiModel, UUID>, JpaSpecificationExecutor<ProgrammaAPuntiModel> {
 
-    ProgrammaAPuntiModel save(ProgrammaAPuntiModel programmaAPuntiModel);
+    @Modifying
+    @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
+    void setFlagDelete(UUID id);
 
-    ProgrammaAPuntiModel update(ProgrammaAPuntiModel programmaAPuntiModel);
+    boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    boolean delete(ProgrammaAPuntiModel programmaAPuntiModel);
-
-    ProgrammaAPuntiModel findById(UUID id);
-
+    ProgrammaAPuntiModel getByIdAndFlagEliminaIsFalse(UUID id);
 }
