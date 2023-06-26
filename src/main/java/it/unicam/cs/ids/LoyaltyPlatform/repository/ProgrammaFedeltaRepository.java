@@ -1,6 +1,6 @@
-package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
+package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface AttivitaCommercialeRepository extends JpaRepository<AttivitaCommercialeModel, UUID>, JpaSpecificationExecutor<AttivitaCommercialeModel> {
+public interface ProgrammaFedeltaRepository  extends JpaRepository<ProgrammaFedeltaModel, UUID>, JpaSpecificationExecutor<ProgrammaFedeltaModel> {
 
     @Modifying
     @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
@@ -18,5 +18,6 @@ public interface AttivitaCommercialeRepository extends JpaRepository<AttivitaCom
 
     boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    AttivitaCommercialeModel getByIdAndFlagEliminaIsFalse(UUID id);
+    ProgrammaFedeltaModel getByIdAndFlagEliminaIsFalse(UUID id);
+
 }

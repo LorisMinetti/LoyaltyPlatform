@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
+package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCoalizioneModel;
 

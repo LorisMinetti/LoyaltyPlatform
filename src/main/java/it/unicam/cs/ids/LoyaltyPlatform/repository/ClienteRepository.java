@@ -1,6 +1,6 @@
-package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
+package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaCashbackModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ProgrammaCashbackRepository extends JpaRepository<ProgrammaCashbackModel, UUID>, JpaSpecificationExecutor<ProgrammaCashbackModel> {
+public interface ClienteRepository extends JpaRepository<ClienteModel, UUID>, JpaSpecificationExecutor<ClienteModel> {
 
     @Modifying
     @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
@@ -18,7 +18,6 @@ public interface ProgrammaCashbackRepository extends JpaRepository<ProgrammaCash
 
     boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    ProgrammaCashbackModel getByIdAndFlagEliminaIsFalse(UUID id);
-
+    ClienteModel getByIdAndFlagEliminaIsFalse(UUID id);
 
 }

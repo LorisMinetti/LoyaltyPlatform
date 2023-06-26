@@ -1,7 +1,7 @@
-package it.unicam.cs.ids.LoyaltyPlatform.repository.inbound;
+package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.MessaggioModel;
+
 import java.io.IOException;
 import java.util.UUID;
 
