@@ -1,21 +1,39 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import jakarta.persistence.Column;
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
-@Builder
-@ToString
-public class AcquistoModel {
+@Table(name = "acquisto")
+@Entity
+@Accessors(chain = true)
+public class AcquistoModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private double valoreAcquisto;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
+
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @Fetch(FetchMode.SELECT)
     private ClienteModel cliente;
+
+    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @Fetch(FetchMode.SELECT)
     private AttivitaCommercialeModel attivitaCommerciale;
 
     @Column(name = "flag_elimina")
