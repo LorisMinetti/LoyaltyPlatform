@@ -27,6 +27,7 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
         }
         try{
             adesioneProgrammaFedelta.setDataAdesione(LocalDateTime.now());
+
             return adesioneProgrammaFedeltaRepository.save(adesioneProgrammaFedelta);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un adesioneProgrammaFedelta");

@@ -31,6 +31,9 @@ public class AdesioneProgrammaFedeltaModel implements Serializable {
     @Column(name ="data_adesione")
     private LocalDateTime dataAdesione;
 
+    @Column(name = "data_scadenza")
+    private LocalDateTime dataScadenza;
+
     @Column(name = "flagElimina")
     private boolean flagElimina;
 
@@ -53,6 +56,18 @@ public class AdesioneProgrammaFedeltaModel implements Serializable {
     //parametri programma punti
     @Column(name = "rapporto_punti")
     private double rapportoPunti;
+
+    @Column(name = "rinnovo_automatico")
+    private boolean rinnovoAutomatico;
+
+
+    @PrePersist
+    public void setScadenza() {
+        if (dataAdesione != null) {
+            dataScadenza = dataAdesione.plusYears(1);
+        }
+    }
+
 
 
 }
