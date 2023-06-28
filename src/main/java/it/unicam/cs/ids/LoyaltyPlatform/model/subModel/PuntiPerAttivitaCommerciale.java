@@ -1,12 +1,10 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model.subModel;
 
+import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaAPuntiModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -25,16 +23,18 @@ public class PuntiPerAttivitaCommerciale implements Serializable {
     private UUID id;
 
     @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
-    private ProgrammaAPuntiModel programmaAPunti;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private AttivitaCommercialeModel attivitaCommerciale;
 
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private ClienteModel cliente;
 
     @Column(name = "punti")
-    private int punti;
+    private double punti;
+
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
+
 
 }

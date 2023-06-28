@@ -26,14 +26,18 @@ public class SpesaTotalePerAttivitaCommerciale implements Serializable {
     private UUID id;
 
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @Fetch(FetchMode.SELECT)
     private ClienteModel cliente;
+
     @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale;
 
     @Column(name = "spesa_totale")
     private Double spesaTotale;
+
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
+
 }
