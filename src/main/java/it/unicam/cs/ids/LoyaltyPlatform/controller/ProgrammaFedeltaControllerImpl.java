@@ -15,7 +15,7 @@ import java.util.UUID;
 @Slf4j
 public class ProgrammaFedeltaControllerImpl implements ProgrammaFedeltaController {
 
-    @Autowired(required = false)
+    @Autowired
     private ProgrammaFedeltaRepository programmaFedeltaRepository;
 
     @Override

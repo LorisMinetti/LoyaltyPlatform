@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode
-@NoArgsConstructor
 @ToString
 public class GestorePiattaformaModel {
     private String nome;

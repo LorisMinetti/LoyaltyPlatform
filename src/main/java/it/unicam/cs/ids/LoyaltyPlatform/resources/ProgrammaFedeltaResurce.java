@@ -15,13 +15,13 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/programmaFedelta")
+@RequestMapping("/programma-fedelta")
 public class ProgrammaFedeltaResurce {
 
     @Autowired
     private ProgrammaFedeltaController programmaFedeltaController;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ProgrammaFedeltaModel> createCliente(@Validated @RequestBody ProgrammaFedeltaModel dto) {
         log.debug("REST request to create ProgrammaFedelta: {}", dto);
         ProgrammaFedeltaModel result = null;
@@ -35,7 +35,7 @@ public class ProgrammaFedeltaResurce {
     }
 
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ProgrammaFedeltaModel> updateCliente(@Validated @RequestBody ProgrammaFedeltaModel dto){
         log.debug("REST request to update ProgFedelta: {}", dto);
         ProgrammaFedeltaModel result = null;
