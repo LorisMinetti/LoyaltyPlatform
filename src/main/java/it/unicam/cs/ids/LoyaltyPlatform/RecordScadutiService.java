@@ -17,14 +17,11 @@ public class RecordScadutiService {
     @Autowired
     private AdesioneProgrammaFedeltaRepository adesioneProgrammaFedeltaRepository;
 
+    @Scheduled(fixedRate = 12 * 60 * 60 * 1000) // Esegui ogni 24 ore
     public void eliminaRecordScaduti() {
         LocalDateTime now = LocalDateTime.now();
         List<AdesioneProgrammaFedeltaModel> adesioniScadute = adesioneProgrammaFedeltaRepository.findAllByDataScadenzaBefore(now);
         adesioneProgrammaFedeltaRepository.deleteAll(adesioniScadute);
     }
 
-    @Scheduled(cron = "0 0 0 * * *") // Esegui ogni giorno a mezzanotte
-    public void eseguiEliminazioneRecordScaduti() {
-        eliminaRecordScaduti();
-    }
 }

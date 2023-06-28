@@ -2,9 +2,11 @@ package it.unicam.cs.ids.LoyaltyPlatform;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication() // Disabilita la connessione al database
+@EnableScheduling
 public class LoyaltyPlatformApplication {
 
 	public static void main(String[] args) {
