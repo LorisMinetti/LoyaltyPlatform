@@ -34,6 +34,7 @@ public class LivelloPerAttivitaCommerciale implements Serializable {
     @Fetch(FetchMode.SELECT)
     private AttivitaCommercialeModel attivitaCommerciale;
 
+    @Column(name = "livello")
     private int livello;
 
     @Column(name = "flag_elimina")

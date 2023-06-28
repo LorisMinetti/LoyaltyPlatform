@@ -5,8 +5,6 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -27,7 +25,6 @@ public class SpesaTotalePerAttivitaCommerciale implements Serializable {
 
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SELECT)
     private ClienteModel cliente;
 
     @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")

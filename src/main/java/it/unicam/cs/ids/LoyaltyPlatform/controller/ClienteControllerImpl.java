@@ -143,8 +143,8 @@ public class ClienteControllerImpl implements ClienteController {
         SpesaTotalePerAttivitaCommerciale spesaTotaleInstance =
                 spesaTotalePerAttivitaCommercialeController.findAll()
                         .stream()
-                        .filter(s -> s.getCliente().equals(cliente))
-                        .filter(s -> s.getAttivitaCommerciale().getId().equals(attivitaCommerciale.getId()))
+                        .filter(s -> s != null && s.getCliente() != null && s.getCliente().equals(cliente))
+                        .filter(s -> s != null && s.getAttivitaCommerciale() != null && s.getAttivitaCommerciale().getId().equals(attivitaCommerciale.getId()))
                         .findFirst()
                         .orElse(null);
         //Se non esiste una spesa totale per questa attività commerciale la creo
@@ -180,8 +180,8 @@ public class ClienteControllerImpl implements ClienteController {
                     //Prendo l'istanza dei punti collegati all'attività commerciale del cliente che effettua l'acquisto
                     PuntiPerAttivitaCommerciale puntiAttualiInstance = puntiPerAttivitaCommercialeController.findAll()
                             .stream()
-                            .filter(p -> p.getCliente().equals(cliente))
-                            .filter(p -> p.getAttivitaCommerciale().equals(attivitaCommerciale))
+                            .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(cliente))
+                            .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
                             .findFirst()
                             .orElse(null);
 
@@ -219,8 +219,8 @@ public class ClienteControllerImpl implements ClienteController {
                 case "Cashback":
                     SaldoPerAttivitaCommerciale saldoAttualeInstance = saldoPerAttivitaCommercialeController.findAll()
                             .stream()
-                            .filter(p -> p.getCliente().equals(cliente))
-                            .filter(p -> p.getAttivitaCommerciale().equals(attivitaCommerciale))
+                            .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(cliente))
+                            .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
                             .findFirst()
                             .orElse(null);
 
