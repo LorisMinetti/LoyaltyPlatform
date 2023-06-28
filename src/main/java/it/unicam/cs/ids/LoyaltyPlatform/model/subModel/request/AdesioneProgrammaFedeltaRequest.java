@@ -3,6 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
@@ -16,7 +17,7 @@ public class AdesioneProgrammaFedeltaRequest implements Serializable {
 
         private Double spesaMinima;
 
-        private Double[] livelli;
+        private ArrayList<Double> livelli;
 
         private Integer livelloAttuale;
 
