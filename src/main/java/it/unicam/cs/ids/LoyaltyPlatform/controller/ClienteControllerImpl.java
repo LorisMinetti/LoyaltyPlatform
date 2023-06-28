@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -118,7 +117,6 @@ public class ClienteControllerImpl implements ClienteController {
     }
 
 
-    //TODO: implementare
     @Override
     public ClienteModel effettuaAcquisto(AcquistoRequest acquistoRequest) {
         if(acquistoRequest==null){
@@ -148,8 +146,8 @@ public class ClienteControllerImpl implements ClienteController {
         SpesaTotalePerAttivitaCommerciale spesaTotaleInstance =
                 spesaTotalePerAttivitaCommercialeController.findAll()
                         .stream()
-                        .filter(s -> s != null && s.getCliente() != null && s.getCliente().equals(cliente))
-                        .filter(s -> s != null && s.getAttivitaCommerciale() != null && s.getAttivitaCommerciale().getId().equals(attivitaCommerciale.getId()))
+                        .filter(s -> s.getCliente() != null && s.getCliente().equals(cliente))
+                        .filter(s -> s.getAttivitaCommerciale() != null && s.getAttivitaCommerciale().getId().equals(attivitaCommerciale.getId()))
                         .findFirst()
                         .orElse(null);
         //Se non esiste una spesa totale per questa attività commerciale la creo
@@ -175,7 +173,7 @@ public class ClienteControllerImpl implements ClienteController {
                 .filter(a -> a.getIdAttivitaCommerciale().equals(attivitaCommerciale.getId()))
                 .map(a -> programmaFedeltaController.getById(a.getIdProgrammaFedelta()))
 //                .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         for(ProgrammaFedeltaModel programma : programmiAderiti) {
 
@@ -185,8 +183,8 @@ public class ClienteControllerImpl implements ClienteController {
                     //Prendo l'istanza dei punti collegati all'attività commerciale del cliente che effettua l'acquisto
                     PuntiPerAttivitaCommerciale puntiAttualiInstance = puntiPerAttivitaCommercialeController.findAll()
                             .stream()
-                            .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(cliente))
-                            .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
+                            .filter(p -> p.getCliente() != null && p.getCliente().equals(cliente))
+                            .filter(p -> p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
                             .findFirst()
                             .orElse(null);
 
@@ -224,8 +222,8 @@ public class ClienteControllerImpl implements ClienteController {
                 case "Cashback":
                     SaldoPerAttivitaCommerciale saldoAttualeInstance = saldoPerAttivitaCommercialeController.findAll()
                             .stream()
-                            .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(cliente))
-                            .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
+                            .filter(p -> p.getCliente() != null && p.getCliente().equals(cliente))
+                            .filter(p -> p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(attivitaCommerciale))
                             .findFirst()
                             .orElse(null);
 
@@ -284,8 +282,8 @@ public class ClienteControllerImpl implements ClienteController {
 
         PuntiPerAttivitaCommerciale puntiAttualiInstance = puntiPerAttivitaCommercialeController.findAll()
                 .stream()
-                .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
-                .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
+                .filter(p -> p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
+                .filter(p -> p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
                 .findFirst()
                 .orElse(null);
 
@@ -297,12 +295,11 @@ public class ClienteControllerImpl implements ClienteController {
         else
         {
             try{
-                List<CouponModel> l =couponController.findAll();
                 CouponModel anotherOne = couponController.findAll()
                         .stream()
-                        .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
-                        .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
-                        .filter(p -> p != null && p.getDataScadenza().isAfter(LocalDateTime.now()))
+                        .filter(p -> p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
+                        .filter(p -> p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
+                        .filter(p -> p.getDataScadenza().isAfter(LocalDateTime.now()))
                         .findFirst()
                         .orElse(null);
 
