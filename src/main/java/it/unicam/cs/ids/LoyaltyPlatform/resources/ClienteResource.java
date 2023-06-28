@@ -2,7 +2,9 @@ package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.CouponModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AcquistoRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.GeneraCouponRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -94,6 +96,20 @@ public class ClienteResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Errore nella creazione del AcquistoRequest in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/genera-coupon")
+    public ResponseEntity<CouponModel> generaCoupon(@Validated @RequestBody GeneraCouponRequest request){
+        log.debug("REST request to create Coupon: {}", request);
+        CouponModel result = null;
+        try {
+            result = this.clienteController.generaCoupon(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella creazione del Coupon in ingresso");
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

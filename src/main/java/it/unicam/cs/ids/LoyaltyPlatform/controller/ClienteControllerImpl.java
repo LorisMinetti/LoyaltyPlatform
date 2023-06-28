@@ -10,11 +10,13 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.PuntiPerAttivitaCommercia
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SaldoPerAttivitaCommerciale;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.SpesaTotalePerAttivitaCommerciale;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AcquistoRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.GeneraCouponRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.ClienteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +45,9 @@ public class ClienteControllerImpl implements ClienteController {
     private AdesioneProgrammaFedeltaController adesioneProgrammaFedeltaController;
     @Autowired
     private SpesaTotalePerAttivitaCommercialeController spesaTotalePerAttivitaCommercialeController;
+    @Autowired
+    private CouponController couponController;
+
 
 
     @Override
@@ -259,5 +264,91 @@ public class ClienteControllerImpl implements ClienteController {
     @Override
     public boolean effettuaPagamento() {
         return false;
+    }
+
+    @Override
+    public CouponModel generaCoupon(GeneraCouponRequest generaCouponRequest) {
+        if(generaCouponRequest == null){
+            throw new IllegalArgumentException("GeneraCouponRequest non può essere null");
+        }
+
+        CouponModel coupon = new CouponModel();
+        coupon.setCliente( this.getById(generaCouponRequest.getIdCliente()) );
+        coupon.setAttivitaCommerciale(
+                attivitaCommercialeController.getById(generaCouponRequest.getIdAttivitaCommerciale())
+        );
+        coupon.setPuntiConvertiti( generaCouponRequest.getPuntiConvertiti() );
+        coupon.setValoreCouponInEuro(
+                this.calcolaValoreCoupon(generaCouponRequest)
+        );
+
+        PuntiPerAttivitaCommerciale puntiAttualiInstance = puntiPerAttivitaCommercialeController.findAll()
+                .stream()
+                .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
+                .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
+                .findFirst()
+                .orElse(null);
+
+
+        if(puntiAttualiInstance.getPunti() < generaCouponRequest.getPuntiConvertiti())
+        {
+            throw new IllegalArgumentException("Stai tentando di generare un coupon con più punti di quelli che hai");
+        }
+        else
+        {
+            try{
+                List<CouponModel> l =couponController.findAll();
+                CouponModel anotherOne = couponController.findAll()
+                        .stream()
+                        .filter(p -> p != null && p.getCliente() != null && p.getCliente().equals(coupon.getCliente()))
+                        .filter(p -> p != null && p.getAttivitaCommerciale() != null && p.getAttivitaCommerciale().equals(coupon.getAttivitaCommerciale()))
+                        .filter(p -> p != null && p.getDataScadenza().isAfter(LocalDateTime.now()))
+                        .findFirst()
+                        .orElse(null);
+
+                if(anotherOne == null){
+                    this.couponController.createCoupon(coupon);
+                } else {
+                    coupon.setDataGenerazione(anotherOne.getDataGenerazione());
+                    coupon.setDataScadenza(anotherOne.getDataScadenza());
+                    coupon.setValoreCouponInEuro(anotherOne.getValoreCouponInEuro() + coupon.getValoreCouponInEuro());
+                    coupon.setId(anotherOne.getId());
+                    this.couponController.updateCoupon(coupon);
+                }
+            } catch (Exception e){
+                log.error("Errore durante la creazione del coupon");
+                e.printStackTrace();
+            }
+            //TODO: se un cliente ha già generato un coupon per la stessa attività commerciale, e questo non è ancora scaduto, devo aggiornare il coupon esistente e non crearne uno nuovo
+
+            //Aggiorno i punti del cliente decurtandoli di quelli utilizzati per generare il coupon
+            puntiAttualiInstance.setPunti( puntiAttualiInstance.getPunti() - generaCouponRequest.getPuntiConvertiti() );
+            puntiPerAttivitaCommercialeController.updatePuntiPerAttivita(puntiAttualiInstance);
+        }
+
+        return coupon;
+
+    }
+
+    /**
+     * Calcola il valore del coupon in euro.
+     * Utilizza una formula fissa dove viene ripreso il valore di mercato dell'acquisto e questo verrà moltiplicato per il 10% del rapporto punti in ingresso.
+     * @param generaCouponRequest
+     * @return
+     */
+    private double calcolaValoreCoupon(GeneraCouponRequest generaCouponRequest) {
+        final double COSTANTE_RAPPORTO_PUNTI_GENERAZIONE_COUPON = 0.1;
+        AdesioneProgrammaFedeltaModel model = adesioneProgrammaFedeltaController.findAll()
+                .stream()
+                .filter(a -> a.getIdAttivitaCommerciale().equals(generaCouponRequest.getIdAttivitaCommerciale()))
+                .filter(a -> a.getRapportoPunti() != null && a.getRapportoPunti() > 0)           //filtro per attivita commerciale, una volta presa, mi basta considerare l'unica che ha il rapporto punti non null
+                .findFirst()
+                .orElse(null);
+
+        double rapportoPuntiInIngresso = model.getRapportoPunti();
+
+        double prezzoIniziale = generaCouponRequest.getPuntiConvertiti() / rapportoPuntiInIngresso;   //Mi ritorna il prezzo iniziale pagato per i punti convertiti
+
+        return (COSTANTE_RAPPORTO_PUNTI_GENERAZIONE_COUPON * rapportoPuntiInIngresso) * prezzoIniziale;
     }
 }
