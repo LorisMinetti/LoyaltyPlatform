@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             log.error("Tentativo di creazione di un adesioneProgrammaFedelta con id già presente");
         }
         try{
+            adesioneProgrammaFedelta.setDataAdesione(LocalDateTime.now());
             return adesioneProgrammaFedeltaRepository.save(adesioneProgrammaFedelta);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un adesioneProgrammaFedelta");

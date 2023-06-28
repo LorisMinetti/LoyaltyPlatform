@@ -27,6 +27,7 @@ public class AcquistoControllerImpl implements AcquistoController {
             log.error("Tentativo di creazione di un acquisto con id già presente");
         }
         try{
+            acquisto.setDataAcquisto(LocalDateTime.now());
             return acquistoRepository.save(acquisto);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un acquisto");
