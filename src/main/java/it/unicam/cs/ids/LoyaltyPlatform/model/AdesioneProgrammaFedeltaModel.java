@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
@@ -39,10 +40,13 @@ public class AdesioneProgrammaFedeltaModel implements Serializable {
     @Column(name = "spesa_minima")
     private Double spesaMinima;
 
-
-    //parametri programma livelli
+    //TODO
+    /*in caso l'array generasse un errore, ricordati che è possibile
+    che bisogna ridefinire equals and hashCode
+     */
     @Column(name = "livelli")
-    private Double[] livelli;
+    private ArrayList<Double> livelli;
+
     @Column(name = "livello_attuale")
     private Integer livelloAttuale;
 

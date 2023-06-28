@@ -19,28 +19,26 @@ public class AcquistoModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Column(name = "valore_acquisto")
     private double valoreAcquisto;
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private ClienteModel cliente;
 
     @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale;
-
 
     @Column(name ="data_acquisto")
     private LocalDateTime dataAcquisto;
 
     @Column(name = "flag_elimina")
     private boolean flagElimina;
-
 
 }

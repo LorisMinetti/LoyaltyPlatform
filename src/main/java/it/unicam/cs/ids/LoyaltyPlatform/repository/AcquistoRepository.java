@@ -24,5 +24,4 @@ public interface AcquistoRepository extends JpaRepository<AcquistoModel, UUID>, 
 
     List<AcquistoModel> findAllByCliente(ClienteModel cliente);
 
-
 }
