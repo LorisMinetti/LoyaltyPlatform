@@ -35,4 +35,9 @@ public interface AttivitaCommercialeController {
      */
     Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel);
 
+    /**
+     * Permette di disdire un'adesione ad un programma fedeltà che perdurerà fino alla fine della dataScadenza
+     */
+    Boolean disdiciAdesione(AdesioneProgrammaFedeltaModel adesione);
+
 }

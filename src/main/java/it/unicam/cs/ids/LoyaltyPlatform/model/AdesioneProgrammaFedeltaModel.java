@@ -51,14 +51,14 @@ public class AdesioneProgrammaFedeltaModel implements Serializable {
 
     //parametri programma cashback
     @Column(name = "percentuale_cashback")
-    private double percentualeCashback;
+    private Double percentualeCashback;
 
     //parametri programma punti
     @Column(name = "rapporto_punti")
-    private double rapportoPunti;
+    private Double rapportoPunti;
 
     @Column(name = "rinnovo_automatico")
-    private boolean rinnovoAutomatico;
+    private boolean rinnovoAutomatico = true;      //default true
 
 
     @PrePersist

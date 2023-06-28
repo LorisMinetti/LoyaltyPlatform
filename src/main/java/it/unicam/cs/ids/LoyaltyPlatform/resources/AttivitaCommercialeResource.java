@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFedeltaController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
@@ -22,6 +23,8 @@ public class AttivitaCommercialeResource {
 
     @Autowired
     private AttivitaCommercialeController attivitaCommercialeController;
+    @Autowired
+    private AdesioneProgrammaFedeltaController adesioneProgrammaFedeltaController;
 
     @PostMapping
     public ResponseEntity<AttivitaCommercialeModel> createAttivitaCommerciale(@Validated @RequestBody AttivitaCommercialeModel dto) {
@@ -95,6 +98,20 @@ public class AttivitaCommercialeResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Errore nella creazione del AdesioneProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PutMapping("/disdici/{id}")
+    public ResponseEntity<Boolean> disdiciAdesione(@PathVariable("id") UUID id){
+        log.debug("REST request to disdici AdesioneProgrammaFedelta");
+        AdesioneProgrammaFedeltaModel adesione = adesioneProgrammaFedeltaController.getById(id);
+        Boolean result = null;
+        try {
+            result = attivitaCommercialeController.disdiciAdesione(adesione);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella disdetta del AdesioneProgrammaFedeltaDTO in ingresso");
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

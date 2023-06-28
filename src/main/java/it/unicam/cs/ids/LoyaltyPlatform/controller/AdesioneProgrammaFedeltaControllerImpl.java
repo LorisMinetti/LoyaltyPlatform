@@ -83,5 +83,22 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
         }
         return ret;
     }
+
+    @Override
+    public Boolean setRinnovoFalse(UUID id) {
+        if(!adesioneProgrammaFedeltaRepository.existsByIdAndFlagEliminaIsFalse( id ) ){
+            log.error("Tentativo di disdire di un adesioneProgrammaFedelta non presente");
+            return false;
+        }
+        try{
+            adesioneProgrammaFedeltaRepository.setRinnovoAutomaticoToFalse(id);
+            return true;
+        } catch (Exception e) {
+            log.error("Errore durante l'aggiornamento del rinnovo automatico di un adesioneProgrammaFedelta");
+            e.getMessage();
+            e.getCause();
+            return false;
+        }
+    }
 }
 

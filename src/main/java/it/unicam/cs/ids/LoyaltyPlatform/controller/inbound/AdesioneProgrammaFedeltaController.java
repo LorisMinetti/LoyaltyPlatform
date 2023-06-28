@@ -15,4 +15,6 @@ public interface AdesioneProgrammaFedeltaController {
     AdesioneProgrammaFedeltaModel getById(UUID id);
 
     List<AdesioneProgrammaFedeltaModel> findAll();
+
+    Boolean setRinnovoFalse(UUID id);
 }

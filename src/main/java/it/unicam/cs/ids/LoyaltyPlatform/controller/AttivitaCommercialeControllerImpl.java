@@ -124,7 +124,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             case ("Cashback"): {
                 if( adesioneProgrammaFedelta.getSpesaMinima() == null
                         || adesioneProgrammaFedelta.getPercentualeCashback() == null ) {
-                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà di tipo cashback");
+                    log.error("Inserire\"spesaMinima\" o \"percentualeCashback\" per aderire al programma fedeltà Cashback");
                     return null;
                 }
                 ret.setSpesaMinima( adesioneProgrammaFedelta.getSpesaMinima() );
@@ -201,6 +201,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         return ret;
     }
 
+
     private boolean isOneSelectable(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedeltaModel) {
         Set<ProgrammaFedeltaModel> programmiAvailable = this.getAvailablePrograms(attivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse( adesioneProgrammaFedeltaModel.getIdAttivitaCommerciale() ));
 
@@ -214,5 +215,34 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         }
         return false;
     }
+
+
+    /**
+     * Permette di disdire un'adesione a un programma fedeltà che perdurerà fino alla fine della dataScadenza
+     *
+     * @param adesione
+     */
+    @Override
+    public Boolean disdiciAdesione(AdesioneProgrammaFedeltaModel adesione) {
+        if( adesione == null){
+            log.error("Tentativo di disdire un'adesione nulla");
+            return false;
+        } else if ( ! adesione.isRinnovoAutomatico()){
+            log.error("Tentativo di disdire un'adesione non rinnovabile");
+            return false;
+        } else if ( adesione.getDataScadenza() == null){
+            log.error("Tentativo di disdire un'adesione senza data di scadenza");
+            return false;
+        }
+
+        try{
+            return adesioneProgrammaFedeltaController.setRinnovoFalse( adesione.getId() );
+        } catch (Exception e) {
+            log.error("Errore durante la disdetta di un'adesione ad un programma fedeltà");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 
 }
