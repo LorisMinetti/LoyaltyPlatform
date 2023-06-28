@@ -1,6 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
+@Transactional
 public interface AttivitaCommercialeRepository extends JpaRepository<AttivitaCommercialeModel, UUID>, JpaSpecificationExecutor<AttivitaCommercialeModel> {
 
     @Modifying

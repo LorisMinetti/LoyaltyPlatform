@@ -1,8 +1,8 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
+//
+//@Repository
+//@Transactional
 public interface ProgrammaAPuntiRepository  {
 //
 //    @Modifying
