@@ -1,13 +1,9 @@
 package it.unicam.cs.ids.LoyaltyPlatform;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaALivelliModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaAPuntiModel;
 
 import java.sql.*;
 import java.util.*;
-import org.postgresql.Driver;
 
 
 public class DBController {
