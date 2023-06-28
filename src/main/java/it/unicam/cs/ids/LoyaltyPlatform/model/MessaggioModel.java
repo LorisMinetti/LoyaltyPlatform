@@ -6,9 +6,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode
-@NoArgsConstructor
-@ToString
 public class MessaggioModel<M, D> {
     private UUID id;
     private String testo;
