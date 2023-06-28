@@ -1,7 +1,9 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
+import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -19,10 +21,18 @@ public interface AttivitaCommercialeController {
 
     List<AttivitaCommercialeModel> findAll();
 
-    ProgrammaFedeltaModel aderisciProgrammaFedelta();
+    /**
+     * Adesione di un'attivitaCommerciale a un programma fedeltà
+     * @param adesioneProgrammaFedeltaRequest
+     * @return l'adesione effettuata
+     */
+    AdesioneProgrammaFedeltaModel aderisciProgrammaFedelta(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedeltaRequest);
 
+    /**
+     * Restituisce i programmi fedeltà selezionabili per l'attività commerciale
+     * @param attivitaCommercialeModel
+     * @return
+     */
     Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel);
-
-    void selezionaProgrammaFedelta(AttivitaCommercialeModel attivitaCommercialeModel, ProgrammaFedeltaModel programmaFedeltaModel);
 
 }

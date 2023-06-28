@@ -1,7 +1,9 @@
 package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,4 +84,19 @@ public class AttivitaCommercialeResource {
         }
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
+
+
+    @PostMapping("/aderisci")
+    public ResponseEntity<AdesioneProgrammaFedeltaModel> createAdesione(@Validated @RequestBody AdesioneProgrammaFedeltaRequest adesioneRequest) {
+        log.debug("REST request to create AdesioneProgrammaFedelta");
+        AdesioneProgrammaFedeltaModel result = null;
+        try {
+            result = this.attivitaCommercialeController.aderisciProgrammaFedelta(adesioneRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella creazione del AdesioneProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

@@ -1,17 +1,19 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFedeltaController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.inbound.AttivitaCommercialeRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.AdesioneProgrammaFedeltaRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaFedeltaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -19,21 +21,15 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
     @Autowired
     private AttivitaCommercialeRepository attivitaCommercialeRepository;
+    @Autowired
+    private AdesioneProgrammaFedeltaController adesioneProgrammaFedeltaController;
+    @Autowired
+    private AdesioneProgrammaFedeltaRepository adesioneProgrammaFedeltaRepository;
+    @Autowired
+    private ProgrammaFedeltaRepository programmaFedeltaRepository;
 
 
-    @Override
-    public ProgrammaFedeltaModel aderisciProgrammaFedelta() {
-        return null;
-    }
 
-    @Override
-    public Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel) {
-        return null;
-    }
-
-    @Override
-    public void selezionaProgrammaFedelta(AttivitaCommercialeModel attivitaCommercialeModel, ProgrammaFedeltaModel programmaFedeltaModel) {
-    }
 
     @Override
     public AttivitaCommercialeModel createAttivitaCommerciale(AttivitaCommercialeModel attivitaCommerciale) {
@@ -97,6 +93,126 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             e.printStackTrace();
             log.error("Errore nel recupero della lista dei clienti");
         }
-        return ret;    }
+        return ret;
+    }
+
+
+    /**
+     * Adesione di un'attivitaCommerciale a un programma fedeltà
+     * @param adesioneProgrammaFedelta
+     * @return l'adesione effettuata
+     */
+    @Override
+    public AdesioneProgrammaFedeltaModel aderisciProgrammaFedelta(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedelta) {
+        //Controllo se il programma fedeltà non è selezionabile per l'attività commerciale
+        if ( isOneSelectable(adesioneProgrammaFedelta) ) return null;
+
+        //Da qui vuol dire che il programma fedeltà è selezionabile per l'attività commerciale e quindi procedo con l'adesione
+        AdesioneProgrammaFedeltaModel ret = new AdesioneProgrammaFedeltaModel();
+        ret.setIdAttivitaCommerciale( adesioneProgrammaFedelta.getIdAttivitaCommerciale() );
+        ret.setIdProgrammaFedelta( adesioneProgrammaFedelta.getIdProgrammaFedelta() );
+
+        ProgrammaFedeltaModel programmaFedelta = programmaFedeltaRepository.getByIdAndFlagEliminaIsFalse( adesioneProgrammaFedelta.getIdProgrammaFedelta() );
+
+            /*
+            In base a al nome del programma fedeltà devo controllare che se è cashback devono esserci solo i parametri "spesaMinma" e
+            "percentualeCashback". Nel caso sia punti ci devono essere solo i parametri "spesaMinima" e
+            "rapportoPunti", nel caso sia a livelli ci devono essere solo i parametri "livelli" e "livelloAttuale"
+            */
+
+        switch(programmaFedelta.getNome()){
+            case ("Cashback"): {
+                if( adesioneProgrammaFedelta.getSpesaMinima() == null
+                        || adesioneProgrammaFedelta.getPercentualeCashback() == null ) {
+                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà di tipo cashback");
+                    return null;
+                }
+                ret.setSpesaMinima( adesioneProgrammaFedelta.getSpesaMinima() );
+                ret.setPercentualeCashback( adesioneProgrammaFedelta.getPercentualeCashback() );
+                break;
+            }
+            case ("Punti"): {
+                if( adesioneProgrammaFedelta.getSpesaMinima() == null
+                        || adesioneProgrammaFedelta.getRapportoPunti() == null ) {
+                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Punti");
+                    return null;
+                }
+                ret.setSpesaMinima( adesioneProgrammaFedelta.getSpesaMinima() );
+                ret.setRapportoPunti( adesioneProgrammaFedelta.getRapportoPunti() );
+                break;
+            }
+            case ("Livelli"): {
+                if( adesioneProgrammaFedelta.getLivelli() == null
+                        || adesioneProgrammaFedelta.getLivelloAttuale() == null ) {
+                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Livelli");
+                    return null;
+                }
+                ret.setLivelli( adesioneProgrammaFedelta.getLivelli() );
+                ret.setLivelloAttuale( adesioneProgrammaFedelta.getLivelloAttuale() );
+                break;
+            }
+        }
+
+        try{
+            return adesioneProgrammaFedeltaController.createAdesioneProgrammaFedelta(ret);
+        } catch (Exception e) {
+            log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    /**
+     * Restituisce i programmi fedeltà selezionabili per l'attività commerciale
+     * @param attivitaCommercialeModel
+     * @return
+     */
+    @Override
+    public Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel) {
+        //TODO: devo ritornare tutti i programmifedelta selezionabili al quale l'attività non ha ancora aderito
+        if(! attivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(attivitaCommercialeModel.getId())){
+            log.error("Tentativo di recupero dei programmi fedeltà disponibili per un attivitaCommerciale non presente");
+            return null;
+        }
+        //Prendo tutte le adesioni di quest'attività commerciale
+        List<AdesioneProgrammaFedeltaModel> listaAdesioni = adesioneProgrammaFedeltaRepository
+                .findAllByIdAttivitaCommercialeAndFlagEliminaIsFalse(attivitaCommercialeModel.getId());
+
+        //Prendo tutti i programmi fedeltà al momento selezionabili
+        List<ProgrammaFedeltaModel> listaProgrammi = programmaFedeltaRepository
+                .findAllBySelezionabileIsTrueAndFlagEliminaIsFalse();
+
+        //Ora devo ritornare solo i programmi fedeltà che non sono già stati aderiti da quest'attività commerciale
+        Set<ProgrammaFedeltaModel> ret = new HashSet<>();
+
+        for(ProgrammaFedeltaModel programmaFedelta : listaProgrammi){
+            boolean presente = false;
+            for(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta : listaAdesioni){
+                if(adesioneProgrammaFedelta.getIdProgrammaFedelta().equals(programmaFedelta.getId())){
+                    presente = true;
+                    break;
+                }
+            }
+            if(!presente){
+                ret.add(programmaFedelta);
+            }
+        }
+        return ret;
+    }
+
+    private boolean isOneSelectable(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedeltaModel) {
+        Set<ProgrammaFedeltaModel> programmiAvailable = this.getAvailablePrograms(attivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse( adesioneProgrammaFedeltaModel.getIdAttivitaCommerciale() ));
+
+        //Controllo se non c'è nemmeno un programma fedelta come quello al quale voglio aderire
+        if( programmiAvailable.stream()
+                .filter( p -> p.getId().toString().equals( adesioneProgrammaFedeltaModel.getIdProgrammaFedelta().toString() ) )   //controllo direttamente i due uuid come stringhe
+                .count() == 0 )   //se non ne trovo nemmeno uno -> ERRORE
+        {
+            log.error("Tentativo di adesione ad un programma fedeltà non selezionabile per l'attività commerciale");
+            return true;
+        }
+        return false;
+    }
 
 }
