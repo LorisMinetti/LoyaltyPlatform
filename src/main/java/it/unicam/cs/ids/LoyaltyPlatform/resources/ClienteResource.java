@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequestMapping("/cliente")
 public class ClienteResource {
 
-    @Autowired(required = false)
+    @Autowired
     private ClienteController clienteController;
 
 
