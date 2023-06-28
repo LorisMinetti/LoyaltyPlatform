@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "livello_per_attivita_commerciale")
 @Accessors(chain = true)
-public class LivelloPerAttivitàCommerciale implements Serializable {
+public class LivelloPerAttivitaCommerciale implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -35,6 +35,11 @@ public class LivelloPerAttivitàCommerciale implements Serializable {
     private AttivitaCommercialeModel attivitaCommerciale;
 
     private int livello;
+
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
+
+
 
 
 }
