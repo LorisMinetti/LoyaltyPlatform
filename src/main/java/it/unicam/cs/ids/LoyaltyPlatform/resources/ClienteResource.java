@@ -2,6 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ClienteController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AcquistoRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,5 +83,18 @@ public class ClienteResource {
             log.error("Errore nel recupero della lista Clienti");
         }
         return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+    @PostMapping("/acquista")
+    public ResponseEntity<ClienteModel> effettuaAcquisto(@Validated @RequestBody AcquistoRequest acquistoRequest){
+        log.debug("REST request to create Acquisto: {}", acquistoRequest);
+        ClienteModel result = null;
+        try {
+            result = this.clienteController.effettuaAcquisto(acquistoRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella creazione del AcquistoRequest in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
