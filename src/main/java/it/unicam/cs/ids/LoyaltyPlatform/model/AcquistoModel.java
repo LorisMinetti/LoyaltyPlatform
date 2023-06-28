@@ -2,17 +2,16 @@ package it.unicam.cs.ids.LoyaltyPlatform.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode
 @Table(name = "acquisto")
 @Entity
 @Accessors(chain = true)
@@ -35,6 +34,10 @@ public class AcquistoModel implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @Fetch(FetchMode.SELECT)
     private AttivitaCommercialeModel attivitaCommerciale;
+
+
+    @Column(name ="data_acquisto")
+    private LocalDateTime dataAcquisto;
 
     @Column(name = "flag_elimina")
     private boolean flagElimina;
