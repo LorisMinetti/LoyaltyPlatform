@@ -1,8 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform.repository;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.AcquistoModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
-import jakarta.transaction.Transactional;
+import it.unicam.cs.ids.LoyaltyPlatform.model.CouponModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,8 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-@Transactional
-public interface AcquistoRepository extends JpaRepository<AcquistoModel, UUID>, JpaSpecificationExecutor<AcquistoModel> {
+public interface CouponRepository extends JpaRepository<CouponModel, UUID>, JpaSpecificationExecutor<CouponModel> {
 
     @Modifying
     @Query(value = "UPDATE #{#entityName} d SET d.flagElimina = true WHERE d.id = ?1")
@@ -22,8 +20,8 @@ public interface AcquistoRepository extends JpaRepository<AcquistoModel, UUID>, 
 
     boolean existsByIdAndFlagEliminaIsFalse(UUID id);
 
-    AcquistoModel getByIdAndFlagEliminaIsFalse(UUID id);
+    CouponModel getByIdAndFlagEliminaIsFalse(UUID id);
 
-    List<AcquistoModel> findAllByCliente(ClienteModel cliente);
+    List<CouponModel> findAllByCliente(ClienteModel cliente);
 
 }

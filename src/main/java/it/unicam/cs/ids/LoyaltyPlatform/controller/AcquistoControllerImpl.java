@@ -31,6 +31,7 @@ public class AcquistoControllerImpl implements AcquistoController {
             return acquistoRepository.save(acquisto);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un acquisto");
+            e.printStackTrace();
             return null;
         }
     }
@@ -43,8 +44,10 @@ public class AcquistoControllerImpl implements AcquistoController {
             return acquistoRepository.save(acquisto);
         } catch (Exception e) {
             log.error("Errore durante l'aggiornamento di un acquisto");
+            e.printStackTrace();
             return null;
-        }    }
+        }
+    }
 
     @Override
     public boolean deleteAcquisto(AcquistoModel acquisto) {
@@ -56,10 +59,11 @@ public class AcquistoControllerImpl implements AcquistoController {
             acquistoRepository.setFlagDelete(acquisto.getId());
             return true;
         } catch (Exception e) {
-            log.error("Errore durante l'eliminazione di un attivitaCommerciale");
+            log.error("Errore durante l'eliminazione di un acquisto");
             e.printStackTrace();
             return false;
-        }    }
+        }
+    }
 
     @Override
     public AcquistoModel getById(UUID id) {
@@ -67,8 +71,8 @@ public class AcquistoControllerImpl implements AcquistoController {
         try{
             ret = acquistoRepository.getByIdAndFlagEliminaIsFalse(id);
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero del acquisto per Id");
+            e.printStackTrace();
         }
         return ret;
     }
@@ -79,10 +83,11 @@ public class AcquistoControllerImpl implements AcquistoController {
         try{
             ret = this.acquistoRepository.findAll();
         } catch (Exception e){
+            log.error("Errore nel recupero della lista degli acquisto");
             e.printStackTrace();
-            log.error("Errore nel recupero della lista dei acquisto");
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<AcquistoModel> findAllforCliente(ClienteModel cliente) {
@@ -90,8 +95,8 @@ public class AcquistoControllerImpl implements AcquistoController {
         try{
             ret = this.acquistoRepository.findAllByCliente(cliente);
         } catch (Exception e){
+            log.error("Errore nel recupero della lista degli acquisto");
             e.printStackTrace();
-            log.error("Errore nel recupero della lista dei acquisto");
         }
         return ret;    }
 }
