@@ -29,5 +29,7 @@ public class AttivitaCommercialeModel implements Serializable {
     @Column(name = "flag_elimina")
     private boolean flagElimina;
 
+    @Column(name = "coalizzata")
+    private boolean coalizzata;
 
 }
