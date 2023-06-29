@@ -26,10 +26,10 @@ public class ProgrammaFedeltaControllerImpl implements ProgrammaFedeltaControlle
         ProgrammaFedeltaModel ret= null;
         try{
             ret = this.programmaFedeltaRepository.save(programmaFedelta);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di creazione ProgrammaFedelta {}:", programmaFedelta);
+            e.printStackTrace();
         }
-
         return ret;
     }
 
@@ -41,53 +41,51 @@ public class ProgrammaFedeltaControllerImpl implements ProgrammaFedeltaControlle
         ProgrammaFedeltaModel ret= null;
         try{
             ret = this.programmaFedeltaRepository.save(programmaFedelta);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di modifica ProgrammaFedelta {}:", programmaFedelta);
+            e.printStackTrace();
         }
-
         return ret;
     }
 
     @Override
     public boolean deleteProgrammaFedelta(ProgrammaFedeltaModel programmaFedelta) {
-        if( ! this.programmaFedeltaRepository
-                .existsByIdAndFlagEliminaIsFalse(programmaFedelta.getId()) )
-        {
+        if( ! this.programmaFedeltaRepository.existsByIdAndFlagEliminaIsFalse(programmaFedelta.getId())) {
             log.error("Errore durante l'eliminazione ProgrammaFedelta {} non presente a DB", programmaFedelta);
         }
         try{
             this.programmaFedeltaRepository.setFlagDelete(programmaFedelta.getId());
             return true;
-        } catch(Exception e){
+        } catch(Exception e) {
             log.error("Errore durante l'eliminazione ProgrammaFedelta {}", programmaFedelta);
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
     public ProgrammaFedeltaModel getById(UUID id) {
-        if( ! this.programmaFedeltaRepository.existsByIdAndFlagEliminaIsFalse(id) ){
+        if(!this.programmaFedeltaRepository.existsByIdAndFlagEliminaIsFalse(id)){
             log.error("Errore durante il recupero ProgrammaFedelta");
         }
         ProgrammaFedeltaModel ret = null;
         try{
             ret = this.programmaFedeltaRepository.getByIdAndFlagEliminaIsFalse(id);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore durante il recupero programmaFedelta");
+            e.printStackTrace();
         }
         return ret;
     }
 
     @Override
     public List<ProgrammaFedeltaModel> findAll() {
-
             List<ProgrammaFedeltaModel> ret = new ArrayList<>();
             try{
                 ret = this.programmaFedeltaRepository.findAll();
-            } catch (Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
                 log.error("Errore nel recupero della lista dei clienti");
+                e.printStackTrace();
             }
             return ret;
     }

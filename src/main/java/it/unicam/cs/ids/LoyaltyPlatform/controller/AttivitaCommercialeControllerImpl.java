@@ -40,6 +40,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             return attivitaCommercialeRepository.save(attivitaCommerciale);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un attivitaCommerciale");
+            e.printStackTrace();
             return null;
         }
     }
@@ -53,6 +54,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             return attivitaCommercialeRepository.save(attivitaCommerciale);
         } catch (Exception e) {
             log.error("Errore durante l'aggiornamento di un attivitaCommerciale");
+            e.printStackTrace();
             return null;
         }
     }
@@ -70,7 +72,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             log.error("Errore durante l'eliminazione di un attivitaCommerciale");
             e.printStackTrace();
             return false;
-        }    }
+        }
+    }
 
     @Override
     public AttivitaCommercialeModel getById(UUID id) {
@@ -78,8 +81,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         try{
             ret = attivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(id);
         } catch (Exception e){
+            log.error("Errore nel recupero del attivitaCommerciale per id");
             e.printStackTrace();
-            log.error("Errore nel recupero del attivitaCommerciale per Id");
         }
         return ret;
     }
@@ -90,8 +93,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         try{
             ret = this.attivitaCommercialeRepository.findAll();
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
         return ret;
     }

@@ -58,6 +58,7 @@ public class ClienteControllerImpl implements ClienteController {
             return clienteRepository.save(cliente);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un cliente");
+            e.printStackTrace();
             return null;
         }
     }
@@ -71,6 +72,7 @@ public class ClienteControllerImpl implements ClienteController {
             return clienteRepository.save(cliente);
         } catch (Exception e) {
             log.error("Errore durante l'aggiornamento di un cliente");
+            e.printStackTrace();
             return null;
         }
     }
@@ -89,7 +91,6 @@ public class ClienteControllerImpl implements ClienteController {
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
@@ -98,8 +99,8 @@ public class ClienteControllerImpl implements ClienteController {
         try{
             ret = clienteRepository.getByIdAndFlagEliminaIsFalse(id);
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero del cliente per Id");
+            e.printStackTrace();
         }
         return ret;
     }
@@ -110,8 +111,8 @@ public class ClienteControllerImpl implements ClienteController {
         try{
             ret = this.clienteRepository.findAll();
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
         return ret;
     }
@@ -137,8 +138,8 @@ public class ClienteControllerImpl implements ClienteController {
             acquistoController.createAcquisto(acquisto);
             //pagamento effettuato dalcliente
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore durante l'acquisto");
+            e.printStackTrace();
         }
 
 

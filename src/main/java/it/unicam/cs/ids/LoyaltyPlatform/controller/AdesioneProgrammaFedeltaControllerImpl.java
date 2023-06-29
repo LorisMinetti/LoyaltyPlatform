@@ -31,8 +31,10 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             return adesioneProgrammaFedeltaRepository.save(adesioneProgrammaFedelta);
         } catch (Exception e) {
             log.error("Errore durante la creazione di un adesioneProgrammaFedelta");
+            e.printStackTrace();
             return null;
-        }    }
+        }
+    }
 
     @Override
     public AdesioneProgrammaFedeltaModel updateAdesioneProgrammaFedelta(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta) {
@@ -43,8 +45,10 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             return adesioneProgrammaFedeltaRepository.save(adesioneProgrammaFedelta);
         } catch (Exception e) {
             log.error("Errore durante l'aggiornamento di un adesioneProgrammaFedelta");
+            e.printStackTrace();
             return null;
-        }    }
+        }
+    }
 
     @Override
     public boolean deleteAdesioneProgrammaFedelta(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta) {
@@ -59,7 +63,8 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             log.error("Errore durante l'eliminazione di un adesioneProgrammaFedelta");
             e.printStackTrace();
             return false;
-        }    }
+        }
+    }
 
     @Override
     public AdesioneProgrammaFedeltaModel getById(UUID id) {
@@ -70,7 +75,8 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             e.printStackTrace();
             log.error("Errore nel recupero del adesioneProgrammaFedelta per Id");
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<AdesioneProgrammaFedeltaModel> findAll() {
@@ -78,8 +84,8 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
         try{
             ret = this.adesioneProgrammaFedeltaRepository.findAll();
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
         return ret;
     }

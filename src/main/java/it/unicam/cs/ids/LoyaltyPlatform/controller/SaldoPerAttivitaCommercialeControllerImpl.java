@@ -21,80 +21,86 @@ public class SaldoPerAttivitaCommercialeControllerImpl implements SaldoPerAttivi
     private SaldoPerAttivitaCommercialeRepository saldoPerAttivitaCommercialeRepository;
     @Override
     public SaldoPerAttivitaCommerciale createSaldoPerAttivita(SaldoPerAttivitaCommerciale saldoPerAttivitaModel) {
-        if(saldoPerAttivitaModel == null){
+        if(saldoPerAttivitaModel == null) {
             log.error("Errore durante la creazione di un ProgrammaFedeltà. Elemento nullo");
         }
         SaldoPerAttivitaCommerciale ret= null;
         try{
             ret = this.saldoPerAttivitaCommercialeRepository.save(saldoPerAttivitaModel);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di creazione saldoPerAttivitaModel {}:", saldoPerAttivitaModel);
+            e.printStackTrace();
         }
-
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public SaldoPerAttivitaCommerciale updateSaldoPerAttivita(SaldoPerAttivitaCommerciale saldoPerAttivitaModel) {
-        if(saldoPerAttivitaModel.getId() == null){
+        if(saldoPerAttivitaModel.getId() == null) {
             log.error("Errore durante la modifica di un ProgrammaFedeltà. Elemento nullo");
         }
         SaldoPerAttivitaCommerciale ret= null;
         try{
             ret = this.saldoPerAttivitaCommercialeRepository.save(saldoPerAttivitaModel);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di modifica saldoPerAttivitaModel {}:", saldoPerAttivitaModel);
+            e.printStackTrace();
         }
-
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public boolean deleteSaldoPerAttivita(SaldoPerAttivitaCommerciale saldoPerAttivitaModel) {
-        if( ! this.saldoPerAttivitaCommercialeRepository
-                .existsByIdAndFlagEliminaIsFalse(saldoPerAttivitaModel.getId()) )
-        {
+        if( ! this.saldoPerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(saldoPerAttivitaModel.getId())) {
             log.error("Errore durante l'eliminazione saldoPerAttivitaModel {} non presente a DB", saldoPerAttivitaModel);
         }
-        try{
+        try {
             this.saldoPerAttivitaCommercialeRepository.setFlagDelete(saldoPerAttivitaModel.getId());
             return true;
-        } catch(Exception e){
+        } catch(Exception e) {
             log.error("Errore durante l'eliminazione saldoPerAttivitaModel {}", saldoPerAttivitaModel);
+            e.printStackTrace();
         }
-        return false;    }
+        return false;
+    }
 
     @Override
     public SaldoPerAttivitaCommerciale getById(UUID id) {
-        if( ! this.saldoPerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(id) ){
+        if(!this.saldoPerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(id)) {
             log.error("Errore durante il recupero saldoPerAttivitaModel");
         }
         SaldoPerAttivitaCommerciale ret = null;
-        try{
+        try {
             ret = this.saldoPerAttivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(id);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore durante il recupero saldoPerAttivitaModel");
+            e.printStackTrace();
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<SaldoPerAttivitaCommerciale> findAll() {
         List<SaldoPerAttivitaCommerciale> ret = new ArrayList<>();
-        try{
+        try {
             ret = this.saldoPerAttivitaCommercialeRepository.findAll();
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
+
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<SaldoPerAttivitaCommerciale> findAllByCliente(ClienteModel cliente) {
         List<SaldoPerAttivitaCommerciale> ret = new ArrayList<>();
-        try{
+        try {
             ret = this.saldoPerAttivitaCommercialeRepository.findAllByCliente(cliente);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
-        return ret;    }
+        return ret;
+    }
 }

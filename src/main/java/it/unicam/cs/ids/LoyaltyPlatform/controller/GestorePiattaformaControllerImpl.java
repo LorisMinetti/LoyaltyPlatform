@@ -15,25 +15,8 @@ import java.util.UUID;
 @Service
 public class GestorePiattaformaControllerImpl implements GestorePiattaformaController {
 
-    @Autowired(required = false)
+    @Autowired
     private GestorePiattaformaRepository gestorePiattaformaRepository;
-
-
-
-    @Override
-    public ProgrammaFedeltaModel aggiungiProgrammaFedelta() {
-        return null;
-    }
-
-    @Override
-    public List<ProgrammaFedeltaModel> getAllProgrammiFedelta() {
-        return null;
-    }
-
-    @Override
-    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
-
-    }
 
     @Override
     public GestorePiattaformaModel createGestorePiattaforma(GestorePiattaformaModel gestorePiattaforma) {
@@ -54,4 +37,18 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
     public GestorePiattaformaModel getById(UUID id) {
         return null;
     }
+
+    @Override
+    public ProgrammaFedeltaModel aggiungiProgrammaFedelta() {
+        return null;
+    }
+
+    @Override
+    public List<ProgrammaFedeltaModel> getAllProgrammiFedelta() {
+        return null;
+    }
+
+    @Override
+    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {}
+
 }

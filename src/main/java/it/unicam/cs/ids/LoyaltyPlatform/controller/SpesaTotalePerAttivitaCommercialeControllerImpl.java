@@ -21,39 +21,37 @@ public class SpesaTotalePerAttivitaCommercialeControllerImpl implements SpesaTot
 
     @Override
     public SpesaTotalePerAttivitaCommerciale createSpesaTotale(SpesaTotalePerAttivitaCommerciale spesaTotale) {
-        if(spesaTotale == null){
+        if(spesaTotale == null) {
             log.error("Errore durante la creazione di un ProgrammaFedeltà. Elemento nullo");
         }
         SpesaTotalePerAttivitaCommerciale ret= null;
-        try{
+        try {
             ret = this.spesaTotalePerAttivitaCommercialeRepository.save(spesaTotale);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di creazione spesaTotale {}:", spesaTotale);
+            e.printStackTrace();
         }
-
         return ret;
     }
 
     @Override
     public SpesaTotalePerAttivitaCommerciale updateSpesaTotale(SpesaTotalePerAttivitaCommerciale spesaTotale) {
-        if(spesaTotale.getId() == null){
+        if(spesaTotale.getId() == null) {
             log.error("Errore durante la modifica di un ProgrammaFedeltà. Elemento nullo");
         }
         SpesaTotalePerAttivitaCommerciale ret= null;
-        try{
+        try {
             ret = this.spesaTotalePerAttivitaCommercialeRepository.save(spesaTotale);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.debug("Errore di modifica spesaTotale {}:", spesaTotale);
+            e.printStackTrace();
         }
-
         return ret;
     }
 
     @Override
     public boolean deleteSpesaTotale(SpesaTotalePerAttivitaCommerciale spesaTotale) {
-        if( ! this.spesaTotalePerAttivitaCommercialeRepository
-                .existsByIdAndFlagEliminaIsFalse(spesaTotale.getId()) )
-        {
+        if( ! this.spesaTotalePerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(spesaTotale.getId())) {
             log.error("Errore durante l'eliminazione spesaTotale {} non presente a DB", spesaTotale);
         }
         try{
@@ -61,34 +59,34 @@ public class SpesaTotalePerAttivitaCommercialeControllerImpl implements SpesaTot
             return true;
         } catch(Exception e){
             log.error("Errore durante l'eliminazione spesaTotale {}", spesaTotale);
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
     public SpesaTotalePerAttivitaCommerciale getById(UUID id) {
-        if( ! this.spesaTotalePerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(id) ){
+        if( ! this.spesaTotalePerAttivitaCommercialeRepository.existsByIdAndFlagEliminaIsFalse(id)) {
             log.error("Errore durante il recupero spesaTotale");
         }
         SpesaTotalePerAttivitaCommerciale ret = null;
         try{
             ret = this.spesaTotalePerAttivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(id);
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore durante il recupero spesaTotale");
+            e.printStackTrace();
         }
         return ret;
     }
 
     @Override
     public List<SpesaTotalePerAttivitaCommerciale> findAll() {
-
         List<SpesaTotalePerAttivitaCommerciale> ret = new ArrayList<>();
-        try{
+        try {
             ret = this.spesaTotalePerAttivitaCommercialeRepository.findAll();
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
         return ret;
     }
@@ -96,11 +94,11 @@ public class SpesaTotalePerAttivitaCommercialeControllerImpl implements SpesaTot
     @Override
     public List<SpesaTotalePerAttivitaCommerciale> findAllByCliente(ClienteModel cliente) {
         List<SpesaTotalePerAttivitaCommerciale> ret = new ArrayList<>();
-        try{
+        try {
             ret = this.spesaTotalePerAttivitaCommercialeRepository.findAllByCliente(cliente);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             log.error("Errore nel recupero della lista dei clienti");
+            e.printStackTrace();
         }
         return ret;
     }

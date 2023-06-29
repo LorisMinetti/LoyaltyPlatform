@@ -10,7 +10,6 @@ public class MessaggioControllerImpl implements MessaggioController {
 
     private MessaggioRepository messaggioRepository;
 
-
     @Override
     public MessaggioModel createMessaggio(MessaggioModel messaggioModel) {
         return null;

@@ -29,9 +29,10 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
             ret = this.livelloPerAttivitaCommercialeRepository.save(livello);
         } catch (Exception e){
             log.debug("Errore di creazione livello {}:", livello);
+            e.printStackTrace();
         }
-
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public LivelloPerAttivitaCommerciale updateLivelloPerAttivita(LivelloPerAttivitaCommerciale livello) {
@@ -43,9 +44,10 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
             ret = this.livelloPerAttivitaCommercialeRepository.save(livello);
         } catch (Exception e){
             log.debug("Errore di modifica livello {}:", livello);
+            e.printStackTrace();
         }
-
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public boolean deleteLivelloPerAttivita(LivelloPerAttivitaCommerciale livello) {
@@ -59,8 +61,10 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
             return true;
         } catch(Exception e){
             log.error("Errore durante l'eliminazione livello {}", livello);
+            e.printStackTrace();
         }
-        return false;    }
+        return false;
+    }
 
     @Override
     public LivelloPerAttivitaCommerciale getById(UUID id) {
@@ -71,10 +75,11 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
         try{
             ret = this.livelloPerAttivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(id);
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore durante il recupero livello");
+            e.printStackTrace();
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<LivelloPerAttivitaCommerciale> findAll() {
@@ -82,10 +87,11 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
         try{
             ret = this.livelloPerAttivitaCommercialeRepository.findAll();
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero della lista dei livelli");
+            e.printStackTrace();
         }
-        return ret;    }
+        return ret;
+    }
 
     @Override
     public List<LivelloPerAttivitaCommerciale> findAllByCliente(ClienteModel cliente) {
@@ -93,8 +99,8 @@ public class LivelloPerAttivitaCommercialeControllerImpl implements LivelloPerAt
         try{
             ret = this.livelloPerAttivitaCommercialeRepository.findAllByCliente(cliente);
         } catch (Exception e){
-            e.printStackTrace();
             log.error("Errore nel recupero della lista dei livelli");
+            e.printStackTrace();
         }
         return ret;    
     }
