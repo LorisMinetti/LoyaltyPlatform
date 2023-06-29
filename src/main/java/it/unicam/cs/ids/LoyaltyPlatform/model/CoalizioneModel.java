@@ -51,4 +51,7 @@ public class CoalizioneModel implements Serializable {
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale5;
 
+    @Column(name = "flag_elimina")
+    private boolean flagElimina;
+
 }

@@ -45,7 +45,6 @@ public class CouponModel implements Serializable {
     @Column(name = "flag_elimina")
     private boolean flagElimina;
 
-
     @PrePersist
     void setDataScadenza() {            //il coupon scade dopo 6 mesi dalla data di generazione
         this.dataScadenza = this.dataGenerazione.plusMonths(6);
