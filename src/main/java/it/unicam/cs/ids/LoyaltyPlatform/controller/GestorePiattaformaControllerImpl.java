@@ -15,8 +15,7 @@ import java.util.UUID;
 @Service
 public class GestorePiattaformaControllerImpl implements GestorePiattaformaController {
 
-    @Autowired
-    private GestorePiattaformaRepository gestorePiattaformaRepository;
+
 
     @Override
     public GestorePiattaformaModel createGestorePiattaforma(GestorePiattaformaModel gestorePiattaforma) {
