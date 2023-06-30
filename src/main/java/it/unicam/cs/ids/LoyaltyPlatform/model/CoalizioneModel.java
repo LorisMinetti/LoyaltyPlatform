@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import it.unicam.cs.ids.LoyaltyPlatform.Coalizzabile;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "coalizione")
 @Entity
 @Accessors(chain = true)
-public class CoalizioneModel implements Serializable {
+public class CoalizioneModel implements Serializable, Coalizzabile {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,25 +32,21 @@ public class CoalizioneModel implements Serializable {
     @Column(name = "nome")
     private String nome;
 
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_attivita_commerciale1", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale1;
 
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_attivita_commerciale2", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale2;
 
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_attivita_commerciale3", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale3;
 
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_attivita_commerciale4", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private AttivitaCommercialeModel attivitaCommerciale4;
-
-    @JoinColumn(name = "id_attivita_commerciale", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private AttivitaCommercialeModel attivitaCommerciale5;
 
     @Column(name = "flag_elimina")
     private boolean flagElimina;
