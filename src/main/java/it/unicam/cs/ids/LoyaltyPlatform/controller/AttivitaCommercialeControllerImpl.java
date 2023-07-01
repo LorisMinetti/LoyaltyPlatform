@@ -212,7 +212,6 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         return ret;
     }
 
-
     private boolean isOneSelectable(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedeltaModel) {
         Set<ProgrammaFedeltaModel> programmiAvailable = this.getAvailablePrograms(attivitaCommercialeRepository.getByIdAndFlagEliminaIsFalse(adesioneProgrammaFedeltaModel.getIdAttivitaCommerciale()));
 
