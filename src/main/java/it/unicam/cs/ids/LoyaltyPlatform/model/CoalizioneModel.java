@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.util.Random;
 import java.util.UUID;
 
 @Data
@@ -50,5 +51,33 @@ public class CoalizioneModel implements Serializable, Coalizzabile {
 
     @Column(name = "flag_elimina")
     private boolean flagElimina;
+
+
+    /**
+     * Metodi che generano randomicamente un nome per la coalizione, seguendo un pattern preciso
+     */
+    @PrePersist
+    private void generateRandomString() {
+        String pattern = "A##-####";
+        this.nome = generateRandomStringWithPattern(pattern);
+    }
+    private String generateRandomStringWithPattern(String pattern) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+
+            if (c == '#') {
+                stringBuilder.append(random.nextInt(10)); // Genera un numero casuale tra 0 e 9
+            } else if (c == 'A') {
+                stringBuilder.append((char) (random.nextInt(26) + 'A')); // Genera una lettera maiuscola casuale
+            } else {
+                stringBuilder.append(c);
+            }
+        }
+
+        return stringBuilder.toString();
+    }
 
 }
