@@ -4,7 +4,9 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFede
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.CoalizioneModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.CoalizioneRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -115,5 +117,19 @@ public class AttivitaCommercialeResource {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @PostMapping("/coalizza")
+    public ResponseEntity<CoalizioneModel> coalizza(@RequestBody CoalizioneRequest request){
+        log.debug("REST request to coalizza");
+        CoalizioneModel result = null;
+        try {
+            result = attivitaCommercialeController.richiediCoalizzazione(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella coalizione");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }

@@ -247,5 +247,84 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         }
     }
 
+    @Override
+    public CoalizioneModel richiediCoalizzazione(CoalizioneRequest request) {
+        // controlli su mittente e destinatario
+        if (request.getMittente() == null || request.getDestinatario() == null) {
+            log.error("Tentativo di richiedere una coalizione con mittente o destinatario nulli");
+            return null;
+        } else if(coalizioneRepository.existsByAttivitaId(request.getMittente())){
+            log.error("Tentativo di richiedere una coalizione da un attivitaCommerciale già coalizzato");
+            return null;
+        }
+
+        AttivitaCommercialeModel mittente = this.getById(request.getMittente());
+        AttivitaCommercialeModel destinatario = this.getById(request.getDestinatario());
+
+        CoalizioneModel coalizioneAttualeInstance = new CoalizioneModel();
+
+
+
+            // controllo che non sia già coalizzato
+            if (coalizioneRepository.existsByAttivitaId(destinatario.getId())){
+                // destinatario è già in una coalizione esistente
+
+                coalizioneAttualeInstance = coalizioneRepository.getByAttivitaId(destinatario.getId());   //così sovrascrivo direttamente l'oggetto da ritornare con l'istanza recuperata a DB
+                // controllo se la coalizione è già al completo
+                if(coalizioneAttualeInstance.getAttivitaCommerciale4() != null) {
+                    log.error("Tentativo di accedere ad una coalizione già al completo");
+                    return null;
+                } else {
+                    // coalizione non è al completo -> aggiungo l'attività commerciale mittente nella giusta "slot"
+                    switch (coalizioneAttualeInstance.getNumeroAttivita()){
+                        case 2 -> {
+                           coalizioneAttualeInstance.setAttivitaCommerciale3(mittente);
+                           coalizioneAttualeInstance.setNumeroAttivita(3);
+                        }
+                        case 3 -> {
+                            coalizioneAttualeInstance.setAttivitaCommerciale4(mittente);
+                            coalizioneAttualeInstance.setNumeroAttivita(4);
+                        }
+                    }
+                    mittente.setCoalizzata(true);
+                    // Ora devo aggiornare l'istanza
+                    try{
+                        coalizioneController.updateCoalizione(coalizioneAttualeInstance);
+                        this.updateAttivitaCommerciale(mittente);
+                    } catch (Exception e){
+                        log.error("Errore durante l'aggiornamento di una coalizione");
+                        e.printStackTrace();
+                        throw e;
+                    }
+                }
+            } else { // coalizione non esiste -> la creo
+
+                coalizioneAttualeInstance.setAttivitaCommerciale1(destinatario);
+                coalizioneAttualeInstance.setAttivitaCommerciale2(mittente);
+                coalizioneAttualeInstance.setNumeroAttivita(2);
+
+                mittente.setCoalizzata(true);
+                destinatario.setCoalizzata(true);
+
+                // creo la coalizione
+                try{
+                    coalizioneController.createCoalizione(coalizioneAttualeInstance);
+                    this.updateAttivitaCommerciale(mittente);
+                } catch (Exception e){
+                    log.error("Errore durante l'aggiornamento di una coalizione");
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+
+        return coalizioneAttualeInstance;
+    }
+
+
+
+
+
+
+
 
 }

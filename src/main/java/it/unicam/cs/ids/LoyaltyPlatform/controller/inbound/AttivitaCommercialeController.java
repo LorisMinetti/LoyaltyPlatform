@@ -1,9 +1,12 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
+import it.unicam.cs.ids.LoyaltyPlatform.Coalizzabile;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.CoalizioneModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.CoalizioneRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -36,8 +39,10 @@ public interface AttivitaCommercialeController extends Coalizzabile {
     Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel);
 
     /**
-     * Permette di disdire un'adesione ad un programma fedeltà che perdurerà fino alla fine della dataScadenza
+     * Permette di disdire un'adesione a un programma fedeltà che perdurerà fino alla fine della dataScadenza
      */
     Boolean disdiciAdesione(AdesioneProgrammaFedeltaModel adesione);
 
+
+    CoalizioneModel richiediCoalizzazione(CoalizioneRequest request);
 }

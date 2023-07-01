@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
+import it.unicam.cs.ids.LoyaltyPlatform.Coalizzabile;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -29,7 +30,7 @@ public class AttivitaCommercialeModel implements Serializable, Coalizzabile {
     @Column(name = "flag_elimina")
     private boolean flagElimina;
 
-    @Column(name = "coalizzata")
-    private boolean coalizzata;
+    @Column(name = "coalizzata", nullable = false)
+    private Boolean coalizzata;
 
 }
