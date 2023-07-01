@@ -12,7 +12,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Table(name = "attivita_commerciale")
 @Entity
-public class AttivitaCommercialeModel implements Serializable {
+public class AttivitaCommercialeModel implements Serializable, Coalizzabile {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "nome")

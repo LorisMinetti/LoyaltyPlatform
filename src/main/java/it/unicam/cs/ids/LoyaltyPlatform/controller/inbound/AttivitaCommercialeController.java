@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public interface AttivitaCommercialeController {
+public interface AttivitaCommercialeController extends Coalizzabile {
 
     AttivitaCommercialeModel createAttivitaCommerciale(AttivitaCommercialeModel attivitaCommerciale);
 

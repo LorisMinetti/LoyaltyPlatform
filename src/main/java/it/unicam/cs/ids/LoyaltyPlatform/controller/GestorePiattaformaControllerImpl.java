@@ -3,9 +3,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.controller;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
-import it.unicam.cs.ids.LoyaltyPlatform.repository.GestorePiattaformaRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
