@@ -21,10 +21,6 @@ public class CoalizioneModel implements Serializable, Coalizzabile {
     @Column(name = "numero_attivita_presenti")
     private int numeroAttivita = 0;
 
-    private int consensiAttivita = 0;
-
-    private boolean consensoGestore;
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
