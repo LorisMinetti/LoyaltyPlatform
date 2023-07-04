@@ -1,13 +1,7 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFedeltaController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.CoalizioneController;
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaFedeltaController;
-import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.CoalizioneModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.*;
+import it.unicam.cs.ids.LoyaltyPlatform.model.*;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.CoalizioneRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AdesioneProgrammaFedeltaRepository;
@@ -18,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -38,6 +33,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     private CoalizioneController coalizioneController;
     @Autowired
     private CoalizioneRepository coalizioneRepository;
+    @Autowired
+    private NotificaController notificaController;
 
 
     @Override
@@ -125,6 +122,18 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         ret.setIdAttivitaCommerciale(adesioneProgrammaFedelta.getIdAttivitaCommerciale());
         ret.setIdProgrammaFedelta(adesioneProgrammaFedelta.getIdProgrammaFedelta());
 
+        if (checkTipoProgramma(adesioneProgrammaFedelta, ret)) return null;
+
+        try {
+            return adesioneProgrammaFedeltaController.createAdesioneProgrammaFedelta(ret);
+        } catch (Exception e) {
+            log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private boolean checkTipoProgramma(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedelta, AdesioneProgrammaFedeltaModel ret) {
         ProgrammaFedeltaModel programmaFedelta = programmaFedeltaController.getById(adesioneProgrammaFedelta.getIdProgrammaFedelta());
 
             /*
@@ -138,7 +147,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 if (adesioneProgrammaFedelta.getSpesaMinima() == null
                         || adesioneProgrammaFedelta.getPercentualeCashback() == null) {
                     log.error("Inserire\"spesaMinima\" o \"percentualeCashback\" per aderire al programma fedeltà Cashback");
-                    return null;
+                    return true;
                 }
                 ret.setSpesaMinima(adesioneProgrammaFedelta.getSpesaMinima());
                 ret.setPercentualeCashback(adesioneProgrammaFedelta.getPercentualeCashback());
@@ -147,7 +156,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 if (adesioneProgrammaFedelta.getSpesaMinima() == null
                         || adesioneProgrammaFedelta.getRapportoPunti() == null) {
                     log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Punti");
-                    return null;
+                    return true;
                 }
                 ret.setSpesaMinima(adesioneProgrammaFedelta.getSpesaMinima());
                 ret.setRapportoPunti(adesioneProgrammaFedelta.getRapportoPunti());
@@ -156,12 +165,14 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 if (adesioneProgrammaFedelta.getLivelli() == null
                         || adesioneProgrammaFedelta.getLivelloAttuale() == null) {
                     log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Livelli");
-                    return null;
+                    return true;
                 }
                 ret.setLivelli(adesioneProgrammaFedelta.getLivelli());
                 ret.setLivelloAttuale(adesioneProgrammaFedelta.getLivelloAttuale());
             }
         }
+        return false;
+    }
 
         try {
             return adesioneProgrammaFedeltaController.createAdesioneProgrammaFedelta(ret);
