@@ -1,7 +1,9 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFedeltaController;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaFedeltaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AdesioneProgrammaFedeltaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
 
     @Autowired
     private AdesioneProgrammaFedeltaRepository adesioneProgrammaFedeltaRepository;
+    @Autowired
+    private ProgrammaFedeltaController programmaFedeltaController;
 
 
     @Override
@@ -41,6 +45,9 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
         if(adesioneProgrammaFedelta.getId() == null) {
             log.error("Tentativo di aggiornamento di un adesioneProgrammaFedelta senza id");
         }
+
+        if (checkConstraints(adesioneProgrammaFedelta)) return null;
+
         try{
             return adesioneProgrammaFedeltaRepository.save(adesioneProgrammaFedelta);
         } catch (Exception e) {
@@ -106,5 +113,42 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
             return false;
         }
     }
+
+
+    /**
+     * Permette di controllare che in base al programma che si vuole modificare devono esserci necessariamente i parametri necessari a quel programma.
+     * @param adesioneProgrammaFedelta
+     * @return
+     */
+
+    private boolean checkConstraints(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta) {
+        ProgrammaFedeltaModel programmaFedelta = programmaFedeltaController.getById(adesioneProgrammaFedelta.getIdProgrammaFedelta());
+
+        switch (programmaFedelta.getNome()) {
+            case ("Cashback") -> {
+                if (adesioneProgrammaFedelta.getSpesaMinima() == null
+                        || adesioneProgrammaFedelta.getPercentualeCashback() == null) {
+                    log.error("Inserire\"spesaMinima\" o \"percentualeCashback\" per aderire al programma fedeltà Cashback");
+                    return true;
+                }
+            }
+            case ("Punti") -> {
+                if (adesioneProgrammaFedelta.getSpesaMinima() == null
+                        || adesioneProgrammaFedelta.getRapportoPunti() == null) {
+                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Punti");
+                    return true;
+                }
+            }
+            case ("Livelli") -> {
+                if (adesioneProgrammaFedelta.getLivelli() == null
+                        || adesioneProgrammaFedelta.getLivelloAttuale() == null) {
+                    log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà a Livelli");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
 
