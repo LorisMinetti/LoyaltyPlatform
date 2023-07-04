@@ -271,8 +271,6 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
         CoalizioneModel coalizioneAttualeInstance = new CoalizioneModel();
 
-
-
             // controllo che non sia già coalizzato
             if (coalizioneRepository.existsByAttivitaId(destinatario.getId())){
                 // destinatario è già in una coalizione esistente
@@ -294,13 +292,23 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                             coalizioneAttualeInstance.setNumeroAttivita(4);
                         }
                     }
+
+
+
+                    //TODO: qui dovrei inserire il meccanismo asincrono per i consensi delle altre aziende?
+
+
                     mittente.setCoalizzata(true);
                     // Ora devo aggiornare l'istanza
                     try{
+                        //Modifico la coalizione a DB
                         coalizioneController.updateCoalizione(coalizioneAttualeInstance);
+                        //Invio la notifica di coalizione a tutte le attività coinvolte
+                        this.inviaNotificaCreazioneCoalizione(mittente, coalizioneAttualeInstance);
+                        //Modifico il record dell'attività richiedente
                         this.updateAttivitaCommerciale(mittente);
                     } catch (Exception e){
-                        log.error("Errore durante l'aggiornamento di una coalizione");
+                        log.error("Errore durante l'aggiornamento di una coalizione richiesta da: " + mittente.getNome() + " alla già esistente coalizione: " + coalizioneAttualeInstance.getId());
                         e.printStackTrace();
                         throw e;
                     }
@@ -316,10 +324,15 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
                 // creo la coalizione
                 try{
-                    coalizioneController.createCoalizione(coalizioneAttualeInstance);
+                    //così facendo sto creando una coalizione a DB ed automaticamente il valore di ritorno
+                    //di questa funzione lo passo in input alla funzione che invia Notifiche
+                    this.inviaNotificaCreazioneCoalizione(
+                            mittente,
+                            coalizioneController.createCoalizione(coalizioneAttualeInstance)
+                    );
                     this.updateAttivitaCommerciale(mittente);
                 } catch (Exception e){
-                    log.error("Errore durante l'aggiornamento di una coalizione");
+                    log.error("Errore durante la creazione di una coalizione per l'attività commerciale: " + mittente.getNome() + " e: " + destinatario.getNome());
                     e.printStackTrace();
                     throw e;
                 }
@@ -327,6 +340,168 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
         return coalizioneAttualeInstance;
     }
+
+    @Override
+    public CoalizioneModel abbandonaCoalizione(AttivitaCommercialeModel attivita) {
+        if(attivita == null){
+            log.error("Attivita abbandonante è null");
+            return null;
+        }
+        CoalizioneModel coalizioneModel = this.getCoalizioneByOneAttivita(attivita);
+
+        //Elimino quella giusta nella giusta posizione
+        if (coalizioneModel.getAttivitaCommerciale1() != null && coalizioneModel.getAttivitaCommerciale1().equals(attivita)) {
+            switch (coalizioneModel.getNumeroAttivita()) {
+                case 2 -> {
+                    coalizioneModel.setAttivitaCommerciale1(null);
+                    coalizioneModel.setAttivitaCommerciale2(null);
+                    coalizioneModel.setNumeroAttivita(0);
+                    if (this.coalizioneController.deleteCoalizione(coalizioneModel)) {
+                        return coalizioneModel;
+                    }
+                }  //caso in cui ci sono 2 attività coalizzate -> Se una abbandona la coalizione, la coalizione viene eliminata
+                case 3 -> {
+                    coalizioneModel.setAttivitaCommerciale1(coalizioneModel.getAttivitaCommerciale2());
+                    coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
+                    coalizioneModel.setAttivitaCommerciale3(null);
+                    coalizioneModel.setNumeroAttivita(2);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+                case 4 -> {
+                    coalizioneModel.setAttivitaCommerciale1(coalizioneModel.getAttivitaCommerciale2());
+                    coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
+                    coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
+                    coalizioneModel.setAttivitaCommerciale4(null);
+                    coalizioneModel.setNumeroAttivita(3);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+            }
+        }
+        if (coalizioneModel.getAttivitaCommerciale2() != null && coalizioneModel.getAttivitaCommerciale2().equals(attivita)) {
+            switch (coalizioneModel.getNumeroAttivita()) {
+                case 2 -> {
+                    coalizioneModel.setAttivitaCommerciale1(null);
+                    coalizioneModel.setAttivitaCommerciale2(null);
+                    coalizioneModel.setNumeroAttivita(0);
+                    if (this.coalizioneController.deleteCoalizione(coalizioneModel)) {
+                        return coalizioneModel;
+                    }
+                }
+                case 3 -> {
+                    coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
+                    coalizioneModel.setAttivitaCommerciale3(null);
+                    coalizioneModel.setNumeroAttivita(2);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+                case 4 -> {
+                    coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
+                    coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
+                    coalizioneModel.setAttivitaCommerciale4(null);
+                    coalizioneModel.setNumeroAttivita(3);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+            }
+        }
+        if (coalizioneModel.getAttivitaCommerciale3() != null && coalizioneModel.getAttivitaCommerciale3().equals(attivita)) {
+            switch (coalizioneModel.getNumeroAttivita()) {
+                case 3 -> {
+                    coalizioneModel.setAttivitaCommerciale3(null);
+                    coalizioneModel.setNumeroAttivita(2);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+                case 4 -> {
+                    coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
+                    coalizioneModel.setAttivitaCommerciale4(null);
+                    coalizioneModel.setNumeroAttivita(3);
+                    return this.coalizioneController.updateCoalizione(coalizioneModel);
+                }
+            }
+        }
+
+        if (coalizioneModel.getAttivitaCommerciale4() != null && coalizioneModel.getAttivitaCommerciale4().equals(attivita)) {
+            coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
+            coalizioneModel.setAttivitaCommerciale4(null);
+            coalizioneModel.setNumeroAttivita(3);
+            return this.coalizioneController.updateCoalizione(coalizioneModel);
+        }
+
+
+        //se non sono riuscito ad aggiornare il dato a db, o ad eliminarlo nel caso la coalizione fosse da 2 devo tornare un errore
+        log.error("Tentativo di abbandonare una coalizione non andato a buon fine");
+        return null;
+    }
+
+
+    /**
+     * Da un'attività, se questa è presente in una coalizione, recupero la coalizione
+     * @param attivita attivita
+     * @return coalizione
+     */
+    @Override
+    public CoalizioneModel getCoalizioneByOneAttivita (AttivitaCommercialeModel attivita) {
+        List<CoalizioneModel> co = this.coalizioneController.findAll();
+        CoalizioneModel coalizioneModel = this.coalizioneController.findAll()
+                .stream()
+                .filter(x ->
+                        x.getAttivitaCommerciale1() != null && x.getAttivitaCommerciale1().equals(attivita) ||
+                                x.getAttivitaCommerciale2() != null && x.getAttivitaCommerciale2().equals(attivita) ||
+                                x.getAttivitaCommerciale3() != null && x.getAttivitaCommerciale3().equals(attivita) ||
+                                x.getAttivitaCommerciale4() != null && x.getAttivitaCommerciale4().equals(attivita)
+                )
+                .findFirst()
+                .orElse(null);
+        return coalizioneModel;
+    }
+
+
+    void inviaNotificaCreazioneCoalizione(AttivitaCommercialeModel attivitaRichiedente, CoalizioneModel coalizione){
+        if(coalizione == null){
+            log.error("Tentativo di inviare notifiche ad una coalizione nulla");
+        }
+        List<AttivitaCommercialeModel> attivitaCoalizzate = new ArrayList<>();
+        attivitaCoalizzate.add(coalizione.getAttivitaCommerciale1());
+        attivitaCoalizzate.add(coalizione.getAttivitaCommerciale2());
+        if(coalizione.getNumeroAttivita() == 3 ){
+            attivitaCoalizzate.add(coalizione.getAttivitaCommerciale3());
+        }else if (coalizione.getNumeroAttivita() == 4){
+            attivitaCoalizzate.add(coalizione.getAttivitaCommerciale3());
+            attivitaCoalizzate.add(coalizione.getAttivitaCommerciale4());
+        }
+        //Una volta trovate tutte le attività coalizzate rimuovo l'attività richiedente in modo da non fargli arrivare alcuna notifica
+        attivitaCoalizzate.remove(attivitaRichiedente);
+
+        //Creo l'oggetto notifica da fare arrivare a db per ogni attività coalizzata
+
+
+        if(attivitaCoalizzate.size()>2){
+            for(AttivitaCommercialeModel x : attivitaCoalizzate){
+                NotificaModel notifica = new NotificaModel();
+                notifica.setAttivitaDestinataria(x);
+                notifica.setOraInvio(LocalDateTime.now());
+                notifica.setTesto("Richiesta di coalizione da parte dell'attività: "+attivitaRichiedente.getNome());
+
+                try{
+                    this.notificaController.createNotifica(notifica);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        } else if(attivitaCoalizzate.size()==2){
+            NotificaModel notifica = new NotificaModel();
+            //Sono sicuro che dovrà arrivare una notifica solo all'attività 1 che è l'attività destinatario in una coalizione a 2
+            notifica.setAttivitaDestinataria(coalizione.getAttivitaCommerciale1());
+            notifica.setOraInvio(LocalDateTime.now());
+            notifica.setTesto("Richiesta di coalizione da parte dell'attività: "+attivitaRichiedente.getNome());
+            try{
+                this.notificaController.createNotifica(notifica);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        log.info("Notifiche inviate con successo.");
+    }
+
+    public void inviaNotificaAbbandonoCoalizione(){};
 
 
 
