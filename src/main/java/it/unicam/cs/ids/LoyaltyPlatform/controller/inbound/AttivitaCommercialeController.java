@@ -24,18 +24,22 @@ public interface AttivitaCommercialeController extends Coalizzabile {
 
     List<AttivitaCommercialeModel> findAll();
 
-    /**
-     * Adesione di un'attivitaCommerciale a un programma fedeltà
-     * @param adesioneProgrammaFedeltaRequest
+    /*
+            * Adesione di un'attivitaCommerciale a un programma fedeltà
+            * @param adesioneProgrammaFedeltaRequest
      * @return l'adesione effettuata
-     */
+            */
     AdesioneProgrammaFedeltaModel aderisciProgrammaFedelta(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedeltaRequest);
 
-    /**
-     * Restituisce i programmi fedeltà selezionabili per l'attività commerciale
-     * @param attivitaCommercialeModel
+    AdesioneProgrammaFedeltaModel modificaAdesione(AdesioneProgrammaFedeltaModel update);
+
+    CoalizioneModel getCoalizioneByOneAttivita (AttivitaCommercialeModel attivita);
+
+    /*
+            * Restituisce i programmi fedeltà selezionabili per l'attività commerciale
+            * @param attivitaCommercialeModel
      * @return
-     */
+             */
     Set<ProgrammaFedeltaModel> getAvailablePrograms(AttivitaCommercialeModel attivitaCommercialeModel);
 
     /**
@@ -45,4 +49,6 @@ public interface AttivitaCommercialeController extends Coalizzabile {
 
 
     CoalizioneModel richiediCoalizzazione(CoalizioneRequest request);
+
+    CoalizioneModel abbandonaCoalizione(AttivitaCommercialeModel attivita);
 }
