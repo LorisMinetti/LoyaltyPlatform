@@ -2,6 +2,7 @@ package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AdesioneProgrammaFedeltaController;
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.AttivitaCommercialeController;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.CoalizioneController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.CoalizioneModel;
@@ -27,8 +28,10 @@ public class AttivitaCommercialeResource {
     private AttivitaCommercialeController attivitaCommercialeController;
     @Autowired
     private AdesioneProgrammaFedeltaController adesioneProgrammaFedeltaController;
+    @Autowired
+    private CoalizioneController coalizioneController;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<AttivitaCommercialeModel> createAttivitaCommerciale(@Validated @RequestBody AttivitaCommercialeModel dto) {
         log.debug("REST request to create AttivitaCommerciale: {}", dto);
         AttivitaCommercialeModel result = null;
@@ -41,7 +44,7 @@ public class AttivitaCommercialeResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<AttivitaCommercialeModel> updateAttivitaCommerciale(@Validated @RequestBody AttivitaCommercialeModel dto){
         log.debug("REST request to update AttivitaCommerciale: {}", dto);
         AttivitaCommercialeModel result = null;
@@ -104,6 +107,20 @@ public class AttivitaCommercialeResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+//    @PutMapping("/modifica-adesione/{id}")
+//    public ResponseEntity<AdesioneProgrammaFedeltaModel> updateAdesione( @PathVariable("id") UUID id,
+//            @Validated @RequestBody ModificaAdesioneRequest modificaAdesione) {
+//        log.debug("REST request to update AdesioneProgrammaFedelta");
+//        AdesioneProgrammaFedeltaModel result = null;
+//        try {
+//            result = this.attivitaCommercialeController.modificaAdesione(modificaAdesione);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error("Errore nella creazione del AdesioneProgrammaFedeltaDTO in ingresso");
+//        }
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
+
     @PutMapping("/disdici/{id}")
     public ResponseEntity<Boolean> disdiciAdesione(@PathVariable("id") UUID id){
         log.debug("REST request to disdici AdesioneProgrammaFedelta");
@@ -131,5 +148,23 @@ public class AttivitaCommercialeResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PutMapping("/abbandona-coalizione/{id}")
+    public ResponseEntity<CoalizioneModel> abbandonaCoalizione(@PathVariable("id") UUID id){
+        if(id == null){
+            log.error("Id nullo");
+            return null;
+        }
+        CoalizioneModel ret = null;
+        try{
+
+            ret = this.attivitaCommercialeController.abbandonaCoalizione(
+                    this.attivitaCommercialeController.getById(id)
+            );
+        } catch (Exception e){
+            e.getMessage();
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
 
 }
