@@ -1,5 +1,6 @@
-package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
+package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.NotificaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.NotificaModel;

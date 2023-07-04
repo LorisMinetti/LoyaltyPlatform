@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -40,8 +39,8 @@ public class NotificaModel implements Serializable {
     private LocalDateTime destroyTime;
 
     @PrePersist
-    void setDestroyTime() {
-        if (this.oraInvio != null)
+    void setDestroyTime(){
+        if(this.oraInvio != null)
             this.destroyTime = oraInvio.plusMonths(3);
     }
 }

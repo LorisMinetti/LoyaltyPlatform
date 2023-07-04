@@ -1,7 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
 import it.unicam.cs.ids.LoyaltyPlatform.model.NotificaModel;
-
 import java.util.List;
 import java.util.UUID;
 
