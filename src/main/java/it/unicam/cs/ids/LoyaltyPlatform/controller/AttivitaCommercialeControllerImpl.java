@@ -282,6 +282,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
 
         CoalizioneModel coalizioneAttualeInstance = new CoalizioneModel();
 
+        String notifica = "L'attività commerciale " + mittente.getNome() + " ha richiesto di coalizzarsi con te";
+
             // controllo che non sia già coalizzato
             if (coalizioneRepository.existsByAttivitaId(destinatario.getId())){
                 // destinatario è già in una coalizione esistente
@@ -315,7 +317,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                         //Modifico la coalizione a DB
                         coalizioneController.updateCoalizione(coalizioneAttualeInstance);
                         //Invio la notifica di coalizione a tutte le attività coinvolte
-                        this.inviaNotificaCreazioneCoalizione(mittente, coalizioneAttualeInstance);
+                        this.inviaNotificaAdAttivita(mittente, coalizioneAttualeInstance, notifica);
                         //Modifico il record dell'attività richiedente
                         this.updateAttivitaCommerciale(mittente);
                     } catch (Exception e){
@@ -337,9 +339,10 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 try{
                     //così facendo sto creando una coalizione a DB ed automaticamente il valore di ritorno
                     //di questa funzione lo passo in input alla funzione che invia Notifiche
-                    this.inviaNotificaCreazioneCoalizione(
+                    this.inviaNotificaAdAttivita(
                             mittente,
-                            coalizioneController.createCoalizione(coalizioneAttualeInstance)
+                            coalizioneController.createCoalizione(coalizioneAttualeInstance),       //Passo al metodo l'istanza appena creata
+                            notifica
                     );
                     this.updateAttivitaCommerciale(mittente);
                 } catch (Exception e){
@@ -359,6 +362,9 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             return null;
         }
         CoalizioneModel coalizioneModel = this.getCoalizioneByOneAttivita(attivita);
+        String notifica = "L'attività commerciale: " + attivita.getNome() + " ha abbandonato la coalizione";
+
+        CoalizioneModel copia = coalizioneModel;
 
         //Elimino quella giusta nella giusta posizione
         if (coalizioneModel.getAttivitaCommerciale1() != null && coalizioneModel.getAttivitaCommerciale1().equals(attivita)) {
@@ -368,6 +374,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale2(null);
                     coalizioneModel.setNumeroAttivita(0);
                     if (this.coalizioneController.deleteCoalizione(coalizioneModel)) {
+
+                        this.inviaNotificaAdAttivita(attivita, copia, notifica);
                         return coalizioneModel;
                     }
                 }  //caso in cui ci sono 2 attività coalizzate -> Se una abbandona la coalizione, la coalizione viene eliminata
@@ -376,6 +384,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
                     coalizioneModel.setAttivitaCommerciale3(null);
                     coalizioneModel.setNumeroAttivita(2);
+
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
                 case 4 -> {
@@ -384,6 +394,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
                     coalizioneModel.setAttivitaCommerciale4(null);
                     coalizioneModel.setNumeroAttivita(3);
+
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
             }
@@ -395,6 +407,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale2(null);
                     coalizioneModel.setNumeroAttivita(0);
                     if (this.coalizioneController.deleteCoalizione(coalizioneModel)) {
+                        this.inviaNotificaAdAttivita(attivita, copia, notifica);
                         return coalizioneModel;
                     }
                 }
@@ -402,6 +415,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale2(coalizioneModel.getAttivitaCommerciale3());
                     coalizioneModel.setAttivitaCommerciale3(null);
                     coalizioneModel.setNumeroAttivita(2);
+                    //Invio la Notifica di abbandono coalizione
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
                 case 4 -> {
@@ -409,6 +424,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                     coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
                     coalizioneModel.setAttivitaCommerciale4(null);
                     coalizioneModel.setNumeroAttivita(3);
+                    //Invio la Notifica di abbandono coalizione
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
             }
@@ -418,12 +435,16 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 case 3 -> {
                     coalizioneModel.setAttivitaCommerciale3(null);
                     coalizioneModel.setNumeroAttivita(2);
+                    //Invio la Notifica di abbandono coalizione
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
                 case 4 -> {
                     coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
                     coalizioneModel.setAttivitaCommerciale4(null);
                     coalizioneModel.setNumeroAttivita(3);
+
+                    this.inviaNotificaAdAttivita(attivita, copia, notifica);
                     return this.coalizioneController.updateCoalizione(coalizioneModel);
                 }
             }
@@ -433,6 +454,8 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             coalizioneModel.setAttivitaCommerciale3(coalizioneModel.getAttivitaCommerciale4());
             coalizioneModel.setAttivitaCommerciale4(null);
             coalizioneModel.setNumeroAttivita(3);
+            //Invio la Notifica di abbandono coalizione
+            this.inviaNotificaAdAttivita(attivita, copia, notifica);
             return this.coalizioneController.updateCoalizione(coalizioneModel);
         }
 
@@ -465,7 +488,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
     }
 
 
-    void inviaNotificaCreazioneCoalizione(AttivitaCommercialeModel attivitaRichiedente, CoalizioneModel coalizione){
+    void inviaNotificaAdAttivita(AttivitaCommercialeModel attivitaRichiedente, CoalizioneModel coalizione, String testo){
         if(coalizione == null){
             log.error("Tentativo di inviare notifiche ad una coalizione nulla");
         }
@@ -489,7 +512,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
                 NotificaModel notifica = new NotificaModel();
                 notifica.setAttivitaDestinataria(x);
                 notifica.setOraInvio(LocalDateTime.now());
-                notifica.setTesto("Richiesta di coalizione da parte dell'attività: "+attivitaRichiedente.getNome());
+                notifica.setTesto(testo);
 
                 try{
                     this.notificaController.createNotifica(notifica);
@@ -502,7 +525,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
             //Sono sicuro che dovrà arrivare una notifica solo all'attività 1 che è l'attività destinatario in una coalizione a 2
             notifica.setAttivitaDestinataria(coalizione.getAttivitaCommerciale1());
             notifica.setOraInvio(LocalDateTime.now());
-            notifica.setTesto("Richiesta di coalizione da parte dell'attività: "+attivitaRichiedente.getNome());
+            notifica.setTesto(testo);
             try{
                 this.notificaController.createNotifica(notifica);
             } catch(Exception e){
@@ -511,8 +534,6 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         }
         log.info("Notifiche inviate con successo.");
     }
-
-    public void inviaNotificaAbbandonoCoalizione(){};
 
 
 
