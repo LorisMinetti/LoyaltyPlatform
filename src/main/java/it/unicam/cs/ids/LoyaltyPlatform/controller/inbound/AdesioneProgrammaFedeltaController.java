@@ -10,8 +10,6 @@ public interface AdesioneProgrammaFedeltaController {
 
     AdesioneProgrammaFedeltaModel updateAdesioneProgrammaFedelta(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta);
 
-    boolean deleteAdesioneProgrammaFedelta(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta);
-
     AdesioneProgrammaFedeltaModel getById(UUID id);
 
     List<AdesioneProgrammaFedeltaModel> findAll();

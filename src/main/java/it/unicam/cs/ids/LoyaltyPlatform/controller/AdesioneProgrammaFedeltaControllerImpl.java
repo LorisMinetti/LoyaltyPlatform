@@ -58,22 +58,6 @@ public class AdesioneProgrammaFedeltaControllerImpl implements AdesioneProgramma
     }
 
     @Override
-    public boolean deleteAdesioneProgrammaFedelta(AdesioneProgrammaFedeltaModel adesioneProgrammaFedelta) {
-        if(!adesioneProgrammaFedeltaRepository.existsByIdAndFlagEliminaIsFalse(adesioneProgrammaFedelta.getId())){
-            log.error("Tentativo di eliminazione di un adesioneProgrammaFedelta non presente");
-            return false;
-        }
-        try{
-            adesioneProgrammaFedeltaRepository.setFlagDelete(adesioneProgrammaFedelta.getId());
-            return true;
-        } catch (Exception e) {
-            log.error("Errore durante l'eliminazione di un adesioneProgrammaFedelta");
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
     public AdesioneProgrammaFedeltaModel getById(UUID id) {
         AdesioneProgrammaFedeltaModel ret = null;
         try{
