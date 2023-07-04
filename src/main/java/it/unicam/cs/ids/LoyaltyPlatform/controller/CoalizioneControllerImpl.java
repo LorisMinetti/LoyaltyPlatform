@@ -34,7 +34,7 @@ public class CoalizioneControllerImpl implements CoalizioneController {
 
     @Override
     public CoalizioneModel updateCoalizione(CoalizioneModel coalizioneModel) {
-        if (coalizioneModel.getId() != null) {
+        if (coalizioneModel.getId() == null) {
             log.error("Tentativo di aggiornamento di una coalizione senza id");
         }
         try {

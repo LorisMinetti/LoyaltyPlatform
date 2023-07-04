@@ -22,7 +22,7 @@ public class ProgrammaFedeltaResurce {
     private ProgrammaFedeltaController programmaFedeltaController;
 
     @PostMapping("/create")
-    public ResponseEntity<ProgrammaFedeltaModel> createCliente(@Validated @RequestBody ProgrammaFedeltaModel dto) {
+    public ResponseEntity<ProgrammaFedeltaModel> createProgrammaFedelta(@Validated @RequestBody ProgrammaFedeltaModel dto) {
         log.debug("REST request to create ProgrammaFedelta: {}", dto);
         ProgrammaFedeltaModel result = null;
         try {
@@ -36,7 +36,7 @@ public class ProgrammaFedeltaResurce {
 
 
     @PutMapping("/update")
-    public ResponseEntity<ProgrammaFedeltaModel> updateCliente(@Validated @RequestBody ProgrammaFedeltaModel dto){
+    public ResponseEntity<ProgrammaFedeltaModel> updateProgrammaFedelta(@Validated @RequestBody ProgrammaFedeltaModel dto){
         log.debug("REST request to update ProgFedelta: {}", dto);
         ProgrammaFedeltaModel result = null;
         try {
@@ -49,7 +49,7 @@ public class ProgrammaFedeltaResurce {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteCliente(@PathVariable("id") UUID id) {
+    public ResponseEntity<Boolean> deleteProgrammaFedelta(@PathVariable("id") UUID id) {
         log.debug("REST request to delete ProgFedelta: {}", id);
         Boolean result = false;
         try {
