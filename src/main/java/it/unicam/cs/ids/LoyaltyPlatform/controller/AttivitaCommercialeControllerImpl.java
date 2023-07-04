@@ -4,6 +4,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.*;
 import it.unicam.cs.ids.LoyaltyPlatform.model.*;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.CoalizioneRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.ModificaAdesioneRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AdesioneProgrammaFedeltaRepository;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.AttivitaCommercialeRepository;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.CoalizioneRepository;
@@ -122,7 +123,7 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         ret.setIdAttivitaCommerciale(adesioneProgrammaFedelta.getIdAttivitaCommerciale());
         ret.setIdProgrammaFedelta(adesioneProgrammaFedelta.getIdProgrammaFedelta());
 
-        if (checkTipoProgramma(adesioneProgrammaFedelta, ret)) return null;
+        if (checkTipoProgrammaCreate(adesioneProgrammaFedelta, ret)) return null;
 
         try {
             return adesioneProgrammaFedeltaController.createAdesioneProgrammaFedelta(ret);
@@ -133,7 +134,74 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         }
     }
 
-    private boolean checkTipoProgramma(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedelta, AdesioneProgrammaFedeltaModel ret) {
+
+
+    @Override
+    public AdesioneProgrammaFedeltaModel modificaAdesione(ModificaAdesioneRequest modificaAdesioneRequest) {
+        if(modificaAdesioneRequest == null){
+            log.error("Errore. L'argomento passato in input è nullo");
+            return null;
+        } else if(modificaAdesioneRequest.getIdAdesione() == null){
+            log.error("Errore. L'id dell'adesione passato in input è nullo");
+            return null;
+        }
+        AdesioneProgrammaFedeltaModel update = checkTipoProgrammaUpdate(modificaAdesioneRequest);
+
+        try{
+            return adesioneProgrammaFedeltaController.updateAdesioneProgrammaFedelta(update);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     *  Permette di controllare il tipo di programmaFedelta per una richiesta di adesione in UPDATE
+     * @param modificaAdesioneRequest
+     * @return
+     */
+    private AdesioneProgrammaFedeltaModel checkTipoProgrammaUpdate(ModificaAdesioneRequest modificaAdesioneRequest) {
+        AdesioneProgrammaFedeltaModel update = adesioneProgrammaFedeltaController.getById(modificaAdesioneRequest.getIdAdesione());
+
+        switch( programmaFedeltaController .getById( update.getIdProgrammaFedelta() ) .getNome() ){
+            case ("Cashback") -> {
+                if(modificaAdesioneRequest.getSpesaMinima() != null){
+                    update.setSpesaMinima(modificaAdesioneRequest.getSpesaMinima());
+                }
+                if(modificaAdesioneRequest.getPercentualeCashback() != null){
+                    update.setPercentualeCashback(modificaAdesioneRequest.getPercentualeCashback());
+                }
+            }
+            case ("Punti") -> {
+                if(modificaAdesioneRequest.getSpesaMinima() != null){
+                    update.setSpesaMinima(modificaAdesioneRequest.getSpesaMinima());
+                }
+                if(modificaAdesioneRequest.getRapportoPunti() != null){
+                    update.setRapportoPunti(modificaAdesioneRequest.getRapportoPunti());
+                }
+            }
+            case ("Livelli") -> {
+                if(modificaAdesioneRequest.getLivelli() != null){
+                    update.setLivelli(modificaAdesioneRequest.getLivelli());
+                }
+                if(modificaAdesioneRequest.getLivelloAttuale() != null){
+                    update.setLivelloAttuale(modificaAdesioneRequest.getLivelloAttuale());
+                }
+            }
+        }
+        return update;
+    }
+
+
+
+    /**
+     * Permette di controllare il tipo di programmaFedelta per una richiesta di adesione in Crezione
+     * @param adesioneProgrammaFedelta
+     * @param ret
+     * @return
+     */
+    private boolean checkTipoProgrammaCreate(AdesioneProgrammaFedeltaRequest adesioneProgrammaFedelta, AdesioneProgrammaFedeltaModel ret) {
         ProgrammaFedeltaModel programmaFedelta = programmaFedeltaController.getById(adesioneProgrammaFedelta.getIdProgrammaFedelta());
 
             /*
@@ -174,19 +242,9 @@ public class AttivitaCommercialeControllerImpl implements AttivitaCommercialeCon
         return false;
     }
 
-        try {
-            return adesioneProgrammaFedeltaController.createAdesioneProgrammaFedelta(ret);
-        } catch (Exception e) {
-            log.error("Errore durante l'adesione di un attivitaCommerciale ad un programma fedeltà");
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
 
     /**
      * Restituisce i programmi fedeltà selezionabili per l'attività commerciale
-     *
      * @param attivitaCommercialeModel
      * @return
      */

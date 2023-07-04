@@ -8,6 +8,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.CoalizioneModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.AdesioneProgrammaFedeltaRequest;
 import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.CoalizioneRequest;
+import it.unicam.cs.ids.LoyaltyPlatform.model.subModel.request.ModificaAdesioneRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -107,19 +108,19 @@ public class AttivitaCommercialeResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @PutMapping("/modifica-adesione/{id}")
-//    public ResponseEntity<AdesioneProgrammaFedeltaModel> updateAdesione( @PathVariable("id") UUID id,
-//            @Validated @RequestBody ModificaAdesioneRequest modificaAdesione) {
-//        log.debug("REST request to update AdesioneProgrammaFedelta");
-//        AdesioneProgrammaFedeltaModel result = null;
-//        try {
-//            result = this.attivitaCommercialeController.modificaAdesione(modificaAdesione);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error("Errore nella creazione del AdesioneProgrammaFedeltaDTO in ingresso");
-//        }
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    @PutMapping("/modifica-adesione")
+    public ResponseEntity<AdesioneProgrammaFedeltaModel> updateAdesione(@Validated @RequestBody ModificaAdesioneRequest request){
+        log.debug("REST request to update AdesioneProgrammaFedelta");
+        AdesioneProgrammaFedeltaModel result = null;
+
+        try {
+            result = this.attivitaCommercialeController.modificaAdesione(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella creazione del AdesioneProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     @PutMapping("/disdici/{id}")
     public ResponseEntity<Boolean> disdiciAdesione(@PathVariable("id") UUID id){
