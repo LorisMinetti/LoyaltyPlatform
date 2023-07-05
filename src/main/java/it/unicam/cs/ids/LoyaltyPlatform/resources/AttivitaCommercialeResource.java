@@ -73,12 +73,12 @@ public class AttivitaCommercialeResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<AttivitaCommercialeModel> getAttivitaCommerciale(@PathVariable("id") UUID id) {
-        log.debug("REST request to delete ProgFedelta: {}", id);
+        log.debug("REST request to delete GestorePiattaforma: {}", id);
         AttivitaCommercialeModel result = null;
         try {
             result = this.attivitaCommercialeController.getById(id);
         } catch (Exception e) {
-            log.error("Errore nell'eliminazione del ProgFedelta");
+            log.error("Errore nell'eliminazione dell'AttivitaCommerciale");
         }
         return ResponseEntity.ok().body(result);
     }
@@ -89,7 +89,7 @@ public class AttivitaCommercialeResource {
         try{
             ret = this.attivitaCommercialeController.findAll();
         } catch (Exception e){
-            log.error("Errore nel recupero della lista Clienti");
+            log.error("Errore nel recupero della lista AttivitaCommerciali");
         }
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
