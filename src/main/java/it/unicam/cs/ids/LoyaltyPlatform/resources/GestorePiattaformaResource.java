@@ -1,9 +1,9 @@
 package it.unicam.cs.ids.LoyaltyPlatform.resources;
 
 import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.ProgrammaFedeltaController;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,8 @@ public class GestorePiattaformaResource {
 
     @Autowired
     private GestorePiattaformaController gestorePiattaformaController;
+    @Autowired
+    private ProgrammaFedeltaController programmaFedeltaController;
 
     @PostMapping("/create")
     public ResponseEntity<GestorePiattaformaModel> createGestorePiattaforma(@Validated @RequestBody GestorePiattaformaModel dto) {
@@ -84,5 +86,45 @@ public class GestorePiattaformaResource {
         }
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
+
+    @PostMapping("/aggiungi-programmaFedelta")
+    public ResponseEntity<ProgrammaFedeltaModel> aggiungiProgrammaFedelta(@Validated @RequestBody ProgrammaFedeltaModel dto) {
+        log.debug("REST request to create ProgrammaFedelta: {}", dto);
+        ProgrammaFedeltaModel result = null;
+        try {
+            result = this.gestorePiattaformaController.aggiungiProgrammaFedelta(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella creazione del ProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PutMapping("/rimuovi-programmaFedelta/{id}")
+    public ResponseEntity<Boolean> rimuoviProgrammaFedelta(@PathVariable("id") UUID id){
+        ProgrammaFedeltaModel dto = programmaFedeltaController.getById(id);
+        Boolean result = false;
+        try {
+            //Se l'operazione del controller va a buon fine, restituisce true
+            result = this.gestorePiattaformaController.rimuoviProgrammaFedelta(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella modifica del ProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/lista-programmiFedelta")
+    public ResponseEntity<List<ProgrammaFedeltaModel>> getAllProgrammiFedelta(){
+        List<ProgrammaFedeltaModel> ret = new ArrayList<>();
+        try{
+            ret = this.gestorePiattaformaController.getAllProgrammiFedelta();
+        } catch (Exception e) {
+            log.error("Errore nel recupero della lista ProgrammaFedelta");
+        }
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+
 
 }

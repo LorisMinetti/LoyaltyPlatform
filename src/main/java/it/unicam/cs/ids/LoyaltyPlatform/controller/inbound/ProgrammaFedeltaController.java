@@ -13,6 +13,8 @@ public interface ProgrammaFedeltaController {
 
     boolean deleteProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
+    ProgrammaFedeltaModel deSelectable(ProgrammaFedeltaModel programmaFedeltaModel);
+
     ProgrammaFedeltaModel getById(UUID id);
 
     List<ProgrammaFedeltaModel> findAll();

@@ -36,4 +36,6 @@ public interface AdesioneProgrammaFedeltaRepository extends JpaRepository<Adesio
          * @return
          */
         List<AdesioneProgrammaFedeltaModel> findAllByRinnovoAutomaticoIsFalseAndDataScadenzaIsBefore(LocalDateTime now);
+
+        List<AdesioneProgrammaFedeltaModel> findAllByIdProgrammaFedeltaAndRinnovoAutomaticoIsFalseAndFlagEliminaIsFalse(UUID progFedelta);
 }

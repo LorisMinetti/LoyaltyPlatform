@@ -1,15 +1,16 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller;
 
-import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.GestorePiattaformaController;
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
-import it.unicam.cs.ids.LoyaltyPlatform.model.ClienteModel;
+import it.unicam.cs.ids.LoyaltyPlatform.controller.inbound.*;
+import it.unicam.cs.ids.LoyaltyPlatform.model.AdesioneProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
+import it.unicam.cs.ids.LoyaltyPlatform.model.NotificaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.GestorePiattaformaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,14 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
 
     @Autowired
     private GestorePiattaformaRepository gestorePiattaformaRepository;
-
+    @Autowired
+    private ProgrammaFedeltaController programmaFedeltaController;
+    @Autowired
+    private AdesioneProgrammaFedeltaController adesioneProgrammaFedeltaController;
+    @Autowired
+    private AttivitaCommercialeController attivitaCommercialeController;
+    @Autowired
+    private NotificaController notificaController;
     @Override
     public GestorePiattaformaModel createGestorePiattaforma(GestorePiattaformaModel gestorePiattaforma) {
         if(gestorePiattaforma.getId() != null) {
@@ -90,21 +98,105 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
     }
 
     @Override
-    public ProgrammaFedeltaModel aggiungiProgrammaFedelta() {
-        return null;
+    public ProgrammaFedeltaModel aggiungiProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
+        if(programmaFedeltaModel == null){
+            log.error("Tentativo di aggiunta di un programma fedeltà nullo");
+            return null;
+        }
+        try{
+            return programmaFedeltaController.createProgrammaFedelta(programmaFedeltaModel);
+        } catch (Exception e) {
+            log.error("Errore durante l'aggiunta di un programma fedeltà");
+            e.printStackTrace();
+            return null;
+        }
     }
 
+
     @Override
-    public boolean rimuoviProgrammaFedelta() {
-        return false;
+    public boolean rimuoviProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
+        if(programmaFedeltaModel == null){
+            log.error("Tentativo di rimozione di un programma fedeltà nullo");
+            return false;
+        }
+        boolean ret = false;
+        try{
+            programmaFedeltaController.deSelectable(programmaFedeltaModel);
+            ret = true;
+
+            //Una volta reso non più disposnibile il programmaFedelta posso automaticamente disdire tutte le adesioni per le attivita
+            //che avevano aderito al programma fedeltà e dunque avranno una scadenza fissata e non più rinnovabile
+            this.disdiciAutomaticamentePerTutti(programmaFedeltaModel);
+
+        } catch (Exception e) {
+            log.error("Errore durante la rimozione di un programma fedeltà");
+            e.printStackTrace();
+            return false;
+        }
+        return ret;
     }
 
     @Override
     public List<ProgrammaFedeltaModel> getAllProgrammiFedelta() {
-        return null;
+        List<ProgrammaFedeltaModel> ret = new ArrayList<>();
+        try{
+            ret = programmaFedeltaController.findAll();
+        } catch (Exception e) {
+            log.error("Errore durante il recupero della lista dei programmi fedeltà");
+            e.printStackTrace();
+        }
+        return ret;
     }
 
-    @Override
-    public void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {}
+
+    private void inviaNotificaAdAttivita(ProgrammaFedeltaModel programmaFedeltaModel, String testo){
+        List<AdesioneProgrammaFedeltaModel> adesioniProgramma = adesioneProgrammaFedeltaController.findAll()
+                .stream()
+                .filter(x -> x.getIdProgrammaFedelta().equals( programmaFedeltaModel.getId() ) )
+                .distinct()
+                .toList();
+
+        adesioniProgramma.forEach( x -> {
+            NotificaModel notifica = new NotificaModel();
+            notifica.setAttivitaDestinataria( attivitaCommercialeController.getById( x.getIdAttivitaCommerciale() ) );
+            notifica.setTesto(testo);
+            notifica.setOraInvio(LocalDateTime.now());
+            try{
+                this.notificaController.createNotifica(notifica);
+            } catch (Exception e) {
+                log.error("Errore durante l'invio di una notifica per l'attivita " + notifica.getAttivitaDestinataria().getNome() + "\nSaluti, \n" +
+                        "il gestore piattaforma");
+                e.printStackTrace();
+            }
+        });
+        log.info("Notifiche inviate con successo");
+    }
+
+    private void disdiciAutomaticamentePerTutti(ProgrammaFedeltaModel programmaFedeltaModel){
+        String notifica = "Il programma fedeltà " + programmaFedeltaModel.getNome() + " è stato rimosso dal gestore piattaforma. Non \n" +
+                "preoccuparti, potrai continuare ad usufuire dei vantaggi fino alla scadenza del programma.";
+
+        List<AdesioneProgrammaFedeltaModel> adesioniProgramma = adesioneProgrammaFedeltaController.findAll()
+                .stream()
+                .filter(x -> x.getIdProgrammaFedelta().equals(programmaFedeltaModel.getId()))
+                .toList();
+
+        adesioniProgramma.forEach( x -> {
+            AdesioneProgrammaFedeltaModel adesione = adesioneProgrammaFedeltaController.getById(x.getId());
+            adesione.setRinnovoAutomatico(false);
+            try{
+                this.adesioneProgrammaFedeltaController.updateAdesioneProgrammaFedelta(adesione);
+            } catch (Exception e) {
+                log.error("Errore durante la disdetta automatica di un programma fedeltà per l'attivita " +
+                            attivitaCommercialeController.getById( x.getIdAttivitaCommerciale() ).getNome()
+                        + "\nSaluti, \n" +
+                        "il gestore piattaforma");
+                e.printStackTrace();
+            }
+        });
+        this.inviaNotificaAdAttivita(programmaFedeltaModel, notifica);
+        log.info("Disdette automatiche effettuate con successo");
+
+    }
 
 }

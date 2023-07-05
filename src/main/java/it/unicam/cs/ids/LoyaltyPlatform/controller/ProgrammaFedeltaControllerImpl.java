@@ -90,4 +90,25 @@ public class ProgrammaFedeltaControllerImpl implements ProgrammaFedeltaControlle
             return ret;
     }
 
+    @Override
+    public ProgrammaFedeltaModel deSelectable(ProgrammaFedeltaModel programma){
+        if(programma == null){
+            log.error("Errore durante la deselezione di un ProgrammaFedeltà. Elemento nullo");
+        } else if(!this.programmaFedeltaRepository.existsByIdAndFlagEliminaIsFalse(programma.getId())){
+            log.error("Errore durante la deselezione di un ProgrammaFedeltà. Elemento non presente a DB");
+        }
+        if(programma.isSelezionabile()){
+            programma.setSelezionabile(false);
+        } else {
+            log.warn("ProgrammaFedeltà già NON selezionabile");
+        }
+        try{
+            return this.updateProgrammaFedelta(programma);
+        } catch (Exception e){
+            log.error("Errore durante la deselezione di un ProgrammaFedeltà");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

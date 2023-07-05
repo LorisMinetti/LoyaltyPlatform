@@ -25,4 +25,6 @@ public interface ProgrammaFedeltaRepository  extends JpaRepository<ProgrammaFede
 
     List<ProgrammaFedeltaModel> findAllBySelezionabileIsTrueAndFlagEliminaIsFalse();
 
+    List<ProgrammaFedeltaModel> findAllBySelezionabileIsFalseAndFlagEliminaIsFalse();
+
 }

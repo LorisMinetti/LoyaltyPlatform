@@ -1,6 +1,5 @@
 package it.unicam.cs.ids.LoyaltyPlatform.controller.inbound;
 
-import it.unicam.cs.ids.LoyaltyPlatform.model.AttivitaCommercialeModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 
@@ -19,12 +18,10 @@ public interface GestorePiattaformaController {
 
     List<GestorePiattaformaModel> findAll();
 
-    ProgrammaFedeltaModel aggiungiProgrammaFedelta();
+    ProgrammaFedeltaModel aggiungiProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
-    boolean rimuoviProgrammaFedelta();
+    boolean rimuoviProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
     List<ProgrammaFedeltaModel> getAllProgrammiFedelta();
-
-    void selezionaProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel);
 
 }
