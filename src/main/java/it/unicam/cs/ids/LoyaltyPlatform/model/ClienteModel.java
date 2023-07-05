@@ -20,7 +20,7 @@ public class ClienteModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome")
     private String nome;
 
     @Id
@@ -31,9 +31,11 @@ public class ClienteModel implements Serializable {
     @OneToMany( mappedBy = "cliente")
     private Set<SpesaTotalePerAttivitaCommerciale> spesaTotalePerAttivitaCommerciale;
 
-    //    private Set<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
+    //private Set<ProgrammaALivelliModel, Integer> livelloPerAttivitaCommerciale;
+
     @OneToMany( mappedBy = "cliente")
     private Set<PuntiPerAttivitaCommerciale> puntiPerAttivitaCommerciale;
+
     @OneToMany(mappedBy = "cliente")
     private Set<SaldoPerAttivitaCommerciale> saldoPerAttivitaCommerciale;
 
