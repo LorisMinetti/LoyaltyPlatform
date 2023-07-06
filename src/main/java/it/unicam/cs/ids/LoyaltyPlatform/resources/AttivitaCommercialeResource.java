@@ -83,7 +83,7 @@ public class AttivitaCommercialeResource {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/listaClienti")
+    @GetMapping("/listaAttivitaCommerciali")
     public ResponseEntity<List<AttivitaCommercialeModel>> findAll(){
         List<AttivitaCommercialeModel> ret = new ArrayList<>();
         try{
