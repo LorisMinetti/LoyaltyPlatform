@@ -1,7 +1,6 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import it.unicam.cs.ids.LoyaltyPlatform.Coalizzabile;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Accessors(chain = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class CoalizioneModel implements Serializable, Coalizzabile {
+public class CoalizioneModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,5 @@
 package it.unicam.cs.ids.LoyaltyPlatform.model;
 
-import it.unicam.cs.ids.LoyaltyPlatform.Coalizzabile;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -13,7 +12,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Table(name = "attivita_commerciale")
 @Entity
-public class AttivitaCommercialeModel implements Serializable, Coalizzabile {
+public class AttivitaCommercialeModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "nome")
