@@ -309,6 +309,7 @@ public class ClienteControllerImpl implements ClienteController {
                 } else {
                     coupon.setDataGenerazione(anotherOne.getDataGenerazione());
                     coupon.setDataScadenza(anotherOne.getDataScadenza());
+                    coupon.setPuntiConvertiti(anotherOne.getPuntiConvertiti() + coupon.getPuntiConvertiti());
                     coupon.setValoreCouponInEuro(anotherOne.getValoreCouponInEuro() + coupon.getValoreCouponInEuro());
                     coupon.setId(anotherOne.getId());
                     this.couponController.updateCoupon(coupon);

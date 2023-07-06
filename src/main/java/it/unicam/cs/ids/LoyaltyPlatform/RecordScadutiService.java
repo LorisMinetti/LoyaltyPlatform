@@ -40,7 +40,7 @@ public class RecordScadutiService {
         notificaRepository.deleteAll(notificheDeletable);
     }
 
-    @Scheduled(fixedRate = 60 * 1000) // Esegui ogni 40 minuti
+    @Scheduled(fixedRate = 2 * 60 * 1000) // Esegui ogni 2 minuti
     public void eliminaProgrammaFedelta(){
         LocalDateTime now = LocalDateTime.now();
         List<ProgrammaFedeltaModel> programmiFedeltaScaduti = programmaFedeltaRepository.findAllBySelezionabileIsFalseAndFlagEliminaIsFalse();
