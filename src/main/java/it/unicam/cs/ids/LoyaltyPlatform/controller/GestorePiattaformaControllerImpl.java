@@ -206,10 +206,10 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
                 .toList();
 
         adesioniProgramma.forEach( x -> {
-            AdesioneProgrammaFedeltaModel adesione = adesioneProgrammaFedeltaController.getById(x.getId());
-            adesione.setRinnovoAutomatico(false);
+
+            x.setRinnovoAutomatico(false);
             try{
-                this.adesioneProgrammaFedeltaController.updateAdesioneProgrammaFedelta(adesione);
+                this.adesioneProgrammaFedeltaController.updateAdesioneProgrammaFedelta(x);
             } catch (Exception e) {
                 log.error("Errore durante la disdetta automatica di un programma fedeltà per l'attivita " +
                             attivitaCommercialeController.getById( x.getIdAttivitaCommerciale() ).getNome()
