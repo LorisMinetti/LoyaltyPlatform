@@ -24,4 +24,6 @@ public interface GestorePiattaformaController {
 
     List<ProgrammaFedeltaModel> getAllProgrammiFedelta();
 
+    boolean rendiDisponibile(ProgrammaFedeltaModel dto);
+
 }

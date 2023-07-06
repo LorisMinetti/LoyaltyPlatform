@@ -114,6 +114,20 @@ public class GestorePiattaformaResource {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PutMapping("/rendiDisponbibile-programmaFedelta/{id}")
+    public ResponseEntity<Boolean> rendiDisponibileProgrammaFedelta(@PathVariable("id") UUID id){
+        ProgrammaFedeltaModel dto = programmaFedeltaController.getById(id);
+        Boolean result = null;
+        try {
+            //Se l'operazione del controller va a buon fine, restituisce true
+            result = this.gestorePiattaformaController.rendiDisponibile(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Errore nella modifica del ProgrammaFedeltaDTO in ingresso");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @GetMapping("/lista-programmiFedelta")
     public ResponseEntity<List<ProgrammaFedeltaModel>> getAllProgrammiFedelta(){
         List<ProgrammaFedeltaModel> ret = new ArrayList<>();

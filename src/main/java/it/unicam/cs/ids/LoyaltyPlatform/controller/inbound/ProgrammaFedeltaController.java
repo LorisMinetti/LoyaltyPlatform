@@ -15,6 +15,8 @@ public interface ProgrammaFedeltaController {
 
     ProgrammaFedeltaModel deSelectable(ProgrammaFedeltaModel programmaFedeltaModel);
 
+    ProgrammaFedeltaModel selectable(ProgrammaFedeltaModel programmaFedeltaModel);
+
     ProgrammaFedeltaModel getById(UUID id);
 
     List<ProgrammaFedeltaModel> findAll();

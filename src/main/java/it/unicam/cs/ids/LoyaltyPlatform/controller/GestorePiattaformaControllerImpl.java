@@ -6,6 +6,7 @@ import it.unicam.cs.ids.LoyaltyPlatform.model.GestorePiattaformaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.NotificaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.model.ProgrammaFedeltaModel;
 import it.unicam.cs.ids.LoyaltyPlatform.repository.GestorePiattaformaRepository;
+import it.unicam.cs.ids.LoyaltyPlatform.repository.ProgrammaFedeltaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
     private AttivitaCommercialeController attivitaCommercialeController;
     @Autowired
     private NotificaController notificaController;
+    @Autowired
+    private ProgrammaFedeltaRepository programmaFedeltaRepository;
+
+
     @Override
     public GestorePiattaformaModel createGestorePiattaforma(GestorePiattaformaModel gestorePiattaforma) {
         if(gestorePiattaforma.getId() != null) {
@@ -113,6 +118,8 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
     }
 
 
+
+
     @Override
     public boolean rimuoviProgrammaFedelta(ProgrammaFedeltaModel programmaFedeltaModel) {
         if(programmaFedeltaModel == null){
@@ -144,6 +151,23 @@ public class GestorePiattaformaControllerImpl implements GestorePiattaformaContr
         } catch (Exception e) {
             log.error("Errore durante il recupero della lista dei programmi fedeltà");
             e.printStackTrace();
+        }
+        return ret;
+    }
+
+    @Override
+    public boolean rendiDisponibile(ProgrammaFedeltaModel dto) {
+        if(dto == null){
+            log.error("Tentativo di rendere disponibile un programma fedeltà nullo");
+            return false;
+        }
+        boolean ret = false;
+        try {
+            programmaFedeltaController.selectable(dto);
+            ret = true;
+        } catch (Exception e){
+            e.getMessage();
+            log.error("Errore durante la resa disponibile di un programma fedeltà");
         }
         return ret;
     }
