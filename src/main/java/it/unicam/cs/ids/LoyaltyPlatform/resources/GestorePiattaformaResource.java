@@ -76,7 +76,7 @@ public class GestorePiattaformaResource {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/listaClienti")
+    @GetMapping("/listaGestori")
     public ResponseEntity<List<GestorePiattaformaModel>> findAll(){
         List<GestorePiattaformaModel> ret = new ArrayList<>();
         try{
