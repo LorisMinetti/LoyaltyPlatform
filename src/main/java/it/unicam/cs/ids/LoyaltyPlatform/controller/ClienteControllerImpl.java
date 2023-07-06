@@ -196,7 +196,7 @@ public class ClienteControllerImpl implements ClienteController {
                             .findFirst()
                             .orElse(null);
 
-                    if(puntiAttualiInstance == null) {
+                    if(puntiAttualiInstance == null && adesionePunti.getSpesaMinima() <= prezzo) {
                         //Se non esiste un'istanza di punti per questa attività commerciale la creo
                         puntiAttualiInstance = new PuntiPerAttivitaCommerciale();
                         puntiAttualiInstance.setAttivitaCommerciale(attivitaCommerciale);
@@ -206,7 +206,7 @@ public class ClienteControllerImpl implements ClienteController {
                         puntiPerAttivitaCommercialeController.createPuntiPerAttivita(puntiAttualiInstance);    //Devo aggiungere l'istanza al DB
                         //cliente.getPuntiPerAttivitaCommerciale().add(puntiAttualiInstance);                    //Devo aggiungere l'istanza al Set<PuntiPerAttivitaCommerciale> del cliente
 
-                    } else {
+                    } else if (adesionePunti.getSpesaMinima() <= prezzo) {
                         //Se esiste la aggiorno
                         puntiAttualiInstance.setPunti( puntiAttualiInstance.getPunti() + (prezzo * adesionePunti.getRapportoPunti()) );
                         puntiPerAttivitaCommercialeController.updatePuntiPerAttivita(puntiAttualiInstance);
@@ -235,7 +235,7 @@ public class ClienteControllerImpl implements ClienteController {
                             .findFirst()
                             .orElse(null);
 
-                    if(saldoAttualeInstance == null){
+                    if(saldoAttualeInstance == null && adesioneCashback.getSpesaMinima() <= prezzo) {
                         saldoAttualeInstance = new SaldoPerAttivitaCommerciale();
                         saldoAttualeInstance.setAttivitaCommerciale(attivitaCommerciale);
                         saldoAttualeInstance.setCliente(cliente);
@@ -244,7 +244,7 @@ public class ClienteControllerImpl implements ClienteController {
                         saldoPerAttivitaCommercialeController.createSaldoPerAttivita(saldoAttualeInstance);    //Devo aggiungere l'istanza al DB
                         //cliente.getSaldoPerAttivitaCommerciale().add(saldoAttualeInstance);                    //Devo aggiungere l'istanza al Set<SaldoPerAttivitaCommerciale> del cliente
 
-                    } else {
+                    } else if (adesioneCashback.getSpesaMinima() <= prezzo) {
                         //Se esiste la aggiorno
                         saldoAttualeInstance.setSaldo( saldoAttualeInstance.getSaldo() + ( (prezzo / 100 ) * adesioneCashback.getPercentualeCashback() ) );
                         saldoPerAttivitaCommercialeController.updateSaldoPerAttivita(saldoAttualeInstance);
