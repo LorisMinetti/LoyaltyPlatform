@@ -68,7 +68,7 @@ public class AdesioneProgrammaFedeltaModel implements Serializable {
     @PrePersist
     public void setScadenza() {
         if (dataAdesione != null) {
-            dataScadenza = dataAdesione.plusHours(2);
+            dataScadenza = dataAdesione.plusMinutes(4);
         }
     }
 
